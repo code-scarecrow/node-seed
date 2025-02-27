@@ -1,0 +1,34 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Debug: api",
+			"type": "node",
+			"request": "attach",
+			"restart": true,
+			"port": 9662,
+			"address": "0.0.0.0",
+			"localRoot": "${workspaceFolder}",
+			"remoteRoot": "/app",
+			"skipFiles": ["<node_internals>/**"]
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Mocha unit",
+			"runtimeExecutable": "npm",
+			"runtimeArgs": ["run-script", "test"],
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen"
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Mocha E2E",
+			"runtimeExecutable": "npm",
+			"runtimeArgs": ["run-script", "test:e2e"],
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen"
+		}
+	]
+}

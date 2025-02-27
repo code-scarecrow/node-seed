@@ -1,0 +1,175 @@
+version: '3.8'
+
+services:
+  node_start:
+    container_name: node-ms-seed-start
+    build:
+      context: ./docker/node
+      dockerfile: ./Dockerfile.start
+    user: node
+    volumes:
+      - ./:/usr/application
+    environment:
+      - DATABASE_HOST=database
+      - DATABASE_NAME=pickit
+      - DATABASE_PASS=pickit
+      - DATABASE_USER=pickit
+    depends_on:
+      database:
+        condition: service_started
+    networks:
+      - pickit-net
+
+  node:
+    container_name: node-ms-seed
+    build:
+      context: ./docker/node
+    restart: unless-stopped
+    volumes:
+      - ./:/app
+    ports:
+      - '3000:33000'
+      - '9662:9662' #docker debbug port
+    environment:
+      - APP_NAME="ms-seed"
+      - DATABASE_HOST=database
+      - DATABASE_NAME=pickit
+      - DATABASE_PASS=pickit
+      - DATABASE_USER=pickit
+      - AWS_ACCESS_KEY_ID=DUMMYIDEXAMPLE
+      - AWS_SECRET_ACCESS_KEY=DUMMYEXAMPLEKEY
+      - AWS_ENDPOINT=http://dynamodb:4566
+      - AWS_REGION=us-west-2
+      - AWS_ENDPOINT_S3=http://s3:4566
+      - AWS_FORCE_PATH_STYLE=true
+      - AWS_BUCKET_NAME=test-bucket
+      - DYNAMODB_TABLE_NAME_RABBITS=rabbits
+      - SUPER_HERO_URL=http://json-server
+      - CORE_API_KEY=DUMMYCOREKEY
+      - CORE_URL_AR=https://api.test.pickit.net
+      - CORE_URL_CO=https://api.test.pickit.com.co
+      - CORE_URL_UY=https://api.test.pickit.com.uy
+      - CORE_URL_MX=https://api.test.pickit.com.mx
+      - CORE_URL_CL=https://api.test.pickit.cl
+      - CORE_URL_PE=https://api.test.pickit.com.pe
+      - RABBIT_URI=amqp://guest:guest@rabbitmq:5672/
+      - RABBIT_QUEUE=ms-seed-consumer
+      - RABBIT_EVENT_BUS_EXCHANGE=event_bus_example
+      - REDIS_HOST=redis-ms-seed
+      - REDIS_PORT=6379
+      - REDIS_USER=root
+      - REDIS_PASSWORD=admin
+      - TTL=10
+    depends_on:
+      database:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+      node_start:
+        condition: service_completed_successfully
+      redis:
+        condition: service_started
+      dynamodb:
+        condition: service_started
+      s3:
+        condition: service_started
+    networks:
+      - pickit-net
+
+  database:
+    container_name: database-ms-seed
+    image: 'mariadb:10.5'
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=pickit
+      - MYSQL_USER=pickit
+      - MYSQL_PASSWORD=pickit
+    volumes:
+      - app_database_volume:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - pickit-net
+
+  dynamodb:
+    container_name: dynamodb-ms-seed
+    image: localstack/localstack
+    restart: unless-stopped
+    ports:
+      - '8000:4566'
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - PERSISTENCE=1
+      - DYNAMODB_SHARE_DB=1
+    volumes:
+      - './docker/dynamodb/init.py:/etc/localstack/init/ready.d/init-aws.py' # ready hook
+      - 'app_dynamodb_localstack_volume:/var/lib/localstack'
+      - 'app_dynamodb_sock_volume:/var/run/docker.sock'
+    networks:
+      - pickit-net
+
+  rabbitmq:
+    container_name: rabbitmq-ms-seed
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./docker/rabbitmq:/tmp
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbitmq_management load_definitions "/tmp/conf.json"
+    healthcheck:
+      test: ['CMD', 'rabbitmq-diagnostics', '-q', 'ping']
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - pickit-net
+
+  redis:
+    container_name: redis-ms-seed
+    image: 'redis:6.0.9'
+    volumes:
+      - app_redis_volume:/data
+    command: redis-server
+    ports:
+      - 6379:6379
+    networks:
+      - pickit-net
+
+  json-server:
+    container_name: json-server-ms-seed
+    image: vimagick/json-server
+    command: -w db.json --host 0.0.0.0 --port 80
+    ports:
+      - '3030:80'
+    volumes:
+      - ./docker/json-server/data:/data
+    restart: unless-stopped
+    networks:
+      - pickit-net
+
+  s3:
+    container_name: s3-ms-seed
+    image: localstack/localstack:s3-latest
+    ports:
+      - '4566:4566'
+    volumes:
+      - './docker/s3/init-s3.py:/etc/localstack/init/ready.d/init-s3.py'
+    restart: unless-stopped
+    networks:
+      - pickit-net
+
+networks:
+  pickit-net:
+    name: 'pickit-network'
+
+volumes:
+  app_database_volume:
+  app_redis_volume:
+  app_dynamodb_localstack_volume:
+  app_dynamodb_sock_volume:
+  app_s3_volume:

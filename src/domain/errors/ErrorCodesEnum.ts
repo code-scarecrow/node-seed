@@ -1,0 +1,5 @@
+export enum ErrorCodesEnum {
+	VALIDATION_ERROR = '00001',
+	ENTITY_NOT_FOUND = '00002',
+	DUPLICATED_ENTITY = '00003',
+}

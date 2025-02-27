@@ -1,0 +1,9 @@
+FROM node:22-alpine
+
+RUN mkdir /scripts
+
+COPY ./start.sh /scripts/.
+RUN chmod 777 /scripts/start.sh
+
+WORKDIR /usr/application
+ENTRYPOINT [ "sh", "-c", "/scripts/start.sh" ]

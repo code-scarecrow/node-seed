@@ -1,0 +1,54 @@
+{
+	"super-heroes": [
+		{
+			"id": 1,
+			"name": "Ironman",
+			"combat": "80",
+			"durability": "70",
+			"intelligence": "100",
+			"power": "80",
+			"speed": "60",
+			"strength": "70"
+		},
+		{
+			"id": 2,
+			"name": "Hulk",
+			"intelligence": "80",
+			"strength": "100",
+			"speed": "20",
+			"durability": "90",
+			"power": "95",
+			"combat": "100"
+		},
+		{
+			"id": 3,
+			"name": "Thor",
+			"intelligence": "40",
+			"strength": "90",
+			"speed": "60",
+			"durability": "80",
+			"power": "80",
+			"combat": "95"
+		},
+		{
+			"id": 4,
+			"name": "Captain america",
+			"intelligence": "70",
+			"strength": "70",
+			"speed": "20",
+			"durability": "40",
+			"power": "30",
+			"combat": "50"
+		},
+		{
+			"name": "Batman",
+			"combat": "75",
+			"durability": "50",
+			"intelligence": "100",
+			"power": "80",
+			"speed": "50",
+			"strength": "80",
+			"id": 5
+		}
+	]
+}
