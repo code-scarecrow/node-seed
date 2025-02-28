@@ -7,7 +7,7 @@ import { BaseTypeOrmRepository } from '@code-scarecrow/base/database';
 
 @Injectable()
 export class ClubRepository extends BaseTypeOrmRepository<{ id: number }, ClubEntity> implements IClubRepository {
-	constructor(@InjectRepository(ClubEntity) private repository: Repository<ClubEntity>) {
+	constructor(@InjectRepository(ClubEntity) private readonly repository: Repository<ClubEntity>) {
 		super(repository);
 	}
 

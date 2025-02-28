@@ -5,7 +5,7 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 export abstract class BaseDynamodbRepository<TKey extends { [key: string]: unknown }, TEntity extends TKey>
 	implements ISingleEntityRepository<TKey, TEntity>
 {
-	constructor(private client: DynamodbClient, protected tableName: string) {}
+	constructor(private readonly client: DynamodbClient, protected tableName: string) {}
 
 	public async update(_key: TKey, entity: TEntity): Promise<TEntity> {
 		return this.create(entity);

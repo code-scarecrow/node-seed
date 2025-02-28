@@ -18,7 +18,7 @@ import { ErrorResponse } from '@code-scarecrow/base';
 @ApiHeader({ name: 'Country-Code' })
 @ApiExtraModels(PlayerResponse)
 export class PlayerController {
-	constructor(private playerService: PlayerService) {}
+	constructor(private readonly playerService: PlayerService) {}
 
 	@Post()
 	@HttpCode(HttpStatus.CREATED)

@@ -10,7 +10,7 @@ export class CountryRepository
 	extends BaseTypeOrmRepository<{ id: number }, CountryEntity>
 	implements ICountryRepository
 {
-	constructor(@InjectRepository(CountryEntity) private repository: Repository<CountryEntity>) {
+	constructor(@InjectRepository(CountryEntity) private readonly repository: Repository<CountryEntity>) {
 		super(repository);
 	}
 

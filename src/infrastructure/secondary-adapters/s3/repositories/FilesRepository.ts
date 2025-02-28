@@ -9,7 +9,7 @@ import { awsClientS3Config } from '../config/AWSClientS3Config';
 
 @Injectable()
 export class FilesRepository implements IFileRepository {
-	private bucketName: string;
+	private readonly bucketName: string;
 
 	constructor(
 		@InjectS3() private readonly s3: S3,
@@ -77,9 +77,9 @@ export class FilesRepository implements IFileRepository {
 		}
 	}
 
-	private isRecord = (obj: unknown): obj is Record<string, unknown> => typeof obj === 'object';
+	private readonly isRecord = (obj: unknown): obj is Record<string, unknown> => typeof obj === 'object';
 
-	private isS3Error = (obj: unknown): obj is IS3Error => {
+	private readonly isS3Error = (obj: unknown): obj is IS3Error => {
 		return !!obj && this.isRecord(obj) && 'name' in obj && typeof obj['name'] === 'string';
 	};
 }

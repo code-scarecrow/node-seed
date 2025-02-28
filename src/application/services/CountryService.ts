@@ -5,7 +5,7 @@ import { CountryEntity } from 'src/domain/entities/CountryEntity';
 
 @Injectable()
 export class CountryService {
-	constructor(@Inject(COUNTRY_REPO) private countryRepository: ICountryRepository) {}
+	constructor(@Inject(COUNTRY_REPO) private readonly countryRepository: ICountryRepository) {}
 
 	public async create(country: CountryEntity): Promise<CountryEntity> {
 		return await this.countryRepository.create(country);

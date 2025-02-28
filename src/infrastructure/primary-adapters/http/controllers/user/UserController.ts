@@ -8,7 +8,7 @@ import { ErrorResponse } from '@code-scarecrow/base';
 @Controller('users')
 @ApiTags('Users')
 export class UserController {
-	constructor(private userService: UserService) {}
+	constructor(private readonly userService: UserService) {}
 
 	@Post()
 	@ApiHeader({

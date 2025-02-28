@@ -10,7 +10,7 @@ export class WorldCupRepository
 	extends BaseTypeOrmRepository<{ id: number }, WorldCupEntity>
 	implements IWorldCupRepository
 {
-	constructor(@InjectRepository(WorldCupEntity) private repository: Repository<WorldCupEntity>) {
+	constructor(@InjectRepository(WorldCupEntity) private readonly repository: Repository<WorldCupEntity>) {
 		super(repository);
 	}
 

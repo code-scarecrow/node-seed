@@ -7,7 +7,7 @@ import { databaseConfig } from '../config/DatabaseConfig';
 export class MariaDBOptionsFactory implements TypeOrmOptionsFactory {
 	constructor(
 		@Inject(databaseConfig.KEY)
-		private databaseConfiguration: ConfigType<typeof databaseConfig>,
+		private readonly databaseConfiguration: ConfigType<typeof databaseConfig>,
 	) {}
 
 	public createTypeOrmOptions(): TypeOrmModuleOptions {

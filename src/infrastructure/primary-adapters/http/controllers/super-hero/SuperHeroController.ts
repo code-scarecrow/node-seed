@@ -9,7 +9,7 @@ import { ErrorResponse } from '@code-scarecrow/base';
 @ApiTags('Super Heroes')
 @ApiHeader({ name: 'Country-Code' })
 export class SuperHeroController {
-	constructor(private superHeroService: SuperHeroService) {}
+	constructor(private readonly superHeroService: SuperHeroService) {}
 
 	@Post()
 	@HttpCode(HttpStatus.CREATED)

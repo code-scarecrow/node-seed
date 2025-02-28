@@ -5,7 +5,7 @@ import { SuperHero } from 'src/domain/entities/SuperHero';
 
 @Injectable()
 export class SuperHeroService {
-	constructor(@Inject(SUPER_HERO_REPO) private superHeroRepository: ISuperHeroRepository) {}
+	constructor(@Inject(SUPER_HERO_REPO) private readonly superHeroRepository: ISuperHeroRepository) {}
 
 	public async create(superHero: SuperHero): Promise<void> {
 		await this.superHeroRepository.create(superHero);

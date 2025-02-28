@@ -5,7 +5,7 @@ import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
 
 @Injectable()
 export class RabbitService {
-	constructor(@Inject(RABBIT_REPO) private rabbitRepository: IRabbitRepository) {}
+	constructor(@Inject(RABBIT_REPO) private readonly rabbitRepository: IRabbitRepository) {}
 
 	public async create(rabbit: Rabbit): Promise<Rabbit> {
 		return await this.rabbitRepository.create(rabbit);

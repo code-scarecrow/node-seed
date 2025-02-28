@@ -20,7 +20,7 @@ import { ErrorResponse } from '@code-scarecrow/base';
 @ApiHeader({ name: 'Country-Code' })
 @ApiExtraModels(WorldCupResponse, AddParticipantsResponse)
 export class WorldCupController {
-	constructor(private worldCupService: WorldCupService) {}
+	constructor(private readonly worldCupService: WorldCupService) {}
 
 	@Post()
 	@HttpCode(HttpStatus.CREATED)

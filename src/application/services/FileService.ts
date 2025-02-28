@@ -5,7 +5,7 @@ import { DuplicatedEntity } from 'src/domain/errors/DuplicatedEntity';
 
 @Injectable()
 export class FileService {
-	constructor(@Inject(FILE_REPO) private fileRepository: IFileRepository) {}
+	constructor(@Inject(FILE_REPO) private readonly fileRepository: IFileRepository) {}
 
 	public async create(name: string, file: Buffer): Promise<void> {
 		const fileNameExists = await this.fileRepository.exist(name);

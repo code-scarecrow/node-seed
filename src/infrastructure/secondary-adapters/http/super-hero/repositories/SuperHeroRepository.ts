@@ -8,7 +8,7 @@ import { ISuperHeroRequest } from './requests/SuperHeroRequest';
 
 @Injectable()
 export class SuperHeroRepository implements ISuperHeroRepository {
-	constructor(private httpClient: SuperHeroClient) {}
+	constructor(private readonly httpClient: SuperHeroClient) {}
 
 	public async getAll(): Promise<SuperHero[]> {
 		return await this.httpClient.get<IGetSuperHeroResponse[]>('/super-heroes');

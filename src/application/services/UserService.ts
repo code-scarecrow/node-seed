@@ -9,10 +9,10 @@ import { IUserFinishCreationProducer, USER_FINISH_CREATION_PRODUCER } from '../i
 export class UserService {
 	constructor(
 		@Inject(USER_CREATE_MESSAGE_PRODUCER)
-		private userCreateProducer: IUserCreateMessageProducer,
+		private readonly userCreateProducer: IUserCreateMessageProducer,
 		@Inject(USER_FINISH_CREATION_PRODUCER)
-		private userFinishCreationProducer: IUserFinishCreationProducer,
-		@Inject(USER_REPO) private userRepository: IUserRepository,
+		private readonly userFinishCreationProducer: IUserFinishCreationProducer,
+		@Inject(USER_REPO) private readonly userRepository: IUserRepository,
 	) {}
 
 	public createMessage(user: Omit<UserEntity, 'id' | 'uuid'>): void {

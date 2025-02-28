@@ -7,7 +7,11 @@ import { IUserIncommingMessage } from './IUserIncommingMessage';
 
 @Injectable()
 export class UserCreateListener extends BaseMessageHandler {
-	constructor(private userService: UserService, private interceptor: QueueInterceptor, logger: Logger) {
+	constructor(
+		private readonly userService: UserService,
+		private readonly interceptor: QueueInterceptor,
+		logger: Logger,
+	) {
 		super(logger);
 	}
 

@@ -78,5 +78,6 @@ module.exports = {
 		'no-nested-ternary': 'error',
 		'folders/match-regex': ['error', '^[a-z-]+$', 'src'],
 		'folders/match-regex': ['error', '^([1-9]_)?[a-z-1-9]+$', 'test'],
+		'@typescript-eslint/prefer-readonly': 'error'
 	},
 };

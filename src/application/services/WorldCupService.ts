@@ -8,9 +8,9 @@ import { IUOWFactory, UOW_FACTORY } from '@code-scarecrow/base/database';
 @Injectable()
 export class WorldCupService {
 	constructor(
-		@Inject(WORLD_CUP_REPO) private worldCupRepository: IWorldCupRepository,
-		private countryService: CountryService,
-		@Inject(UOW_FACTORY) private uow: IUOWFactory,
+		@Inject(WORLD_CUP_REPO) private readonly worldCupRepository: IWorldCupRepository,
+		private readonly countryService: CountryService,
+		@Inject(UOW_FACTORY) private readonly uow: IUOWFactory,
 	) {}
 
 	public async create(countryId: string, worldCup: WorldCupEntity): Promise<WorldCupEntity> {

@@ -8,7 +8,7 @@ import { ICoreUrls } from '../config/IHttpCoreConfig';
 
 @Injectable()
 export class CoreClient extends PickitBaseClient {
-	private coreUrls: ICoreUrls;
+	private readonly coreUrls: ICoreUrls;
 
 	constructor(
 		@Inject(httpCoreConfig.KEY)

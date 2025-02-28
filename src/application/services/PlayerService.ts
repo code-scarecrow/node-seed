@@ -8,9 +8,9 @@ import { ClubService } from './ClubService';
 @Injectable()
 export class PlayerService {
 	constructor(
-		@Inject(PLAYER_REPO) private playerRepository: IPlayerRepository,
-		private countryService: CountryService,
-		private clubService: ClubService,
+		@Inject(PLAYER_REPO) private readonly playerRepository: IPlayerRepository,
+		private readonly countryService: CountryService,
+		private readonly clubService: ClubService,
 	) {}
 
 	public async create(countryId: string, clubId: string, player: PlayerEntity): Promise<PlayerEntity> {

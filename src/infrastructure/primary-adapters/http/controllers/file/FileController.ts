@@ -29,7 +29,7 @@ import { UrlResponse } from './response/UrlResponse';
 @ApiTags('Files')
 @ApiHeader({ name: 'Country-Code' })
 export class FileController {
-	constructor(private fileService: FileService) {}
+	constructor(private readonly fileService: FileService) {}
 
 	@Post(':name')
 	@HttpCode(HttpStatus.CREATED)

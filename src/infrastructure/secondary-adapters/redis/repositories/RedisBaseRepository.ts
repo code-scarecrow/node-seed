@@ -5,7 +5,7 @@ import Redis from 'ioredis';
 //TODO - move to pkt-base
 @Injectable()
 export abstract class RedisBaseRepository {
-	private logger: Logger;
+	private readonly logger: Logger;
 
 	constructor(logger: Logger, private readonly redisManager: Redis) {
 		this.logger = logger;

@@ -7,7 +7,7 @@ import { BaseTypeOrmRepository } from '@code-scarecrow/base/database';
 
 @Injectable()
 export class PlayerRepository extends BaseTypeOrmRepository<{ id: number }, PlayerEntity> implements IPlayerRepository {
-	constructor(@InjectRepository(PlayerEntity) private repository: Repository<PlayerEntity>) {
+	constructor(@InjectRepository(PlayerEntity) private readonly repository: Repository<PlayerEntity>) {
 		super(repository);
 	}
 

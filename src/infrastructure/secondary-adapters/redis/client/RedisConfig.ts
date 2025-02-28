@@ -7,7 +7,7 @@ import { cacheConfig } from '../config/CacheConfig';
 export class RedisConfig implements RedisOptionsFactory {
 	constructor(
 		@Inject(cacheConfig.KEY)
-		private cacheConfiguration: ConfigType<typeof cacheConfig>,
+		private readonly cacheConfiguration: ConfigType<typeof cacheConfig>,
 	) {}
 	public createRedisOptions(): RedisModuleOptions {
 		return { ...this.cacheConfiguration };

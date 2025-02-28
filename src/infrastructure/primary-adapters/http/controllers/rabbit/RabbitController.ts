@@ -10,7 +10,7 @@ import { ErrorResponse } from '@code-scarecrow/base';
 @ApiTags('Rabbits')
 @ApiHeader({ name: 'Country-Code' })
 export class RabbitController {
-	constructor(private rabbitService: RabbitService) {}
+	constructor(private readonly rabbitService: RabbitService) {}
 
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
