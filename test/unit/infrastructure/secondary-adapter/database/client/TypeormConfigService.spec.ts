@@ -2,7 +2,7 @@ import { MariaDBOptionsFactory } from 'src/infrastructure/secondary-adapters/dat
 import { IDatabaseConfig } from 'src/infrastructure/secondary-adapters/database/config/IDatabaseConfig';
 import { expect } from 'chai';
 
-describe('Pickit DB Client Test', () => {
+describe('DB Client Test', () => {
 	it('Should return correct config', () => {
 		//Arrange
 		const config: IDatabaseConfig = {

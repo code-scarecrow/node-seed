@@ -2,7 +2,7 @@ import { DynamodbClient } from 'src/infrastructure/secondary-adapters/dynamodb/c
 import { IDynamodbConfig } from 'src/infrastructure/secondary-adapters/dynamodb/config/IDynamodbConfig';
 import { expect } from 'chai';
 
-describe('Pickit Dynamo Client Test.', () => {
+describe('Dynamo Client Test.', () => {
 	it('Should return dynamo client.', () => {
 		//Arrange
 		const config: IDynamodbConfig = {

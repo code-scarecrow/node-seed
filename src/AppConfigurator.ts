@@ -12,7 +12,7 @@ export function setUpSwagger(app: INestApplication): void {
 		.build();
 
 	const customOptions: SwaggerCustomOptions = {
-		customSiteTitle: 'Pickit',
+		customSiteTitle: 'Node Seed',
 	};
 
 	const document = SwaggerModule.createDocument(app, config);
