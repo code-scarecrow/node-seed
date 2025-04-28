@@ -2,7 +2,7 @@ export enum PositionEnum {
 	GK = 'Goalkeeper',
 	CB = 'Center Back',
 	RB = 'Right Back',
-	LR = 'Left Back',
+	LB = 'Left Back',
 	CM = 'Center Midfielder',
 	RM = 'Right Midfielder',
 	LM = 'Left Midfielder',

@@ -1,5 +1,4 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigType } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { HttpConfigService } from './infrastructure/secondary-adapters/http/config/HttpConfigService';
@@ -7,7 +6,6 @@ import { dynamodbConfig } from './infrastructure/secondary-adapters/dynamodb/con
 import { DynamodbClient } from './infrastructure/secondary-adapters/dynamodb/clients/DynamodbClient';
 import { databaseConfig } from './infrastructure/secondary-adapters/database/config/DatabaseConfig';
 import { cacheConfig } from './infrastructure/secondary-adapters/redis/config/CacheConfig';
-import { MariaDBOptionsFactory } from './infrastructure/secondary-adapters/database/client/MariaDBOptionsFactory';
 import { ValidateCountryCodeMiddleware } from './infrastructure/primary-adapters/http/middleware/ValidateCountryCodeMiddleware';
 import { httpCoreConfig } from './infrastructure/secondary-adapters/http/core/config/HttpCoreConfig';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
@@ -17,11 +15,6 @@ import { RABBIT_REPO } from './application/interfaces/IRabbitRepository';
 import { SUPER_HERO_REPO } from './application/interfaces/ISuperHeroRepository';
 import { loggerConfig } from './infrastructure/base/logger/LoggerConfig';
 import { LogModule, LoggerConfig, QueueInterceptor } from '@code-scarecrow/base/logger';
-import { dbAdapterRegistry } from './infrastructure/secondary-adapters/database/DBAdapterConfigurator';
-import { WorldCupEntity } from './domain/entities/WorldCupEntity';
-import { ClubEntity } from './domain/entities/ClubEntity';
-import { PlayerEntity } from './domain/entities/PlayerEntity';
-import { CountryEntity } from './domain/entities/CountryEntity';
 import { COUNTRY_REPO } from './application/interfaces/ICountryRepository';
 import { CountryRepository } from './infrastructure/secondary-adapters/database/repositories/CountryRepository';
 import { CLUB_REPO } from './application/interfaces/IClubRepository';
@@ -34,7 +27,6 @@ import { rabbitMQConfig } from './infrastructure/secondary-adapters/message-queu
 import { USER_CREATE_MESSAGE_PRODUCER } from './application/interfaces/IUserCreateMessageProducer';
 import { USER_REPO } from './application/interfaces/IUserRepository';
 import { UserRepository } from './infrastructure/secondary-adapters/database/repositories/UserRepository';
-import { UserEntity } from './domain/entities/UserEntity';
 import { userCreateQueueConfig } from './infrastructure/secondary-adapters/message-queue/producers/config/UserCreateQueueConfig';
 import { UserCreateProducer } from './infrastructure/secondary-adapters/message-queue/producers/user/UserCreateProducer';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
@@ -54,6 +46,8 @@ import { AxiosInstanceFactory } from '@code-scarecrow/base';
 import { SuperHeroRepository } from './infrastructure/secondary-adapters/http/super-hero/repositories/SuperHeroRepository';
 import { SuperHeroClient } from './infrastructure/secondary-adapters/http/super-hero/client/SuperHeroClient';
 import { httpSuperHeroConfig } from './infrastructure/secondary-adapters/http/super-hero/config/HttpSuperHeroConfig';
+import { prismaConfig } from './infrastructure/secondary-adapters/database/config/PrismaConfig';
+import { PrismaService } from './infrastructure/secondary-adapters/database/client/PrismaService';
 
 @Module({
 	imports: [
@@ -69,20 +63,15 @@ import { httpSuperHeroConfig } from './infrastructure/secondary-adapters/http/su
 				userCreateQueueConfig,
 				userFinishCreationConfig,
 				awsClientS3Config,
+				prismaConfig,
 			],
 			isGlobal: true,
 			cache: true,
-		}),
-		TypeOrmModule.forRootAsync({
-			inject: [MariaDBOptionsFactory],
-			useFactory: (config: MariaDBOptionsFactory) => config.createTypeOrmOptions(),
-			extraProviders: [MariaDBOptionsFactory],
 		}),
 		RabbitMQModule.forRootAsync(RabbitMQModule, {
 			inject: [rabbitMQConfig.KEY],
 			useFactory: (config: ConfigType<typeof rabbitMQConfig>) => config,
 		}),
-		TypeOrmModule.forFeature([WorldCupEntity, ClubEntity, PlayerEntity, CountryEntity, UserEntity]),
 		HttpModule.registerAsync({
 			imports: [ConfigModule],
 			useClass: HttpConfigService,
@@ -121,7 +110,7 @@ import { httpSuperHeroConfig } from './infrastructure/secondary-adapters/http/su
 		{ provide: CLUB_CACHE_REPO, useClass: ClubCacheRepository },
 		UserCreateListener,
 		QueueInterceptor,
-		...dbAdapterRegistry.getProviders(),
+		PrismaService,
 	],
 })
 export class AppModule {

@@ -5,4 +5,5 @@ if [ ! -d node_modules ]; then
 fi
 
 npm run build
+npm run prisma:generate
 npm run migration:run
