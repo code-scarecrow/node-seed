@@ -6,7 +6,7 @@ import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { PlayerRequest } from 'src/infrastructure/primary-adapters/http/controllers/player/request/PlayerRequest';
 import { PositionEnum } from 'src/domain/enums/PositionEnum';
 import { expect } from 'chai';
-import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
+import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 
 describe('Create Player e2e Test.', () => {
 	let app: INestApplication;

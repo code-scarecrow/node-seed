@@ -8,7 +8,7 @@ import { ClubEntity } from 'src/domain/entities/ClubEntity';
 import { expect } from 'chai';
 import { Redis } from 'ioredis';
 import { safeGetConfig } from '@code-scarecrow/base';
-import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
+import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 
 describe('Update Club e2e Test.', () => {
 	let app: INestApplication;

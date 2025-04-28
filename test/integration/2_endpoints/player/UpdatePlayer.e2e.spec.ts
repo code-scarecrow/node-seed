@@ -3,7 +3,7 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
+import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 import { PlayerRequest } from 'src/infrastructure/primary-adapters/http/controllers/player/request/PlayerRequest';
 import { PlayerEntity } from 'src/domain/entities/PlayerEntity';
 import { PositionEnum } from 'src/domain/enums/PositionEnum';

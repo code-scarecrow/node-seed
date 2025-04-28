@@ -6,7 +6,7 @@ import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
 import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
 import { expect } from 'chai';
-import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
+import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 
 describe('Get World Cup e2e Test.', () => {
 	let app: INestApplication;

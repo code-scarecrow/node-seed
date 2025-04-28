@@ -5,7 +5,7 @@ import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { CountryRequest } from 'src/infrastructure/primary-adapters/http/controllers/country/request/CountryRequest';
 import { CountryEntity } from 'src/domain/entities/CountryEntity';
-import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
+import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 import { expect } from 'chai';
 
 describe('Update Country e2e Test.', () => {

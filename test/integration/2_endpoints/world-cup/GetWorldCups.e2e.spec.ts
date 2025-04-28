@@ -3,7 +3,7 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
+import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
 import { WorldCupResponse } from 'src/infrastructure/primary-adapters/http/controllers/world-cup/response/WorldCupResponse';
 import { expect } from 'chai';

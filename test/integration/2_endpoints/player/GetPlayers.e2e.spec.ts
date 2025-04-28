@@ -6,7 +6,7 @@ import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { PlayerEntity } from 'src/domain/entities/PlayerEntity';
 import { PlayerResponse } from 'src/infrastructure/primary-adapters/http/controllers/player/response/PlayerResponse';
 import { expect } from 'chai';
-import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
+import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 
 describe('Get Players e2e Test.', () => {
 	let app: INestApplication;

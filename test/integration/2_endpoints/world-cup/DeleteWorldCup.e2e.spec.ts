@@ -6,7 +6,7 @@ import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
 import { expect } from 'chai';
 import { PrismaClient } from '@prisma/client';
-import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
+import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 
 describe('Delete World Cup e2e Test.', () => {
 	let app: INestApplication;

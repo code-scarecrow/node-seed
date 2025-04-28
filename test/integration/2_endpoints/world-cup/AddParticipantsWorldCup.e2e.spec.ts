@@ -7,7 +7,7 @@ import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
 import { AddParticipantsRequest } from 'src/infrastructure/primary-adapters/http/controllers/world-cup/request/AddParticipantsRequest';
 import { AddParticipantsResponse } from 'src/infrastructure/primary-adapters/http/controllers/world-cup/response/AddParticipantsResponse';
 import { expect } from 'chai';
-import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
+import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 
 describe('Add Participants to a World Cup e2e Test.', () => {
 	let app: INestApplication;

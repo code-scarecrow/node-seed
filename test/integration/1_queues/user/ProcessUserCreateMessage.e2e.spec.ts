@@ -5,7 +5,7 @@ import { expect } from 'chai';
 import { IUserIncommingMessage } from 'src/infrastructure/primary-adapters/message-queue/listeners/user/IUserIncommingMessage';
 import { RabbitMessage, safeGetConfig } from '@code-scarecrow/base';
 import { Channel, Connection, connect } from 'amqplib';
-import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
+import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 
 describe('Process user create message.', () => {
 	let app: INestApplication;
