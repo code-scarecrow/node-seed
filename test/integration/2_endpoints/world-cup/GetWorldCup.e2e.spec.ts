@@ -3,48 +3,29 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { DataSource } from 'typeorm';
-import { deleteAll, insert } from 'test/integration/infrastructure/database/TestDatasetSeed';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
 import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
 import { expect } from 'chai';
+import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
 
 describe('Get World Cup e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
 	let worldCup: WorldCupEntity;
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 	});
 
 	beforeEach(async () => {
 		server = app.getHttpServer();
-		const country = new CountryEntity();
-		country.id = 1;
-		country.uuid = 'df548196-c331-45e5-a4ae-5e557e8aa75c';
-		country.code = 'ARG';
-		country.name = 'Argentina';
 
-		await insert<CountryEntity>(datasource, [country]);
-
-		worldCup = new WorldCupEntity();
-		worldCup.uuid = 'df548196-c331-45e5-a4ae-5e557e8aa75d';
-		worldCup.petName = 'Gauchito';
-		worldCup.year = '1978';
-		worldCup.startDate = new Date('1978-06-01');
-		worldCup.finishDate = new Date('1978-06-25');
-		worldCup.location = country;
-
-		await insert<WorldCupEntity>(datasource, [worldCup]);
+		const country = await dbClient.createCountry();
+		worldCup = await dbClient.createWorldCup(country.id, []);
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, WorldCupEntity);
-		await deleteAll(datasource, CountryEntity);
+		await dbClient.deleteDB();
 		await server.close();
 	});
 
@@ -59,13 +40,14 @@ describe('Get World Cup e2e Test.', () => {
 			.set('Country-Code', CountryCodeEnum.AR)
 			.expect(watch(HttpStatus.OK))
 			.expect((res) => {
+				//TODO - create a reusable method with native custom messages
 				const structure = Object.keys(res.body);
-				expect(structure.includes('id')).to.be.true;
-				expect(structure.includes('petName')).to.be.true;
-				expect(structure.includes('year')).to.be.true;
-				expect(structure.includes('startDate')).to.be.true;
-				expect(structure.includes('finishDate')).to.be.true;
-				expect(structure.includes('location')).to.be.true;
+				expect(structure.includes('id'), 'id').to.be.true;
+				expect(structure.includes('petName'), 'petName').to.be.true;
+				expect(structure.includes('year'), 'year').to.be.true;
+				expect(structure.includes('startDate'), 'startDate').to.be.true;
+				expect(structure.includes('finishDate'), 'finishDate').to.be.true;
+				expect(structure.includes('location'), 'location').to.be.true;
 			});
 	});
 

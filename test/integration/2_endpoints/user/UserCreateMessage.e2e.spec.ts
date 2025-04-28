@@ -3,18 +3,16 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { deleteAll, findOneBy } from 'test/integration/infrastructure/database/TestDatasetSeed';
-import { DataSource } from 'typeorm';
 import { expect } from 'chai';
 import { UserRequest } from 'src/infrastructure/primary-adapters/http/controllers/user/request/UserRequest';
-import { UserEntity } from 'src/domain/entities/UserEntity';
 import { Channel, Connection, connect } from 'amqplib';
 import { safeGetConfig } from '@code-scarecrow/base';
+import { PrismaClient } from '@prisma/client';
+import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
 
 describe('Send Create User Message e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
 	let userRequest: UserRequest;
 	let queue: string;
 	let connection: Connection;
@@ -22,7 +20,6 @@ describe('Send Create User Message e2e Test.', () => {
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 		connection = await connect(safeGetConfig('RABBIT_URI'));
 		queue = safeGetConfig('RABBIT_QUEUE');
 	});
@@ -42,7 +39,7 @@ describe('Send Create User Message e2e Test.', () => {
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, UserEntity);
+		await dbClient.deleteDB();
 		await server.close();
 		await channel.close();
 	});
@@ -59,20 +56,28 @@ describe('Send Create User Message e2e Test.', () => {
 			.set('Country-Code', CountryCodeEnum.AR)
 			.expect(watch(HttpStatus.CREATED));
 
-		await Promise.resolve(process.nextTick(() => {}));
-
+		//TODO - look for better options
 		while ((await channel.assertQueue(queue)).messageCount !== 0) {
 			await new Promise((r) => setTimeout(r, 10));
 		}
 
-		const userCreated = await findOneBy<UserEntity>(datasource, UserEntity, {
-			email: userRequest.email,
-		});
-		expect(userCreated).equal;
+		//TODO - look for betteroptions
+		let counter = 0;
+		let userCreated = null;
+		while (counter < 10) {
+			userCreated = await new PrismaClient().users.findUnique({
+				where: {
+					email: userRequest.email,
+				},
+			});
+			counter++;
+		}
+
+		expect(userCreated).not.be.null;
 		expect(userCreated?.name).equal(userRequest.name);
 		expect(userCreated?.lastname).equal(userRequest.lastname);
 		expect(userCreated?.dni).equal(userRequest.dni);
-		expect(userCreated?.birthDate).deep.equal(new Date(userRequest.birthDate));
+		expect(userCreated?.birth_date).deep.equal(new Date(userRequest.birthDate));
 		expect(userCreated?.email).equal(userRequest.email);
 	});
 

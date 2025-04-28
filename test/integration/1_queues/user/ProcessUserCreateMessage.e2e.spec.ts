@@ -1,17 +1,15 @@
 import { HttpServer, INestApplication } from '@nestjs/common';
 import { initiateApp } from '../../infrastructure/app/AppInitiator';
-import { DataSource } from 'typeorm';
-import { deleteAll, findOneBy } from '../../infrastructure/database/TestDatasetSeed';
 import { UserEntity } from 'src/domain/entities/UserEntity';
 import { expect } from 'chai';
 import { IUserIncommingMessage } from 'src/infrastructure/primary-adapters/message-queue/listeners/user/IUserIncommingMessage';
 import { RabbitMessage, safeGetConfig } from '@code-scarecrow/base';
 import { Channel, Connection, connect } from 'amqplib';
+import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
 
 describe('Process user create message.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
 	let queue: string;
 	let connection: Connection;
 	let channel: Channel;
@@ -39,7 +37,6 @@ describe('Process user create message.', () => {
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 		connection = await connect(safeGetConfig('RABBIT_URI'));
 		queue = safeGetConfig('RABBIT_QUEUE');
 	});
@@ -50,7 +47,7 @@ describe('Process user create message.', () => {
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, UserEntity);
+		await dbClient.deleteDB();
 		await server.close();
 		await channel.close();
 	});
@@ -68,9 +65,7 @@ describe('Process user create message.', () => {
 		await new Promise((r) => setTimeout(r, 10));
 
 		//Assert
-		const userCreated = await findOneBy(datasource, UserEntity, {
-			email: messageBody.email,
-		});
+		const userCreated = await dbClient.getUserByEmail(messageBody.email);
 		expect(userCreated).instanceOf(UserEntity);
 		expect(userCreated?.name).equal(messageBody.name);
 		expect(userCreated?.lastname).equal(messageBody.lastname);

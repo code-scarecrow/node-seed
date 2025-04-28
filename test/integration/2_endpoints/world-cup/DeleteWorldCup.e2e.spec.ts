@@ -3,20 +3,18 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { DataSource } from 'typeorm';
-import { deleteAll, findOneBy, insert } from 'test/integration/infrastructure/database/TestDatasetSeed';
 import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
 import { expect } from 'chai';
+import { PrismaClient } from '@prisma/client';
+import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
 
 describe('Delete World Cup e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
 	let worldCup: WorldCupEntity;
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 	});
 
 	beforeEach(async () => {
@@ -29,11 +27,26 @@ describe('Delete World Cup e2e Test.', () => {
 		worldCup.startDate = new Date('1978-06-01');
 		worldCup.finishDate = new Date('1978-06-25');
 
-		await insert<WorldCupEntity>(datasource, [worldCup]);
+		await new PrismaClient().world_cups.create({
+			data: {
+				uuid: worldCup.uuid,
+				pet_name: worldCup.petName,
+				year: worldCup.year,
+				start_date: worldCup.startDate,
+				finish_date: worldCup.finishDate,
+				countries: {
+					create: {
+						uuid: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+						name: 'Argentina',
+						code: CountryCodeEnum.AR,
+					},
+				},
+			},
+		});
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, WorldCupEntity);
+		await dbClient.deleteDB();
 		await server.close();
 	});
 
@@ -48,9 +61,7 @@ describe('Delete World Cup e2e Test.', () => {
 			.set('Country-Code', CountryCodeEnum.AR)
 			.expect(watch(HttpStatus.NO_CONTENT));
 
-		const worldCupExistent: WorldCupEntity | null = await findOneBy<WorldCupEntity>(datasource, WorldCupEntity, {
-			uuid: worldCup.uuid,
-		});
+		const worldCupExistent: WorldCupEntity | null = await dbClient.getWorldCup(worldCup.uuid);
 		expect(worldCupExistent).equal(null);
 	});
 

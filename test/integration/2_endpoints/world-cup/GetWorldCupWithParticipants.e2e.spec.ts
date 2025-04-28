@@ -3,9 +3,7 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
-import { DataSource } from 'typeorm';
-import { insert } from 'test/integration/infrastructure/database/TestDatasetSeed';
+import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
 import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
 import { expect } from 'chai';
@@ -13,41 +11,18 @@ import { expect } from 'chai';
 describe('Get World cup with participants e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
 	let worldCup: WorldCupEntity;
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 	});
 
 	beforeEach(async () => {
 		server = app.getHttpServer();
 
-		const host = new CountryEntity();
-		host.id = 1;
-		host.uuid = 'e69fa25d-17a1-4ceb-ae33-062af1b3c14c';
-		host.code = 'ARG';
-		host.name = 'Argentina';
-
-		const participant = new CountryEntity();
-		participant.id = 2;
-		participant.uuid = 'e69fa25d-17a1-4ceb-ae33-062af1b3c14d';
-		participant.code = 'ARG';
-		participant.name = 'Argentina';
-
-		await insert<CountryEntity>(datasource, [host, participant]);
-
-		worldCup = new WorldCupEntity();
-		worldCup.uuid = 'e69fa25d-17a1-4ceb-ae33-062af1b3c14e';
-		worldCup.petName = "La'eeb";
-		worldCup.year = '2022';
-		worldCup.startDate = new Date('2022-11-20');
-		worldCup.finishDate = new Date('2022-12-18');
-		worldCup.location = host;
-		worldCup.participants = [host, participant];
-
-		await insert<WorldCupEntity>(datasource, [worldCup]);
+		const host = await dbClient.createCountry();
+		const participant = await dbClient.createCountry();
+		worldCup = await dbClient.createWorldCup(host.id, [participant]);
 	});
 
 	afterEach(async () => {

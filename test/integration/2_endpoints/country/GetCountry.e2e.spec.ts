@@ -4,34 +4,26 @@ import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { CountryEntity } from 'src/domain/entities/CountryEntity';
-import { DataSource } from 'typeorm';
-import { deleteAll, insert } from 'test/integration/infrastructure/database/TestDatasetSeed';
+import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
 import { expect } from 'chai';
 
 describe('Get Country e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
 	let country: CountryEntity;
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 	});
 
 	beforeEach(async () => {
 		server = app.getHttpServer();
-		country = new CountryEntity();
-		country.uuid = '0b5ccea9-85e5-438c-b60d-3fd36eeb1bd9';
-		country.code = 'BRA';
-		country.name = 'Brazil';
-
-		await insert<CountryEntity>(datasource, [country]);
+		country = await dbClient.createCountry();
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, CountryEntity);
+		await dbClient.deleteDB();
 		await server.close();
 	});
 

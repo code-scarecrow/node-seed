@@ -5,14 +5,12 @@ import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { CountryRequest } from 'src/infrastructure/primary-adapters/http/controllers/country/request/CountryRequest';
 import { CountryEntity } from 'src/domain/entities/CountryEntity';
-import { DataSource } from 'typeorm';
-import { deleteAll, findOneBy, insert } from 'test/integration/infrastructure/database/TestDatasetSeed';
+import { dbClient } from 'test/integration/infrastructure/database/TestDatasetSeed';
 import { expect } from 'chai';
 
 describe('Update Country e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
 	let country: CountryEntity;
 
 	const countryRequest = new CountryRequest();
@@ -21,22 +19,15 @@ describe('Update Country e2e Test.', () => {
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 	});
 
 	beforeEach(async () => {
 		server = app.getHttpServer();
-
-		country = new CountryEntity();
-		country.uuid = '0685cee3-5fc8-4b88-ab4d-6647045d5f4d';
-		country.code = 'BRA';
-		country.name = 'Brazil';
-
-		await insert<CountryEntity>(datasource, [country]);
+		country = await dbClient.createCountry();
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, CountryEntity);
+		await dbClient.deleteDB();
 		await server.close();
 	});
 
@@ -57,9 +48,7 @@ describe('Update Country e2e Test.', () => {
 				expect(structure.includes('code')).to.be.true;
 			});
 
-		const countryExistent = await findOneBy<CountryEntity>(datasource, CountryEntity, {
-			uuid: country.uuid,
-		});
+		const countryExistent = await dbClient.getCountryByUuid(country.uuid);
 		expect(countryExistent).equal;
 		expect(countryExistent?.code).equal(countryRequest.code);
 		expect(countryExistent?.name).equal(countryRequest.name);
