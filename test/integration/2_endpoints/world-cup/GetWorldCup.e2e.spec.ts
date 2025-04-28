@@ -4,14 +4,14 @@ import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
-import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
+import { WorldCup } from 'src/domain/entities/WorldCup';
 import { expect } from 'chai';
 import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 
 describe('Get World Cup e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let worldCup: WorldCupEntity;
+	let worldCup: WorldCup;
 
 	before(async () => {
 		app = await initiateApp();

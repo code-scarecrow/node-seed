@@ -4,14 +4,14 @@ import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
-import { PlayerEntity } from 'src/domain/entities/PlayerEntity';
+import { Player } from 'src/domain/entities/Player';
 import { expect } from 'chai';
 import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 
 describe('Get Player e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let player: PlayerEntity;
+	let player: Player;
 
 	before(async () => {
 		app = await initiateApp();

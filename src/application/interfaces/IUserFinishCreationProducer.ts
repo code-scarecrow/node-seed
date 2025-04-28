@@ -1,7 +1,7 @@
-import { UserEntity } from 'src/domain/entities/UserEntity';
+import { User } from 'src/domain/entities/User';
 
 export const USER_FINISH_CREATION_PRODUCER = 'IUserFinishCreationEventProducer';
 
 export interface IUserFinishCreationProducer {
-	send(user: UserEntity): void;
+	send(user: User): void;
 }

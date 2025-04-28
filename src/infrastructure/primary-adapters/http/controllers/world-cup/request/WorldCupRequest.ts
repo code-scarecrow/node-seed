@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBefore } from '@code-scarecrow/base';
 import { IsNotEmpty, IsString, IsUUID, Matches, IsDateString, Length } from 'class-validator';
-import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
+import { WorldCup } from 'src/domain/entities/WorldCup';
 
 export class WorldCupRequest {
 	@IsNotEmpty()
@@ -40,8 +40,8 @@ export class WorldCupRequest {
 	@ApiProperty({ type: 'string', format: 'uuid' })
 	public countryId: string;
 
-	public toEntity(): WorldCupEntity {
-		const worldCup = new WorldCupEntity();
+	public toEntity(): WorldCup {
+		const worldCup = new WorldCup();
 		worldCup.petName = this.petName;
 		worldCup.year = this.year;
 		worldCup.startDate = new Date(this.startDate);

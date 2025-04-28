@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
 import { CLUB_REPO, IClubRepository } from '../interfaces/IClubRepository';
-import { ClubEntity } from 'src/domain/entities/ClubEntity';
+import { Club } from 'src/domain/entities/Club';
 import { CountryService } from './CountryService';
 import { CLUB_CACHE_REPO, IClubCacheRepository } from '../interfaces/IClubCacheRepository';
 
@@ -13,14 +13,14 @@ export class ClubService {
 		@Inject(CLUB_CACHE_REPO) private readonly cacheRepository: IClubCacheRepository,
 	) {}
 
-	public async create(countryId: string, club: ClubEntity): Promise<ClubEntity> {
+	public async create(countryId: string, club: Club): Promise<Club> {
 		const country = await this.countryService.findByUuid(countryId);
 		club.country = country;
 
 		return await this.clubRepository.create(club);
 	}
 
-	public async update(id: string, countryId: string, club: ClubEntity): Promise<ClubEntity> {
+	public async update(id: string, countryId: string, club: Club): Promise<Club> {
 		const country = await this.countryService.findByUuid(countryId);
 		const clubDb = await this.findByUuid(id);
 		club.uuid = clubDb.uuid;
@@ -40,7 +40,7 @@ export class ClubService {
 		await this.cacheRepository.deleteCache(id);
 	}
 
-	public async findByUuid(uuid: string): Promise<ClubEntity> {
+	public async findByUuid(uuid: string): Promise<Club> {
 		const cache = await this.cacheRepository.getCache(uuid);
 
 		if (cache) {
@@ -58,7 +58,7 @@ export class ClubService {
 		return club;
 	}
 
-	public async findAll(): Promise<ClubEntity[]> {
+	public async findAll(): Promise<Club[]> {
 		return await this.clubRepository.findAll();
 	}
 }

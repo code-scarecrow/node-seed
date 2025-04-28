@@ -5,14 +5,14 @@ import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 import { WorldCupRequest } from 'src/infrastructure/primary-adapters/http/controllers/world-cup/request/WorldCupRequest';
-import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
+import { WorldCup } from 'src/domain/entities/WorldCup';
 import { expect } from 'chai';
 
 describe('Update World Cup e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
 	let worldCupRequest: WorldCupRequest;
-	let worldCup: WorldCupEntity;
+	let worldCup: WorldCup;
 
 	before(async () => {
 		app = await initiateApp();
@@ -57,7 +57,7 @@ describe('Update World Cup e2e Test.', () => {
 				expect(structure.includes('location')).to.be.true;
 			});
 
-		const worldCupExistent: WorldCupEntity | null = await dbClient.getWorldCup(worldCup.uuid);
+		const worldCupExistent: WorldCup | null = await dbClient.getWorldCup(worldCup.uuid);
 		expect(worldCupExistent).exist;
 		expect(worldCupExistent?.petName).equal(worldCupRequest.petName);
 		expect(worldCupExistent?.year).equal(worldCupRequest.year);

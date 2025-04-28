@@ -1,8 +1,8 @@
-import { ClubEntity } from 'src/domain/entities/ClubEntity';
+import { Club } from 'src/domain/entities/Club';
 import { IBaseRepository } from '@code-scarecrow/base/database';
 
 export const CLUB_REPO = 'ClubRepositoryInterface';
 
-export interface IClubRepository extends IBaseRepository<{ id: number }, ClubEntity> {
-	findByUuid(uuid: string): Promise<ClubEntity | null>;
+export interface IClubRepository extends IBaseRepository<{ id: number }, Club> {
+	findByUuid(uuid: string): Promise<Club | null>;
 }

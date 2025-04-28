@@ -1,17 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
 import { COUNTRY_REPO, ICountryRepository } from '../interfaces/ICountryRepository';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
+import { Country } from 'src/domain/entities/Country';
 
 @Injectable()
 export class CountryService {
 	constructor(@Inject(COUNTRY_REPO) private readonly countryRepository: ICountryRepository) {}
 
-	public async create(country: CountryEntity): Promise<CountryEntity> {
+	public async create(country: Country): Promise<Country> {
 		return await this.countryRepository.create(country);
 	}
 
-	public async update(id: string, country: CountryEntity): Promise<CountryEntity> {
+	public async update(id: string, country: Country): Promise<Country> {
 		const countryDb = await this.findByUuid(id);
 		country.uuid = countryDb.uuid;
 
@@ -24,7 +24,7 @@ export class CountryService {
 		await this.countryRepository.delete({ id: country.id });
 	}
 
-	public async findByUuid(uuid: string): Promise<CountryEntity> {
+	public async findByUuid(uuid: string): Promise<Country> {
 		const country = await this.countryRepository.findByUuid(uuid);
 
 		if (!country) throw new EntityNotFound('Country');
@@ -32,15 +32,15 @@ export class CountryService {
 		return country;
 	}
 
-	public async findAll(): Promise<CountryEntity[]> {
+	public async findAll(): Promise<Country[]> {
 		return await this.countryRepository.findAll();
 	}
 
-	public async findAllByUuid(uuids: string[]): Promise<CountryEntity[]> {
+	public async findAllByUuid(uuids: string[]): Promise<Country[]> {
 		return await this.countryRepository.findAllByUuid(uuids);
 	}
 
-	public async getCountryPlayers(id: string): Promise<CountryEntity> {
+	public async getCountryPlayers(id: string): Promise<Country> {
 		const country = await this.countryRepository.getCountryWithPlayers(id);
 
 		if (!country) throw new EntityNotFound('Country');

@@ -4,15 +4,15 @@ import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { dbClient } from 'test/integration/infrastructure/database/DBClient';
-import { ClubEntity } from 'src/domain/entities/ClubEntity';
+import { Club } from 'src/domain/entities/Club';
 import { ClubResponse } from 'src/infrastructure/primary-adapters/http/controllers/club/response/ClubResponse';
 import { expect } from 'chai';
 
 describe('Get Clubs e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let club1: ClubEntity;
-	let club2: ClubEntity;
+	let club1: Club;
+	let club2: Club;
 
 	before(async () => {
 		app = await initiateApp();

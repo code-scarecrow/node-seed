@@ -3,7 +3,7 @@ import { Logger } from '@code-scarecrow/base/logger';
 import { expect } from 'chai';
 import { Redis } from 'ioredis';
 import { It, Mock, Times } from 'moq.ts';
-import { ClubEntity } from 'src/domain/entities/ClubEntity';
+import { Club } from 'src/domain/entities/Club';
 import { ClubCacheRepository } from 'src/infrastructure/secondary-adapters/redis/repositories/ClubCacheRepository';
 
 describe('ClubCacheRepository test', () => {
@@ -31,7 +31,7 @@ describe('ClubCacheRepository test', () => {
 	describe('getCache', () => {
 		it('should get from cache', async () => {
 			const uuid = '2bedb101-012d-490a-bf6f-a801d95afc05';
-			const club = new ClubEntity();
+			const club = new Club();
 			club.uuid = uuid;
 			club.name = 'Club Atlético Vélez Sarsfield';
 			club.foundationDate = new Date('1910-01-01');
@@ -78,7 +78,7 @@ describe('ClubCacheRepository test', () => {
 				.setup((rm) => rm.set(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<number>()))
 				.returnsAsync(null);
 
-			await clubCacheRepository.saveCache(new ClubEntity());
+			await clubCacheRepository.saveCache(new Club());
 
 			redisManager.verify(
 				(rm) => rm.set(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<number>()),
@@ -94,7 +94,7 @@ describe('ClubCacheRepository test', () => {
 				.setup((rm) => rm.set(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<number>()))
 				.throwsAsync(mockedError);
 
-			const saveCachePromise = clubCacheRepository.saveCache(new ClubEntity());
+			const saveCachePromise = clubCacheRepository.saveCache(new Club());
 
 			await expect(saveCachePromise).to.be.rejectedWith(mockedError);
 

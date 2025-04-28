@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
 import { IPlayerRepository, PLAYER_REPO } from '../interfaces/IPlayerRepository';
-import { PlayerEntity } from 'src/domain/entities/PlayerEntity';
+import { Player } from 'src/domain/entities/Player';
 import { CountryService } from './CountryService';
 import { ClubService } from './ClubService';
 
@@ -13,7 +13,7 @@ export class PlayerService {
 		private readonly clubService: ClubService,
 	) {}
 
-	public async create(countryId: string, clubId: string, player: PlayerEntity): Promise<PlayerEntity> {
+	public async create(countryId: string, clubId: string, player: Player): Promise<Player> {
 		const country = await this.countryService.findByUuid(countryId);
 		const club = await this.clubService.findByUuid(clubId);
 		player.country = country;
@@ -22,7 +22,7 @@ export class PlayerService {
 		return await this.playerRepository.create(player);
 	}
 
-	public async update(id: string, countryId: string, clubId: string, player: PlayerEntity): Promise<PlayerEntity> {
+	public async update(id: string, countryId: string, clubId: string, player: Player): Promise<Player> {
 		const country = await this.countryService.findByUuid(countryId);
 		const club = await this.clubService.findByUuid(clubId);
 
@@ -41,7 +41,7 @@ export class PlayerService {
 		await this.playerRepository.delete({ id: player.id });
 	}
 
-	public async findByUuid(uuid: string): Promise<PlayerEntity> {
+	public async findByUuid(uuid: string): Promise<Player> {
 		const player = await this.playerRepository.findByUuid(uuid);
 
 		if (!player) throw new EntityNotFound('Player');
@@ -49,7 +49,7 @@ export class PlayerService {
 		return player;
 	}
 
-	public async findAll(): Promise<PlayerEntity[]> {
+	public async findAll(): Promise<Player[]> {
 		return await this.playerRepository.findAll();
 	}
 }

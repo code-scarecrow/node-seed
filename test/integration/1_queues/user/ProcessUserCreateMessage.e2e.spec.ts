@@ -1,6 +1,6 @@
 import { HttpServer, INestApplication } from '@nestjs/common';
 import { initiateApp } from '../../infrastructure/app/AppInitiator';
-import { UserEntity } from 'src/domain/entities/UserEntity';
+import { User } from 'src/domain/entities/User';
 import { expect } from 'chai';
 import { IUserIncommingMessage } from 'src/infrastructure/primary-adapters/message-queue/listeners/user/IUserIncommingMessage';
 import { RabbitMessage, safeGetConfig } from '@code-scarecrow/base';
@@ -14,7 +14,7 @@ describe('Process user create message.', () => {
 	let connection: Connection;
 	let channel: Channel;
 
-	const user = new UserEntity();
+	const user = new User();
 	user.uuid = '40fa3986-c9c1-4575-8385-6fe5f4d6fafb';
 	user.name = 'Walter';
 	user.lastname = 'Bou';
@@ -66,7 +66,7 @@ describe('Process user create message.', () => {
 
 		//Assert
 		const userCreated = await dbClient.getUserByEmail(messageBody.email);
-		expect(userCreated).instanceOf(UserEntity);
+		expect(userCreated).instanceOf(User);
 		expect(userCreated?.name).equal(messageBody.name);
 		expect(userCreated?.lastname).equal(messageBody.lastname);
 		expect(userCreated?.dni).equal(messageBody.dni);

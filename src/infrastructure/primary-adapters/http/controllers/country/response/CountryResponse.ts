@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
+import { Country } from 'src/domain/entities/Country';
 import { PlayerResponse } from '../../player/response/PlayerResponse';
 
 export class CountryResponse {
@@ -15,7 +15,7 @@ export class CountryResponse {
 	@ApiPropertyOptional({ type: [PlayerResponse] })
 	public players?: PlayerResponse[];
 
-	constructor(country: CountryEntity) {
+	constructor(country: Country) {
 		this.id = country.uuid;
 		this.name = country.name;
 		this.code = country.code;

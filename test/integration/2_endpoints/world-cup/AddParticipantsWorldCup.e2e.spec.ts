@@ -3,7 +3,7 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
+import { WorldCup } from 'src/domain/entities/WorldCup';
 import { AddParticipantsRequest } from 'src/infrastructure/primary-adapters/http/controllers/world-cup/request/AddParticipantsRequest';
 import { AddParticipantsResponse } from 'src/infrastructure/primary-adapters/http/controllers/world-cup/response/AddParticipantsResponse';
 import { expect } from 'chai';
@@ -13,7 +13,7 @@ describe('Add Participants to a World Cup e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
 	let participantsRequest: AddParticipantsRequest;
-	let worldCup: WorldCupEntity;
+	let worldCup: WorldCup;
 
 	before(async () => {
 		app = await initiateApp();

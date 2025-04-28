@@ -1,7 +1,7 @@
-import { UserEntity } from 'src/domain/entities/UserEntity';
+import { User } from 'src/domain/entities/User';
 
 export const USER_CREATE_MESSAGE_PRODUCER = 'IUserCreateMessageProducer';
 
 export interface IUserCreateMessageProducer {
-	send(user: Omit<UserEntity, 'id'>): void;
+	send(user: Omit<User, 'id'>): void;
 }

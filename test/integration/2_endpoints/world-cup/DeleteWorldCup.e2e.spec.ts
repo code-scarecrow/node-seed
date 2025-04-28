@@ -3,7 +3,7 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
+import { WorldCup } from 'src/domain/entities/WorldCup';
 import { expect } from 'chai';
 import { PrismaClient } from '@prisma/client';
 import { dbClient } from 'test/integration/infrastructure/database/DBClient';
@@ -11,7 +11,7 @@ import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 describe('Delete World Cup e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let worldCup: WorldCupEntity;
+	let worldCup: WorldCup;
 
 	before(async () => {
 		app = await initiateApp();
@@ -20,7 +20,7 @@ describe('Delete World Cup e2e Test.', () => {
 	beforeEach(async () => {
 		server = app.getHttpServer();
 
-		worldCup = new WorldCupEntity();
+		worldCup = new WorldCup();
 		worldCup.uuid = '67d7c4fc-02f4-49ce-befd-3fbd08e6ac42';
 		worldCup.petName = 'Gauchito';
 		worldCup.year = '1978';
@@ -61,7 +61,7 @@ describe('Delete World Cup e2e Test.', () => {
 			.set('Country-Code', CountryCodeEnum.AR)
 			.expect(watch(HttpStatus.NO_CONTENT));
 
-		const worldCupExistent: WorldCupEntity | null = await dbClient.getWorldCup(worldCup.uuid);
+		const worldCupExistent: WorldCup | null = await dbClient.getWorldCup(worldCup.uuid);
 		expect(worldCupExistent).equal(null);
 	});
 

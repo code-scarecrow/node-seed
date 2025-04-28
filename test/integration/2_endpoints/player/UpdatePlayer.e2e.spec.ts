@@ -5,7 +5,7 @@ import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 import { PlayerRequest } from 'src/infrastructure/primary-adapters/http/controllers/player/request/PlayerRequest';
-import { PlayerEntity } from 'src/domain/entities/PlayerEntity';
+import { Player } from 'src/domain/entities/Player';
 import { PositionEnum } from 'src/domain/enums/PositionEnum';
 import { expect } from 'chai';
 
@@ -13,7 +13,7 @@ describe('Update Player e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
 	let playerRequest: PlayerRequest;
-	let player: PlayerEntity;
+	let player: Player;
 
 	before(async () => {
 		app = await initiateApp();

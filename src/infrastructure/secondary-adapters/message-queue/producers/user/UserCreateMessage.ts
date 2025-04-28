@@ -1,4 +1,4 @@
-import { UserEntity } from 'src/domain/entities/UserEntity';
+import { User } from 'src/domain/entities/User';
 
 export class UserCreateMessage {
 	public uuid: string;
@@ -9,7 +9,7 @@ export class UserCreateMessage {
 	public password: string;
 	public birthDate: Date;
 
-	constructor(user: Omit<UserEntity, 'id'>) {
+	constructor(user: Omit<User, 'id'>) {
 		this.uuid = user.uuid;
 		this.name = user.name;
 		this.lastname = user.lastname;

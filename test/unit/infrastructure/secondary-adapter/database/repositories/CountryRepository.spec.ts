@@ -1,15 +1,15 @@
 import { It, Mock } from 'moq.ts';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
+import { Country } from 'src/domain/entities/Country';
 import { CountryRepository } from 'src/infrastructure/secondary-adapters/database/repositories/CountryRepository';
 import { Repository } from 'typeorm';
 import { expect } from 'chai';
 
 describe('Country Repository Test.', () => {
 	let countryRepository: CountryRepository;
-	let repo: Mock<Repository<CountryEntity>>;
+	let repo: Mock<Repository<Country>>;
 
 	beforeEach(() => {
-		repo = new Mock<Repository<CountryEntity>>();
+		repo = new Mock<Repository<Country>>();
 		countryRepository = new CountryRepository(repo.object());
 	});
 
@@ -17,19 +17,19 @@ describe('Country Repository Test.', () => {
 		//Arrange
 		const uuid = 'c46f7322-9045-11ed-923d-0242ac180003';
 
-		repo.setup((m) => m.findOneBy(It.IsAny())).returnsAsync(new CountryEntity());
+		repo.setup((m) => m.findOneBy(It.IsAny())).returnsAsync(new Country());
 
 		//Act
 		const result = await countryRepository.findByUuid(uuid);
 
 		//Assert
-		expect(result).instanceOf(CountryEntity);
+		expect(result).instanceOf(Country);
 	});
 
 	it('Find all by uuids.', async () => {
 		//Arrange
 		const uuid = 'c46f7322-9045-11ed-923d-0242ac180003';
-		const clubEntity = new CountryEntity();
+		const clubEntity = new Country();
 
 		repo.setup((m) => m.find(It.IsAny())).returnsAsync([clubEntity]);
 
@@ -40,7 +40,7 @@ describe('Country Repository Test.', () => {
 		expect(result).deep.equal([clubEntity]);
 
 		result.forEach((club) => {
-			expect(club).instanceOf(CountryEntity);
+			expect(club).instanceOf(Country);
 		});
 	});
 
@@ -48,12 +48,12 @@ describe('Country Repository Test.', () => {
 		//Arrange
 		const uuid = 'c46f7322-9045-11ed-923d-0242ac180003';
 
-		repo.setup((m) => m.findOne(It.IsAny())).returnsAsync(new CountryEntity());
+		repo.setup((m) => m.findOne(It.IsAny())).returnsAsync(new Country());
 
 		//Act
 		const result = await countryRepository.getCountryWithPlayers(uuid);
 
 		//Assert
-		expect(result).instanceOf(CountryEntity);
+		expect(result).instanceOf(Country);
 	});
 });

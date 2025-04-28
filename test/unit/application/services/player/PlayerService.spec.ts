@@ -3,9 +3,9 @@ import { IPlayerRepository } from 'src/application/interfaces/IPlayerRepository'
 import { ClubService } from 'src/application/services/ClubService';
 import { CountryService } from 'src/application/services/CountryService';
 import { PlayerService } from 'src/application/services/PlayerService';
-import { ClubEntity } from 'src/domain/entities/ClubEntity';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
-import { PlayerEntity } from 'src/domain/entities/PlayerEntity';
+import { Club } from 'src/domain/entities/Club';
+import { Country } from 'src/domain/entities/Country';
+import { Player } from 'src/domain/entities/Player';
 import { expect } from 'chai';
 
 describe('Player service test.', () => {
@@ -28,13 +28,13 @@ describe('Player service test.', () => {
 
 	it('should create a player.', async () => {
 		//Arrange
-		const country = new CountryEntity();
-		const club = new ClubEntity();
-		const player = new PlayerEntity();
+		const country = new Country();
+		const club = new Club();
+		const player = new Player();
 
 		countryService.setup((m) => m.findByUuid(It.IsAny<string>())).returnsAsync(country);
 		clubService.setup((m) => m.findByUuid(It.IsAny<string>())).returnsAsync(club);
-		playerRepository.setup((m) => m.create(player)).returnsAsync(It.IsAny<PlayerEntity>());
+		playerRepository.setup((m) => m.create(player)).returnsAsync(It.IsAny<Player>());
 
 		//Act
 		await playerService.create(country.uuid, club.uuid, player);
@@ -45,9 +45,9 @@ describe('Player service test.', () => {
 
 	it('should update a player.', async () => {
 		//Arrange
-		const country = new CountryEntity();
-		const club = new ClubEntity();
-		const player = new PlayerEntity();
+		const country = new Country();
+		const club = new Club();
+		const player = new Player();
 
 		countryService.setup((m) => m.findByUuid(It.IsAny<string>())).returnsAsync(country);
 		clubService.setup((m) => m.findByUuid(It.IsAny<string>())).returnsAsync(club);
@@ -77,7 +77,7 @@ describe('Player service test.', () => {
 
 	it('should delete a player.', async () => {
 		//Arrange
-		const player = new PlayerEntity();
+		const player = new Player();
 
 		playerRepository.setup((m) => m.findByUuid(It.IsAny<string>())).returnsAsync(player);
 		playerRepository.setup((m) => m.delete(It.Is<{ id: number }>((v) => v.id === player.id))).returnsAsync(undefined);
@@ -91,7 +91,7 @@ describe('Player service test.', () => {
 
 	it('should find a player by uuid return an entity.', async () => {
 		//Arrange
-		const player = new PlayerEntity();
+		const player = new Player();
 
 		playerRepository.setup((m) => m.findByUuid(It.IsAny<string>())).returnsAsync(player);
 
@@ -101,12 +101,12 @@ describe('Player service test.', () => {
 		//Assert
 		playerRepository.verify((m) => m.findByUuid(player.uuid), Times.Once());
 
-		expect(response).instanceOf(PlayerEntity);
+		expect(response).instanceOf(Player);
 	});
 
 	it('should find a player by uuid throw error.', async () => {
 		//Arrange
-		const player = new PlayerEntity();
+		const player = new Player();
 
 		playerRepository.setup((m) => m.findByUuid(It.IsAny<string>())).returnsAsync(null);
 
@@ -121,7 +121,7 @@ describe('Player service test.', () => {
 
 	it('should return all players.', async () => {
 		//Arrange
-		const player = new PlayerEntity();
+		const player = new Player();
 
 		playerRepository.setup((m) => m.findAll()).returnsAsync([player]);
 
@@ -131,6 +131,6 @@ describe('Player service test.', () => {
 		//Assert
 		playerRepository.verify((m) => m.findAll(), Times.Once());
 
-		response.map((country) => expect(country).instanceOf(PlayerEntity));
+		response.map((country) => expect(country).instanceOf(Player));
 	});
 });

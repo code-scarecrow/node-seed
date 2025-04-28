@@ -2,7 +2,7 @@ import { It, Mock, Times } from 'moq.ts';
 import { IUserCreateMessageProducer } from 'src/application/interfaces/IUserCreateMessageProducer';
 import { IUserRepository } from 'src/application/interfaces/IUserRepository';
 import { UserService } from 'src/application/services/UserService';
-import { UserEntity } from 'src/domain/entities/UserEntity';
+import { User } from 'src/domain/entities/User';
 import { expect } from 'chai';
 import { IUserFinishCreationProducer } from 'src/application/interfaces/IUserFinishCreationProducer';
 
@@ -29,10 +29,10 @@ describe('User service test.', () => {
 
 	it('should create a user.', async () => {
 		//Arrange
-		const user = new UserEntity();
+		const user = new User();
 
-		userRepository.setup((ur) => ur.create(It.IsAny<UserEntity>())).returnsAsync(user);
-		userFinishCreationProducer.setup((ur) => ur.send(It.IsAny<UserEntity>())).returns(undefined);
+		userRepository.setup((ur) => ur.create(It.IsAny<User>())).returnsAsync(user);
+		userFinishCreationProducer.setup((ur) => ur.send(It.IsAny<User>())).returns(undefined);
 
 		//Act
 		await userService.create(user);
@@ -43,7 +43,7 @@ describe('User service test.', () => {
 
 	it('should return all users.', async () => {
 		//Arrange
-		const user = new UserEntity();
+		const user = new User();
 
 		userRepository.setup((ur) => ur.findAll()).returnsAsync([user]);
 
@@ -53,19 +53,19 @@ describe('User service test.', () => {
 		//Assert
 		userRepository.verify((ur) => ur.findAll(), Times.Once());
 
-		response.forEach((u) => expect(u).instanceOf(UserEntity));
+		response.forEach((u) => expect(u).instanceOf(User));
 	});
 
 	it('should send a user create message.', () => {
 		//Arrange
-		const user = new UserEntity();
+		const user = new User();
 
-		userCreateProducer.setup((ur) => ur.send(It.IsAny<UserEntity>())).returns(undefined);
+		userCreateProducer.setup((ur) => ur.send(It.IsAny<User>())).returns(undefined);
 
 		//Act
 		userService.createMessage(user);
 
 		//Assert
-		userCreateProducer.verify((ur) => ur.send(It.IsAny<UserEntity>()), Times.Once());
+		userCreateProducer.verify((ur) => ur.send(It.IsAny<User>()), Times.Once());
 	});
 });

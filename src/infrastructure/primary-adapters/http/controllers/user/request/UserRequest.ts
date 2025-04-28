@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, Matches, IsDateString, MaxLength, IsEmail, NotContains } from 'class-validator';
-import { UserEntity } from 'src/domain/entities/UserEntity';
+import { User } from 'src/domain/entities/User';
 
 export class UserRequest {
 	@IsNotEmpty()
@@ -38,8 +38,8 @@ export class UserRequest {
 	@ApiProperty({ type: 'string', format: 'date', example: '2000-02-12' })
 	public birthDate: string;
 
-	public toEntity(): Omit<UserEntity, 'id' | 'uuid'> {
-		const user = new UserEntity();
+	public toEntity(): Omit<User, 'id' | 'uuid'> {
+		const user = new User();
 		user.name = this.name;
 		user.lastname = this.lastname;
 		user.dni = this.dni;

@@ -4,7 +4,7 @@ import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { ClubRequest } from 'src/infrastructure/primary-adapters/http/controllers/club/request/ClubRequest';
-import { ClubEntity } from 'src/domain/entities/ClubEntity';
+import { Club } from 'src/domain/entities/Club';
 import { expect } from 'chai';
 import { Redis } from 'ioredis';
 import { safeGetConfig } from '@code-scarecrow/base';
@@ -14,7 +14,7 @@ describe('Update Club e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
 	let clubRequest: ClubRequest;
-	let club: ClubEntity;
+	let club: Club;
 	let redisClient: Redis;
 
 	before(async () => {

@@ -5,14 +5,14 @@ import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 import { expect } from 'chai';
-import { UserEntity } from 'src/domain/entities/UserEntity';
+import { User } from 'src/domain/entities/User';
 import { UserResponse } from 'src/infrastructure/primary-adapters/http/controllers/user/response/UserResponse';
 
 describe('Get Users e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let user1: UserEntity;
-	let user2: UserEntity;
+	let user1: User;
+	let user2: User;
 
 	before(async () => {
 		app = await initiateApp();

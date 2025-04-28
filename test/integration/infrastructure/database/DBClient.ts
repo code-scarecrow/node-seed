@@ -1,15 +1,15 @@
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
-import { ClubEntity } from 'src/domain/entities/ClubEntity';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
+import { Club } from 'src/domain/entities/Club';
+import { Country } from 'src/domain/entities/Country';
 import {
 	mapPositionEnum,
 	mapPositionPrismaEnum,
 } from 'src/infrastructure/secondary-adapters/database/mappers/PositionEnumMapper';
 import { PositionEnum } from 'src/domain/enums/PositionEnum';
-import { PlayerEntity } from 'src/domain/entities/PlayerEntity';
-import { UserEntity } from 'src/domain/entities/UserEntity';
-import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
+import { Player } from 'src/domain/entities/Player';
+import { User } from 'src/domain/entities/User';
+import { WorldCup } from 'src/domain/entities/WorldCup';
 
 class DBClient {
 	private readonly prisma: PrismaClient;
@@ -27,7 +27,7 @@ class DBClient {
 		await this.prisma.countries.deleteMany();
 	}
 
-	public async createClub(countryId: number): Promise<ClubEntity> {
+	public async createClub(countryId: number): Promise<Club> {
 		const club = await this.prisma.clubs.create({
 			data: {
 				name: 'Club 1',
@@ -42,14 +42,14 @@ class DBClient {
 			},
 		});
 
-		const res = new ClubEntity();
+		const res = new Club();
 		res.id = club.id;
 		res.uuid = club.uuid;
 		res.foundationDate = club.foundation_date;
 		res.createdAt = club.created_at;
 		res.updatedAt = club.updated_at;
 		res.name = club.name;
-		res.country = new CountryEntity();
+		res.country = new Country();
 		res.country.id = club.countries.id;
 		res.country.uuid = club.countries.uuid;
 		res.country.name = club.countries.name;
@@ -57,7 +57,7 @@ class DBClient {
 		return res;
 	}
 
-	public async getClubByUuid(uuid: string): Promise<ClubEntity | null> {
+	public async getClubByUuid(uuid: string): Promise<Club | null> {
 		const club = await this.prisma.clubs.findFirst({
 			where: {
 				uuid,
@@ -69,14 +69,14 @@ class DBClient {
 
 		if (!club) return null;
 
-		const res = new ClubEntity();
+		const res = new Club();
 		res.id = club.id;
 		res.uuid = club.uuid;
 		res.foundationDate = club.foundation_date;
 		res.createdAt = club.created_at;
 		res.updatedAt = club.updated_at;
 		res.name = club.name;
-		res.country = new CountryEntity();
+		res.country = new Country();
 		res.country.id = club.countries.id;
 		res.country.uuid = club.countries.uuid;
 		res.country.name = club.countries.name;
@@ -84,7 +84,7 @@ class DBClient {
 		return res;
 	}
 
-	public async createCountry(): Promise<CountryEntity> {
+	public async createCountry(): Promise<Country> {
 		return await this.prisma.countries.create({
 			data: {
 				name: 'Country 1',
@@ -94,7 +94,7 @@ class DBClient {
 		});
 	}
 
-	public async getCountryByUuid(uuid: string): Promise<CountryEntity | null> {
+	public async getCountryByUuid(uuid: string): Promise<Country | null> {
 		const country = await this.prisma.countries.findFirst({
 			where: {
 				uuid,
@@ -103,7 +103,7 @@ class DBClient {
 
 		if (!country) return null;
 
-		const res = new CountryEntity();
+		const res = new Country();
 		res.id = country.id;
 		res.uuid = country.uuid;
 		res.name = country.name;
@@ -111,7 +111,7 @@ class DBClient {
 		return res;
 	}
 
-	public async createPlayer(clubId: number, countryId: number): Promise<PlayerEntity> {
+	public async createPlayer(clubId: number, countryId: number): Promise<Player> {
 		const player = await this.prisma.players.create({
 			data: {
 				name: faker.string.alpha(10),
@@ -126,7 +126,7 @@ class DBClient {
 			},
 		});
 
-		const res = new PlayerEntity();
+		const res = new Player();
 		res.id = player.id;
 		res.uuid = player.uuid;
 		res.name = player.name;
@@ -139,7 +139,7 @@ class DBClient {
 		return res;
 	}
 
-	public async getPlayer(uuid: string): Promise<PlayerEntity | null> {
+	public async getPlayer(uuid: string): Promise<Player | null> {
 		const player = await this.prisma.players.findFirst({
 			where: {
 				uuid,
@@ -152,7 +152,7 @@ class DBClient {
 
 		if (!player) return null;
 
-		const res = new PlayerEntity();
+		const res = new Player();
 		res.id = player.id;
 		res.uuid = player.uuid;
 		res.name = player.name;
@@ -161,14 +161,14 @@ class DBClient {
 		res.position = mapPositionEnum(player.position);
 		res.birthDate = player.birth_date;
 		res.lastname = player.lastname;
-		res.club = new ClubEntity();
+		res.club = new Club();
 		res.club.id = player.clubs.id;
 		res.club.uuid = player.clubs.uuid;
 		res.club.name = player.clubs.name;
 		res.club.foundationDate = player.clubs.foundation_date;
 		res.club.createdAt = player.clubs.created_at;
 		res.club.updatedAt = player.clubs.updated_at;
-		res.country = new CountryEntity();
+		res.country = new Country();
 		res.country.id = player.countries.id;
 		res.country.uuid = player.countries.uuid;
 		res.country.name = player.countries.name;
@@ -177,7 +177,7 @@ class DBClient {
 		return res;
 	}
 
-	public async createUser(): Promise<UserEntity> {
+	public async createUser(): Promise<User> {
 		const user = await this.prisma.users.create({
 			data: {
 				email: faker.internet.email(),
@@ -190,7 +190,7 @@ class DBClient {
 			},
 		});
 
-		const res = new UserEntity();
+		const res = new User();
 		res.id = user.id;
 		res.uuid = user.uuid;
 		res.email = user.email;
@@ -202,7 +202,7 @@ class DBClient {
 		return res;
 	}
 
-	public async getUserByEmail(email: string): Promise<UserEntity | null> {
+	public async getUserByEmail(email: string): Promise<User | null> {
 		const user = await this.prisma.users.findFirst({
 			where: {
 				email: email,
@@ -211,7 +211,7 @@ class DBClient {
 
 		if (!user) return null;
 
-		const res = new UserEntity();
+		const res = new User();
 		res.id = user.id;
 		res.uuid = user.uuid;
 		res.email = user.email;
@@ -223,7 +223,7 @@ class DBClient {
 		return res;
 	}
 
-	public async createWorldCup(countryId: number, participants: CountryEntity[]): Promise<WorldCupEntity> {
+	public async createWorldCup(countryId: number, participants: Country[]): Promise<WorldCup> {
 		const wc = await this.prisma.world_cups.create({
 			data: {
 				uuid: faker.string.uuid(),
@@ -243,14 +243,14 @@ class DBClient {
 			},
 		});
 
-		const res = new WorldCupEntity();
+		const res = new WorldCup();
 		res.id = wc.id;
 		res.uuid = wc.uuid;
 		res.petName = wc.pet_name;
 		res.startDate = wc.start_date;
 		res.finishDate = wc.finish_date;
 		res.year = wc.year;
-		res.location = new CountryEntity();
+		res.location = new Country();
 		res.location.id = wc.location_id;
 		res.location.name = wc.countries.name;
 		res.location.code = wc.countries.code;
@@ -258,7 +258,7 @@ class DBClient {
 		return res;
 	}
 
-	public async getWorldCup(uuid: string): Promise<WorldCupEntity | null> {
+	public async getWorldCup(uuid: string): Promise<WorldCup | null> {
 		const wc = await this.prisma.world_cups.findFirst({
 			where: {
 				uuid,
@@ -275,20 +275,20 @@ class DBClient {
 
 		if (!wc) return null;
 
-		const res = new WorldCupEntity();
+		const res = new WorldCup();
 		res.id = wc.id;
 		res.uuid = wc.uuid;
 		res.petName = wc.pet_name;
 		res.startDate = wc.start_date;
 		res.finishDate = wc.finish_date;
 		res.year = wc.year;
-		res.location = new CountryEntity();
+		res.location = new Country();
 		res.location.id = wc.location_id;
 		res.location.name = wc.countries.name;
 		res.location.code = wc.countries.code;
 		res.location.uuid = wc.countries.uuid;
 		res.participants = wc.participants.map((p) => {
-			const c = new CountryEntity();
+			const c = new Country();
 			c.id = p.country_id;
 			c.name = p.countries.name;
 			c.code = p.countries.code;
