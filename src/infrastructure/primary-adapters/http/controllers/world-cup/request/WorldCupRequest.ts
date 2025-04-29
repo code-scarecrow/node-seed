@@ -7,7 +7,7 @@ export class WorldCupRequest {
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty({ type: 'string', example: 'argento' })
-	public petName: string;
+	public petName!: string;
 
 	@IsNotEmpty()
 	@IsString()
@@ -16,7 +16,7 @@ export class WorldCupRequest {
 		message: '$property must be formatted as yyyy',
 	})
 	@ApiProperty({ type: 'string', example: '2022' })
-	public year: string;
+	public year!: string;
 
 	@IsNotEmpty()
 	@IsDateString()
@@ -25,7 +25,7 @@ export class WorldCupRequest {
 	})
 	@ApiProperty({ type: 'string', format: 'date' })
 	@IsBefore('finishDate')
-	public startDate: string;
+	public startDate!: string;
 
 	@IsNotEmpty()
 	@IsDateString()
@@ -33,12 +33,12 @@ export class WorldCupRequest {
 		message: '$property must be formatted as yyyy-mm-dd',
 	})
 	@ApiProperty({ type: 'string', format: 'date' })
-	public finishDate: string;
+	public finishDate!: string;
 
 	@IsNotEmpty()
 	@IsUUID()
 	@ApiProperty({ type: 'string', format: 'uuid' })
-	public countryId: string;
+	public countryId!: string;
 
 	public toEntity(): Omit<WorldCupCreation, 'locationId'> {
 		return {

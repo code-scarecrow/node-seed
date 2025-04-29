@@ -7,12 +7,12 @@ export class PlayerRequest {
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty({ type: 'string' })
-	public name: string;
+	public name!: string;
 
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty({ type: 'string' })
-	public lastname: string;
+	public lastname!: string;
 
 	@IsNotEmpty()
 	@IsDateString()
@@ -20,23 +20,23 @@ export class PlayerRequest {
 		message: '$property must be formatted as yyyy-mm-dd',
 	})
 	@ApiProperty({ type: 'string', format: 'date', example: '2000-02-12' })
-	public birthDate: string;
+	public birthDate!: string;
 
 	@IsEnum(PositionEnum, {
 		message: `position should be one of ${Object.values(PositionEnum)}`,
 	})
 	@ApiProperty({ enum: PositionEnum, example: PositionEnum.GK })
-	public position: PositionEnum;
+	public position!: PositionEnum;
 
 	@IsNotEmpty()
 	@IsUUID()
 	@ApiProperty({ type: 'string', format: 'uuid' })
-	public clubId: string;
+	public clubId!: string;
 
 	@IsNotEmpty()
 	@IsUUID()
 	@ApiProperty({ type: 'string', format: 'uuid' })
-	public countryId: string;
+	public countryId!: string;
 
 	public toEntity(): Omit<PlayerCreation, 'clubId' | 'countryId'> {
 		return {

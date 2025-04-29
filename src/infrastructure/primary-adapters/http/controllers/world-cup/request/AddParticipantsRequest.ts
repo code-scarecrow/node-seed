@@ -11,5 +11,5 @@ export class AddParticipantsRequest {
 		type: 'string',
 		format: 'uuid',
 	})
-	public participants: string[];
+	public participants!: string[];
 }

@@ -6,13 +6,13 @@ export class CountryRequest {
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty({ type: 'string', example: 'Argentina' })
-	public name: string;
+	public name!: string;
 
 	@IsNotEmpty()
 	@IsString()
 	@Length(3)
 	@ApiProperty({ type: 'string', example: 'ARG' })
-	public code: string;
+	public code!: string;
 
 	public toEntity(): CountryCreation {
 		return {

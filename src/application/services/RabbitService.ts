@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { IRabbitRepository, RABBIT_REPO } from '../interfaces/IRabbitRepository';
+import { IRabbitRepository, RABBIT_REPO, RabbitCreation } from '../interfaces/IRabbitRepository';
 import { Rabbit } from 'src/domain/entities/Rabbit';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
 
@@ -7,7 +7,7 @@ import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
 export class RabbitService {
 	constructor(@Inject(RABBIT_REPO) private readonly rabbitRepository: IRabbitRepository) {}
 
-	public async create(rabbit: Rabbit): Promise<Rabbit> {
+	public async create(rabbit: RabbitCreation): Promise<Rabbit> {
 		return await this.rabbitRepository.create(rabbit);
 	}
 

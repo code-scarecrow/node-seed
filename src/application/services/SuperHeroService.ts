@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
-import { ISuperHeroRepository, SUPER_HERO_REPO } from '../interfaces/ISuperHeroRepository';
+import { ISuperHeroRepository, SUPER_HERO_REPO, SuperHeroCreation } from '../interfaces/ISuperHeroRepository';
 import { SuperHero } from 'src/domain/entities/SuperHero';
 
 @Injectable()
 export class SuperHeroService {
 	constructor(@Inject(SUPER_HERO_REPO) private readonly superHeroRepository: ISuperHeroRepository) {}
 
-	public async create(superHero: SuperHero): Promise<void> {
+	public async create(superHero: SuperHeroCreation): Promise<void> {
 		await this.superHeroRepository.create(superHero);
 	}
 

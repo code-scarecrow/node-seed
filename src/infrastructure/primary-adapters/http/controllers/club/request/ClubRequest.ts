@@ -6,7 +6,7 @@ export class ClubRequest {
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty({ type: 'string', example: 'Argentina' })
-	public name: string;
+	public name!: string;
 
 	@IsNotEmpty()
 	@IsDateString()
@@ -14,12 +14,12 @@ export class ClubRequest {
 		message: '$property must be formatted as yyyy-mm-dd',
 	})
 	@ApiProperty({ type: 'string', format: 'date', example: '1904-11-30' })
-	public foundationDate: string;
+	public foundationDate!: string;
 
 	@IsNotEmpty()
 	@IsUUID()
 	@ApiProperty({ type: 'string', format: 'uuid' })
-	public countryId: string;
+	public countryId!: string;
 
 	public toEntity(): Omit<ClubCreation, 'countryId'> {
 		return {

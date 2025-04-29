@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { Rabbit } from 'src/domain/entities/Rabbit';
 import { RabbitRacesEnum } from 'src/domain/enums/RabbitRaces';
 
@@ -14,9 +14,6 @@ export class RabbitResponse {
 
 	@ApiProperty({ enum: RabbitRacesEnum, example: RabbitRacesEnum.BELGIAN })
 	public race: RabbitRacesEnum;
-
-	@ApiPropertyOptional({ type: 'string', format: 'date' })
-	public createdAt: Date;
 
 	constructor(rabbit: Rabbit) {
 		this.id = rabbit.id;

@@ -6,29 +6,29 @@ export class UserRequest {
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty({ type: 'string', example: 'pepe' })
-	public name: string;
+	public name!: string;
 
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty({ type: 'string', example: 'argento' })
-	public lastname: string;
+	public lastname!: string;
 
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty({ type: 'string', example: '34543123' })
-	public dni: string;
+	public dni!: string;
 
 	@IsNotEmpty()
 	@IsEmail()
 	@MaxLength(100)
 	@NotContains('+')
 	@ApiProperty({ type: 'string', format: 'email', example: 'test@test.com' })
-	public email: string;
+	public email!: string;
 
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty({ type: 'string', format: 'password', example: 'asde123qas' })
-	public password: string;
+	public password!: string;
 
 	@IsNotEmpty()
 	@IsDateString()
@@ -36,7 +36,7 @@ export class UserRequest {
 		message: '$property must be formatted as yyyy-mm-dd',
 	})
 	@ApiProperty({ type: 'string', format: 'date', example: '2000-02-12' })
-	public birthDate: string;
+	public birthDate!: string;
 
 	public toEntity(): Omit<User, 'id' | 'uuid'> {
 		return {
