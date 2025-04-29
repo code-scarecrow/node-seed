@@ -35,8 +35,8 @@ export class PlayerResponse {
 		this.id = player.uuid;
 		this.name = player.name;
 		this.lastname = player.lastname;
-		if (player.country) this.country = player.country.name;
-		if (player.club) this.club = player.club.name;
+		this.country = player.country.name;
+		this.club = player.club.name;
 		this.birthDate = formatDate(player.birthDate);
 		this.position = player.position;
 		this.createdAt = player.createdAt.toDateString();

@@ -14,15 +14,6 @@ describe('Process user create message.', () => {
 	let connection: Connection;
 	let channel: Channel;
 
-	const user = new User();
-	user.uuid = '40fa3986-c9c1-4575-8385-6fe5f4d6fafb';
-	user.name = 'Walter';
-	user.lastname = 'Bou';
-	user.dni = '32415234';
-	user.birthDate = new Date('1993-08-25');
-	user.email = 'walter@bou.com';
-	user.password = 'qwerqwrsdf';
-
 	const messageBody: IUserIncommingMessage = {
 		uuid: '40fa3986-c9c1-4575-8385-6fe5f4d6fafb',
 		name: 'Walter',

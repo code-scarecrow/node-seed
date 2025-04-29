@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, Length } from 'class-validator';
-import { Country } from 'src/domain/entities/Country';
+import { CountryCreation } from 'src/application/interfaces/ICountryRepository';
 
 export class CountryRequest {
 	@IsNotEmpty()
@@ -14,11 +14,10 @@ export class CountryRequest {
 	@ApiProperty({ type: 'string', example: 'ARG' })
 	public code: string;
 
-	public toEntity(): Country {
-		const country = new Country();
-		country.name = this.name;
-		country.code = this.code;
-
-		return country;
+	public toEntity(): CountryCreation {
+		return {
+			name: this.name,
+			code: this.code,
+		};
 	}
 }

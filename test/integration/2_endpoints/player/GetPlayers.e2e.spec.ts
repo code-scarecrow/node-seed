@@ -44,13 +44,7 @@ describe('Get Players e2e Test.', () => {
 			.expect(watch(HttpStatus.OK))
 			.expect((res) => {
 				const structure = Object.values(res.body);
-				expect(structure).to.deep.equals(
-					[new PlayerResponse(player1), new PlayerResponse(player2)].map((player) => {
-						delete player.club;
-						delete player.country;
-						return player;
-					}),
-				);
+				expect(structure).to.deep.equals([new PlayerResponse(player1), new PlayerResponse(player2)]);
 			});
 	});
 });

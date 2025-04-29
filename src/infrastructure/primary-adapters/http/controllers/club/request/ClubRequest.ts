@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsNotEmpty, IsString, IsUUID, Matches } from 'class-validator';
-import { Club } from 'src/domain/entities/Club';
+import { ClubCreation } from 'src/application/interfaces/IClubRepository';
 
 export class ClubRequest {
 	@IsNotEmpty()
@@ -21,11 +21,10 @@ export class ClubRequest {
 	@ApiProperty({ type: 'string', format: 'uuid' })
 	public countryId: string;
 
-	public toEntity(): Club {
-		const club = new Club();
-		club.name = this.name;
-		club.foundationDate = new Date(this.foundationDate);
-
-		return club;
+	public toEntity(): Omit<ClubCreation, 'countryId'> {
+		return {
+			name: this.name,
+			foundationDate: new Date(this.foundationDate),
+		};
 	}
 }

@@ -67,8 +67,8 @@ describe('Update Player e2e Test.', () => {
 		expect(playerExistent).equal;
 		expect(playerExistent?.name).equal(playerRequest.name);
 		expect(playerExistent?.lastname).equal(playerRequest.lastname);
-		expect(playerExistent?.country?.uuid).equal(playerRequest.countryId);
-		expect(playerExistent?.club?.uuid).equal(playerRequest.clubId);
+		expect(playerExistent?.country.uuid).equal(playerRequest.countryId);
+		expect(playerExistent?.club.uuid).equal(playerRequest.clubId);
 		expect(playerExistent?.birthDate).deep.equal(new Date(playerRequest.birthDate));
 		expect(playerExistent?.position).equal(playerRequest.position);
 	});

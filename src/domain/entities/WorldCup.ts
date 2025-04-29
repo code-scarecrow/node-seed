@@ -1,5 +1,4 @@
 import { Country } from './Country';
-import { Player } from './Player';
 
 export class WorldCup {
 	public id: number;
@@ -8,7 +7,28 @@ export class WorldCup {
 	public startDate: Date;
 	public finishDate: Date;
 	public year: string;
-	public location?: Country;
-	public players?: Player[];
-	public participants?: Country[];
+	public location: Country;
+	public participants: Country[] | undefined;
+
+	public constructor(
+		props: {
+			id: number;
+			uuid: string;
+			petName: string;
+			startDate: Date;
+			finishDate: Date;
+			year: string;
+		},
+		location: Country,
+		participants?: Country[],
+	) {
+		this.id = props.id;
+		this.uuid = props.uuid;
+		this.petName = props.petName;
+		this.startDate = props.startDate;
+		this.finishDate = props.finishDate;
+		this.year = props.year;
+		this.location = location;
+		this.participants = participants;
+	}
 }

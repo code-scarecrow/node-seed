@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsUUID, Matches, IsDateString, IsEnum } from 'class-validator';
-import { Player } from 'src/domain/entities/Player';
+import { PlayerCreation } from 'src/application/interfaces/IPlayerRepository';
 import { PositionEnum } from 'src/domain/enums/PositionEnum';
 
 export class PlayerRequest {
@@ -38,13 +38,12 @@ export class PlayerRequest {
 	@ApiProperty({ type: 'string', format: 'uuid' })
 	public countryId: string;
 
-	public toEntity(): Player {
-		const player = new Player();
-		player.name = this.name;
-		player.lastname = this.lastname;
-		player.birthDate = new Date(this.birthDate);
-		player.position = this.position;
-
-		return player;
+	public toEntity(): Omit<PlayerCreation, 'clubId' | 'countryId'> {
+		return {
+			name: this.name,
+			lastname: this.lastname,
+			birthDate: new Date(this.birthDate),
+			position: this.position,
+		};
 	}
 }

@@ -63,7 +63,7 @@ describe('Update World Cup e2e Test.', () => {
 		expect(worldCupExistent?.year).equal(worldCupRequest.year);
 		expect(worldCupExistent?.startDate).deep.equal(new Date(worldCupRequest.startDate));
 		expect(worldCupExistent?.finishDate).deep.equal(new Date(worldCupRequest.finishDate));
-		expect(worldCupExistent?.location?.uuid).equal(worldCupRequest.countryId);
+		expect(worldCupExistent?.location.uuid).equal(worldCupRequest.countryId);
 	});
 
 	it('Update an existent world cup with bad dates.', async () => {

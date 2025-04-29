@@ -5,7 +5,6 @@ import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { WorldCup } from 'src/domain/entities/WorldCup';
 import { expect } from 'chai';
-import { PrismaClient } from '@prisma/client';
 import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 
 describe('Delete World Cup e2e Test.', () => {
@@ -20,29 +19,7 @@ describe('Delete World Cup e2e Test.', () => {
 	beforeEach(async () => {
 		server = app.getHttpServer();
 
-		worldCup = new WorldCup();
-		worldCup.uuid = '67d7c4fc-02f4-49ce-befd-3fbd08e6ac42';
-		worldCup.petName = 'Gauchito';
-		worldCup.year = '1978';
-		worldCup.startDate = new Date('1978-06-01');
-		worldCup.finishDate = new Date('1978-06-25');
-
-		await new PrismaClient().world_cups.create({
-			data: {
-				uuid: worldCup.uuid,
-				pet_name: worldCup.petName,
-				year: worldCup.year,
-				start_date: worldCup.startDate,
-				finish_date: worldCup.finishDate,
-				countries: {
-					create: {
-						uuid: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-						name: 'Argentina',
-						code: CountryCodeEnum.AR,
-					},
-				},
-			},
-		});
+		worldCup = await dbClient.createWorldCup((await dbClient.createCountry()).id, []);
 	});
 
 	afterEach(async () => {

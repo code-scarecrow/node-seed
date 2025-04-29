@@ -46,7 +46,7 @@ export class WorldCupResponse {
 		this.year = worldCup.year;
 		this.startDate = formatDate(worldCup.startDate);
 		this.finishDate = formatDate(worldCup.finishDate);
-		if (worldCup.location) this.location = worldCup.location.name;
+		this.location = worldCup.location.name;
 		if (worldCup.participants) {
 			this.participants = worldCup.participants.map((participant) => new CountryResponse(participant));
 		}

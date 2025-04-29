@@ -1,5 +1,4 @@
 import { Country } from './Country';
-import { Player } from './Player';
 
 export class Club {
 	public id: number;
@@ -7,7 +6,26 @@ export class Club {
 	public name: string;
 	public foundationDate: Date;
 	public country: Country;
-	public players: Player[];
 	public createdAt: Date;
 	public updatedAt: Date;
+
+	constructor(
+		props: {
+			id: number;
+			uuid: string;
+			name: string;
+			foundationDate: Date;
+			createdAt: Date;
+			updatedAt: Date;
+		},
+		country: Country,
+	) {
+		this.id = props.id;
+		this.uuid = props.uuid;
+		this.name = props.name;
+		this.foundationDate = props.foundationDate;
+		this.country = country;
+		this.createdAt = props.createdAt;
+		this.updatedAt = props.updatedAt;
+	}
 }

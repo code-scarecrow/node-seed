@@ -77,7 +77,7 @@ describe('Send Create User Message e2e Test.', () => {
 		expect(userCreated?.name).equal(userRequest.name);
 		expect(userCreated?.lastname).equal(userRequest.lastname);
 		expect(userCreated?.dni).equal(userRequest.dni);
-		expect(userCreated?.birth_date).deep.equal(new Date(userRequest.birthDate));
+		expect(userCreated?.birthDate).deep.equal(new Date(userRequest.birthDate));
 		expect(userCreated?.email).equal(userRequest.email);
 	});
 

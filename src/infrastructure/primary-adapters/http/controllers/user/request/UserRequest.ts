@@ -39,14 +39,13 @@ export class UserRequest {
 	public birthDate: string;
 
 	public toEntity(): Omit<User, 'id' | 'uuid'> {
-		const user = new User();
-		user.name = this.name;
-		user.lastname = this.lastname;
-		user.dni = this.dni;
-		user.email = this.email;
-		user.password = this.password;
-		user.birthDate = new Date(this.birthDate);
-
-		return user;
+		return {
+			name: this.name,
+			lastname: this.lastname,
+			dni: this.dni,
+			email: this.email,
+			password: this.password,
+			birthDate: new Date(this.birthDate),
+		};
 	}
 }

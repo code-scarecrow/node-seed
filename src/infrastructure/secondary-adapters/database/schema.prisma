@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:root@localhost:3306/pickit"
+}
+
+model clubs {
+  id             Int       @id @default(autoincrement())
+  uuid           String    @unique() @db.VarChar(36)
+  name           String    @db.VarChar(30)
+  foundationDate DateTime  @map("foundation_date") @db.DateTime(0)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.DateTime(6)
+  updatedAt      DateTime  @default(now()) @map("updated_at") @db.DateTime(6)
+  countryId      Int       @map("country_id")
+  countries      countries @relation(fields: [countryId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_283195e110f22a64ef20318791c")
+  players        players[]
+
+  @@index([countryId], map: "FK_283195e110f22a64ef20318791c")
+}
+
+model countries {
+  id           Int            @id @default(autoincrement())
+  uuid         String         @unique() @db.VarChar(36)
+  name         String         @db.VarChar(50)
+  code         String         @db.VarChar(3)
+  clubs        clubs[]
+  participants participants[]
+  players      players[]
+  world_cups   world_cups[]
+}
+
+model migrations {
+  id        Int    @id @default(autoincrement())
+  timestamp BigInt
+  name      String @db.VarChar(255)
+}
+
+model participants {
+  worldCupId Int        @map("world_cup_id")
+  countryId  Int        @map("country_id")
+  world_cups world_cups @relation(fields: [worldCupId], references: [id], onDelete: NoAction, map: "FK_05348aecc98d38ef425f6bf2088")
+  countries  countries  @relation(fields: [countryId], references: [id], onDelete: Cascade, map: "FK_2001eb8bf2efc13a0600945d858")
+
+  @@id([worldCupId, countryId])
+  @@index([worldCupId], map: "IDX_05348aecc98d38ef425f6bf208")
+  @@index([countryId], map: "IDX_2001eb8bf2efc13a0600945d85")
+}
+
+model players {
+  id                            Int                             @id @default(autoincrement())
+  uuid                          String                          @unique() @db.VarChar(36)
+  name                          String                          @db.VarChar(30)
+  lastname                      String                          @db.VarChar(100)
+  birthDate                     DateTime                        @map("birth_date") @db.DateTime(0)
+  position                      players_position
+  createdAt                     DateTime                        @default(now()) @map("created_at") @db.DateTime(6)
+  updatedAt                     DateTime                        @default(now()) @map("updated_at") @db.DateTime(6)
+  clubId                        Int                             @map("club_id")
+  countryId                     Int                             @map("country_id")
+  countries                     countries                       @relation(fields: [countryId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_10144db7fe6b16a4a5fda0ecac8")
+  clubs                         clubs                           @relation(fields: [clubId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_a5426cbe2c827e9ec511b3d00a5")
+  players_world_cups_world_cups players_world_cups_world_cups[]
+
+  @@index([countryId], map: "FK_10144db7fe6b16a4a5fda0ecac8")
+  @@index([clubId], map: "FK_a5426cbe2c827e9ec511b3d00a5")
+}
+
+model players_world_cups_world_cups {
+  playersId   Int        @map("players_id")
+  worldCupsId Int        @map("world_cups_id")
+  world_cups  world_cups @relation(fields: [worldCupsId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_117669872eddf19db30fe48bf14")
+  players     players    @relation(fields: [playersId], references: [id], onDelete: Cascade, map: "FK_274bbdd97b988abeba8672eb314")
+
+  @@id([playersId, worldCupsId])
+  @@index([worldCupsId], map: "IDX_117669872eddf19db30fe48bf1")
+  @@index([playersId], map: "IDX_274bbdd97b988abeba8672eb31")
+}
+
+model users {
+  id        Int      @id @default(autoincrement())
+  uuid      String   @db.VarChar(36)
+  name      String   @db.VarChar(30)
+  lastname  String   @db.VarChar(100)
+  dni       String   @unique(map: "IDX_5fe9cfa518b76c96518a206b35") @db.VarChar(9)
+  email     String   @unique(map: "IDX_97672ac88f789774dd47f7c8be") @db.VarChar(100)
+  password  String   @db.VarChar(255) //TODO - fix nams (extra s)
+  birthDate DateTime @map("birth_date") @db.DateTime(0)
+}
+
+model world_cups {
+  id                            Int                             @id @default(autoincrement())
+  uuid                          String                          @unique() @db.VarChar(36)
+  petName                       String                          @map("pet_name") @db.VarChar(30)
+  startDate                     DateTime                        @map("start_date") @db.DateTime(0)
+  finishDate                    DateTime                        @map("finish_date") @db.DateTime(0)
+  year                          String                          @unique(map: "IDX_0bc4311f454b9dc93061abc801") @db.VarChar(4)
+  locationId                    Int                             @map("location_id")
+  participants                  participants[]
+  players_world_cups_world_cups players_world_cups_world_cups[]
+  countries                     countries                       @relation(fields: [locationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_cfb52d32a5c7f1db18d206c6c73")
+
+  @@index([locationId], map: "FK_cfb52d32a5c7f1db18d206c6c73")
+}
+
+enum players_position {
+  Goalkeeper        @map("Goalkeeper")
+  Center_Back       @map("Center Back")
+  Right_Back        @map("Right Back")
+  Left_Back         @map("Left Back")
+  Center_Midfielder @map("Center Midfielder")
+  Right_Midfielder  @map("Right Midfielder")
+  Left_Midfielder   @map("Left Midfielder")
+  Center_Forward    @map("Center Forward")
+  Right_Striker     @map("Right Striker")
+  Left_Striker      @map("Left Striker")
+}

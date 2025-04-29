@@ -32,29 +32,17 @@ class DBClient {
 			data: {
 				name: 'Club 1',
 				uuid: faker.string.uuid(),
-				foundation_date: faker.date.past(),
-				created_at: faker.date.past(),
-				updated_at: faker.date.past(),
-				country_id: countryId,
+				foundationDate: faker.date.past(),
+				createdAt: faker.date.past(),
+				updatedAt: faker.date.past(),
+				countryId: countryId,
 			},
 			include: {
 				countries: true,
 			},
 		});
 
-		const res = new Club();
-		res.id = club.id;
-		res.uuid = club.uuid;
-		res.foundationDate = club.foundation_date;
-		res.createdAt = club.created_at;
-		res.updatedAt = club.updated_at;
-		res.name = club.name;
-		res.country = new Country();
-		res.country.id = club.countries.id;
-		res.country.uuid = club.countries.uuid;
-		res.country.name = club.countries.name;
-		res.country.code = club.countries.code;
-		return res;
+		return new Club(club, new Country(club.countries));
 	}
 
 	public async getClubByUuid(uuid: string): Promise<Club | null> {
@@ -69,29 +57,19 @@ class DBClient {
 
 		if (!club) return null;
 
-		const res = new Club();
-		res.id = club.id;
-		res.uuid = club.uuid;
-		res.foundationDate = club.foundation_date;
-		res.createdAt = club.created_at;
-		res.updatedAt = club.updated_at;
-		res.name = club.name;
-		res.country = new Country();
-		res.country.id = club.countries.id;
-		res.country.uuid = club.countries.uuid;
-		res.country.name = club.countries.name;
-		res.country.code = club.countries.code;
-		return res;
+		return new Club(club, new Country(club.countries));
 	}
 
 	public async createCountry(): Promise<Country> {
-		return await this.prisma.countries.create({
+		const country = await this.prisma.countries.create({
 			data: {
 				name: 'Country 1',
 				code: faker.string.alpha(3),
 				uuid: faker.string.uuid(),
 			},
 		});
+
+		return new Country(country);
 	}
 
 	public async getCountryByUuid(uuid: string): Promise<Country | null> {
@@ -103,12 +81,7 @@ class DBClient {
 
 		if (!country) return null;
 
-		const res = new Country();
-		res.id = country.id;
-		res.uuid = country.uuid;
-		res.name = country.name;
-		res.code = country.code;
-		return res;
+		return new Country(country);
 	}
 
 	public async createPlayer(clubId: number, countryId: number): Promise<Player> {
@@ -116,27 +89,30 @@ class DBClient {
 			data: {
 				name: faker.string.alpha(10),
 				uuid: faker.string.uuid(),
-				created_at: faker.date.past(),
-				updated_at: faker.date.past(),
-				club_id: clubId,
-				birth_date: faker.date.past(),
-				country_id: countryId,
+				createdAt: faker.date.past(),
+				updatedAt: faker.date.past(),
+				clubId: clubId,
+				birthDate: faker.date.past(),
+				countryId: countryId,
 				lastname: faker.string.alpha(10),
 				position: mapPositionPrismaEnum(PositionEnum.CM),
 			},
+			include: {
+				countries: true,
+				clubs: {
+					include: {
+						countries: true,
+					},
+				},
+			},
 		});
 
-		const res = new Player();
-		res.id = player.id;
-		res.uuid = player.uuid;
-		res.name = player.name;
-		res.createdAt = player.created_at;
-		res.updatedAt = player.updated_at;
-		res.position = mapPositionEnum(player.position);
-		res.birthDate = player.birth_date;
-		res.lastname = player.lastname;
-
-		return res;
+		return new Player(
+			player,
+			mapPositionEnum(player.position),
+			new Club(player.clubs, new Country(player.clubs.countries)),
+			new Country(player.countries),
+		);
 	}
 
 	public async getPlayer(uuid: string): Promise<Player | null> {
@@ -146,60 +122,38 @@ class DBClient {
 			},
 			include: {
 				countries: true,
-				clubs: true,
+				clubs: {
+					include: {
+						countries: true,
+					},
+				},
 			},
 		});
 
 		if (!player) return null;
 
-		const res = new Player();
-		res.id = player.id;
-		res.uuid = player.uuid;
-		res.name = player.name;
-		res.createdAt = player.created_at;
-		res.updatedAt = player.updated_at;
-		res.position = mapPositionEnum(player.position);
-		res.birthDate = player.birth_date;
-		res.lastname = player.lastname;
-		res.club = new Club();
-		res.club.id = player.clubs.id;
-		res.club.uuid = player.clubs.uuid;
-		res.club.name = player.clubs.name;
-		res.club.foundationDate = player.clubs.foundation_date;
-		res.club.createdAt = player.clubs.created_at;
-		res.club.updatedAt = player.clubs.updated_at;
-		res.country = new Country();
-		res.country.id = player.countries.id;
-		res.country.uuid = player.countries.uuid;
-		res.country.name = player.countries.name;
-		res.country.code = player.countries.code;
-
-		return res;
+		return new Player(
+			player,
+			mapPositionEnum(player.position),
+			new Club(player.clubs, new Country(player.clubs.countries)),
+			new Country(player.countries),
+		);
 	}
 
 	public async createUser(): Promise<User> {
 		const user = await this.prisma.users.create({
 			data: {
 				email: faker.internet.email(),
-				passsword: faker.internet.password(),
+				password: faker.internet.password(),
 				uuid: faker.string.uuid(),
 				name: faker.string.alpha(10),
 				lastname: faker.string.alpha(10),
 				dni: faker.string.numeric(8),
-				birth_date: faker.date.past(),
+				birthDate: faker.date.past(),
 			},
 		});
 
-		const res = new User();
-		res.id = user.id;
-		res.uuid = user.uuid;
-		res.email = user.email;
-		res.password = user.passsword;
-		res.name = user.name;
-		res.lastname = user.lastname;
-		res.dni = user.dni;
-		res.birthDate = user.birth_date;
-		return res;
+		return new User(user);
 	}
 
 	public async getUserByEmail(email: string): Promise<User | null> {
@@ -211,30 +165,21 @@ class DBClient {
 
 		if (!user) return null;
 
-		const res = new User();
-		res.id = user.id;
-		res.uuid = user.uuid;
-		res.email = user.email;
-		res.password = user.passsword;
-		res.name = user.name;
-		res.lastname = user.lastname;
-		res.dni = user.dni;
-		res.birthDate = user.birth_date;
-		return res;
+		return new User(user);
 	}
 
 	public async createWorldCup(countryId: number, participants: Country[]): Promise<WorldCup> {
 		const wc = await this.prisma.world_cups.create({
 			data: {
 				uuid: faker.string.uuid(),
-				pet_name: faker.string.alpha(10),
-				start_date: faker.date.past(),
-				finish_date: faker.date.past(),
+				petName: faker.string.alpha(10),
+				startDate: faker.date.past(),
+				finishDate: faker.date.past(),
 				year: faker.string.numeric(4),
-				location_id: countryId,
+				locationId: countryId,
 				participants: {
 					create: participants.map((p) => ({
-						country_id: p.id,
+						countryId: p.id,
 					})),
 				},
 			},
@@ -243,19 +188,7 @@ class DBClient {
 			},
 		});
 
-		const res = new WorldCup();
-		res.id = wc.id;
-		res.uuid = wc.uuid;
-		res.petName = wc.pet_name;
-		res.startDate = wc.start_date;
-		res.finishDate = wc.finish_date;
-		res.year = wc.year;
-		res.location = new Country();
-		res.location.id = wc.location_id;
-		res.location.name = wc.countries.name;
-		res.location.code = wc.countries.code;
-		res.location.uuid = wc.countries.uuid;
-		return res;
+		return new WorldCup(wc, new Country(wc.countries));
 	}
 
 	public async getWorldCup(uuid: string): Promise<WorldCup | null> {
@@ -275,28 +208,7 @@ class DBClient {
 
 		if (!wc) return null;
 
-		const res = new WorldCup();
-		res.id = wc.id;
-		res.uuid = wc.uuid;
-		res.petName = wc.pet_name;
-		res.startDate = wc.start_date;
-		res.finishDate = wc.finish_date;
-		res.year = wc.year;
-		res.location = new Country();
-		res.location.id = wc.location_id;
-		res.location.name = wc.countries.name;
-		res.location.code = wc.countries.code;
-		res.location.uuid = wc.countries.uuid;
-		res.participants = wc.participants.map((p) => {
-			const c = new Country();
-			c.id = p.country_id;
-			c.name = p.countries.name;
-			c.code = p.countries.code;
-			c.uuid = p.countries.uuid;
-			return c;
-		});
-
-		return res;
+		return new WorldCup(wc, new Country(wc.countries));
 	}
 }
 

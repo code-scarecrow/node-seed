@@ -1,19 +1,18 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
-import { COUNTRY_REPO, ICountryRepository } from '../interfaces/ICountryRepository';
+import { COUNTRY_REPO, CountryCreation, ICountryRepository } from '../interfaces/ICountryRepository';
 import { Country } from 'src/domain/entities/Country';
 
 @Injectable()
 export class CountryService {
 	constructor(@Inject(COUNTRY_REPO) private readonly countryRepository: ICountryRepository) {}
 
-	public async create(country: Country): Promise<Country> {
+	public async create(country: CountryCreation): Promise<Country> {
 		return await this.countryRepository.create(country);
 	}
 
-	public async update(id: string, country: Country): Promise<Country> {
+	public async update(id: string, country: CountryCreation): Promise<Country> {
 		const countryDb = await this.findByUuid(id);
-		country.uuid = countryDb.uuid;
 
 		return await this.countryRepository.update({ id: countryDb.id }, country);
 	}
