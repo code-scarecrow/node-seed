@@ -60,10 +60,10 @@ describe('Process user create message.', () => {
 		}
 
 		//Assert
-		expect(userCreated?.name).equal(messageBody.name);
-		expect(userCreated?.lastname).equal(messageBody.lastname);
-		expect(userCreated?.dni).equal(messageBody.dni);
-		expect(userCreated?.birthDate.toISOString()).equal(messageBody.birthDate.toISOString());
-		expect(userCreated?.email).equal(messageBody.email);
+		expect(userCreated.name).equal(messageBody.name);
+		expect(userCreated.lastname).equal(messageBody.lastname);
+		expect(userCreated.dni).equal(messageBody.dni);
+		expect(userCreated.birthDate.toISOString()).equal(messageBody.birthDate.toISOString());
+		expect(userCreated.email).equal(messageBody.email);
 	});
 });

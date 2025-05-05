@@ -69,11 +69,11 @@ describe('Send Create User Message e2e Test.', () => {
 		}
 
 		expect(userCreated).not.be.null;
-		expect(userCreated?.name).equal(userRequest.name);
-		expect(userCreated?.lastname).equal(userRequest.lastname);
-		expect(userCreated?.dni).equal(userRequest.dni);
-		expect(userCreated?.birthDate).deep.equal(new Date(userRequest.birthDate));
-		expect(userCreated?.email).equal(userRequest.email);
+		expect(userCreated.name).equal(userRequest.name);
+		expect(userCreated.lastname).equal(userRequest.lastname);
+		expect(userCreated.dni).equal(userRequest.dni);
+		expect(userCreated.birthDate).deep.equal(new Date(userRequest.birthDate));
+		expect(userCreated.email).equal(userRequest.email);
 	});
 
 	it('Send create user message without name.', async () => {
