@@ -3,63 +3,30 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { DataSource } from 'typeorm';
-import { deleteAll, insert } from 'test/integration/infrastructure/database/TestDatasetSeed';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
-import { ClubEntity } from 'src/domain/entities/ClubEntity';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
-import { PlayerEntity } from 'src/domain/entities/PlayerEntity';
-import { PositionEnum } from 'src/domain/enums/PositionEnum';
+import { Player } from 'src/domain/entities/Player';
 import { expect } from 'chai';
+import { dbClient } from 'test/integration/setup';
 
 describe('Get Player e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
-	let player: PlayerEntity;
+	let player: Player;
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 	});
 
 	beforeEach(async () => {
 		server = app.getHttpServer();
-		const country = new CountryEntity();
-		country.id = 1;
-		country.uuid = '1d78c637-3f35-4666-80c0-57f6ff647da9';
-		country.code = 'ARG';
-		country.name = 'Argentina';
 
-		await insert<CountryEntity>(datasource, [country]);
-
-		const club = new ClubEntity();
-		club.id = 1;
-		club.uuid = '1d78c637-3f35-4666-80c0-57f6ff647da8';
-		club.name = 'Club Atlético Vélez Sarsfield';
-		club.foundationDate = new Date('1910-01-01');
-		club.country = country;
-
-		await insert<ClubEntity>(datasource, [club]);
-
-		player = new PlayerEntity();
-		player.uuid = '1d78c637-3f35-4666-80c0-57f6ff647da7';
-		player.name = 'Walter';
-		player.lastname = 'Bou';
-		player.birthDate = new Date('1993-08-25');
-		player.position = PositionEnum.CF;
-		player.createdAt = new Date();
-		player.updatedAt = new Date();
-		player.country = country;
-		player.club = club;
-
-		await insert<PlayerEntity>(datasource, [player]);
+		const country = await dbClient.createCountry();
+		const club = await dbClient.createClub(country.id);
+		player = await dbClient.createPlayer(club.id, country.id);
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, PlayerEntity);
-		await deleteAll(datasource, ClubEntity);
-		await deleteAll(datasource, CountryEntity);
+		await dbClient.deleteDB();
 		await server.close();
 	});
 
@@ -75,14 +42,14 @@ describe('Get Player e2e Test.', () => {
 			.expect(watch(HttpStatus.OK))
 			.expect((res) => {
 				const structure = Object.keys(res.body);
-				expect(structure.includes('id')).to.be.true;
-				expect(structure.includes('name')).to.be.true;
-				expect(structure.includes('lastname')).to.be.true;
-				expect(structure.includes('country')).to.be.true;
-				expect(structure.includes('club')).to.be.true;
-				expect(structure.includes('birthDate')).to.be.true;
-				expect(structure.includes('createdAt')).to.be.true;
-				expect(structure.includes('updatedAt')).to.be.true;
+				expect(structure.includes('id'), 'id').to.be.true;
+				expect(structure.includes('name'), 'name').to.be.true;
+				expect(structure.includes('lastname'), 'lastname').to.be.true;
+				expect(structure.includes('country'), 'country').to.be.true;
+				expect(structure.includes('club'), 'club').to.be.true;
+				expect(structure.includes('birthDate'), 'birthDate').to.be.true;
+				expect(structure.includes('createdAt'), 'createdAt').to.be.true;
+				expect(structure.includes('updatedAt'), 'updatedAt').to.be.true;
 			});
 	});
 

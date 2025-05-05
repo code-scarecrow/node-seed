@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { QueueInterceptor } from '@code-scarecrow/base/logger';
 import { IUserCreateMessageProducer } from 'src/application/interfaces/IUserCreateMessageProducer';
-import { UserEntity } from 'src/domain/entities/UserEntity';
+import { User } from 'src/domain/entities/User';
 import { userCreateQueueConfig } from '../config/UserCreateQueueConfig';
 import { UserCreateMessage } from './UserCreateMessage';
 import { MessageClient, safeGetConfig } from '@code-scarecrow/base';
@@ -18,7 +18,7 @@ export class UserCreateProducer extends MessageClient<UserCreateMessage> impleme
 		super(config.queue, amqpConnection, interceptor, safeGetConfig('APP_NAME'));
 	}
 
-	public send(user: Omit<UserEntity, 'id'>): void {
+	public send(user: Omit<User, 'id'>): void {
 		this.publish(new UserCreateMessage(user));
 	}
 }

@@ -1,18 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsUUID, Matches, IsDateString, IsEnum } from 'class-validator';
-import { PlayerEntity } from 'src/domain/entities/PlayerEntity';
+import { PlayerCreation } from 'src/application/interfaces/IPlayerRepository';
 import { PositionEnum } from 'src/domain/enums/PositionEnum';
 
 export class PlayerRequest {
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty({ type: 'string' })
-	public name: string;
+	public name!: string;
 
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty({ type: 'string' })
-	public lastname: string;
+	public lastname!: string;
 
 	@IsNotEmpty()
 	@IsDateString()
@@ -20,31 +20,30 @@ export class PlayerRequest {
 		message: '$property must be formatted as yyyy-mm-dd',
 	})
 	@ApiProperty({ type: 'string', format: 'date', example: '2000-02-12' })
-	public birthDate: string;
+	public birthDate!: string;
 
 	@IsEnum(PositionEnum, {
 		message: `position should be one of ${Object.values(PositionEnum)}`,
 	})
 	@ApiProperty({ enum: PositionEnum, example: PositionEnum.GK })
-	public position: PositionEnum;
+	public position!: PositionEnum;
 
 	@IsNotEmpty()
 	@IsUUID()
 	@ApiProperty({ type: 'string', format: 'uuid' })
-	public clubId: string;
+	public clubId!: string;
 
 	@IsNotEmpty()
 	@IsUUID()
 	@ApiProperty({ type: 'string', format: 'uuid' })
-	public countryId: string;
+	public countryId!: string;
 
-	public toEntity(): PlayerEntity {
-		const player = new PlayerEntity();
-		player.name = this.name;
-		player.lastname = this.lastname;
-		player.birthDate = new Date(this.birthDate);
-		player.position = this.position;
-
-		return player;
+	public toEntity(): Omit<PlayerCreation, 'clubId' | 'countryId'> {
+		return {
+			name: this.name,
+			lastname: this.lastname,
+			birthDate: new Date(this.birthDate),
+			position: this.position,
+		};
 	}
 }

@@ -2,7 +2,7 @@ import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { QueueInterceptor } from '@code-scarecrow/base/logger';
-import { UserEntity } from 'src/domain/entities/UserEntity';
+import { User } from 'src/domain/entities/User';
 import { UserCreateMessage } from './UserCreateMessage';
 import { EventClient, safeGetConfig } from '@code-scarecrow/base';
 import { IUserFinishCreationProducer } from 'src/application/interfaces/IUserFinishCreationProducer';
@@ -18,7 +18,7 @@ export class UserFinishCreationProducer extends EventClient<UserCreateMessage> i
 		super(config.exchange, 'users.status.created', amqpConnection, interceptor, safeGetConfig('APP_NAME'));
 	}
 
-	public send(user: UserEntity): void {
+	public send(user: User): void {
 		this.publish(new UserCreateMessage(user));
 	}
 }

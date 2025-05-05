@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { formatDate } from 'src/application/utils/DateFormat';
-import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
+import { WorldCup } from 'src/domain/entities/WorldCup';
 import { CountryResponse } from '../../country/response/CountryResponse';
 
 export class WorldCupResponse {
@@ -40,13 +40,13 @@ export class WorldCupResponse {
 	})
 	public participants?: CountryResponse[];
 
-	constructor(worldCup: WorldCupEntity) {
+	constructor(worldCup: WorldCup) {
 		this.id = worldCup.uuid;
 		this.petName = worldCup.petName;
 		this.year = worldCup.year;
 		this.startDate = formatDate(worldCup.startDate);
 		this.finishDate = formatDate(worldCup.finishDate);
-		if (worldCup.location) this.location = worldCup.location.name;
+		this.location = worldCup.location.name;
 		if (worldCup.participants) {
 			this.participants = worldCup.participants.map((participant) => new CountryResponse(participant));
 		}

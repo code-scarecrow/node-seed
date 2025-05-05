@@ -3,63 +3,29 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
-import { DataSource } from 'typeorm';
-import { deleteAll, insert } from 'test/integration/infrastructure/database/TestDatasetSeed';
+import { Country } from 'src/domain/entities/Country';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
-import { PlayerEntity } from 'src/domain/entities/PlayerEntity';
-import { ClubEntity } from 'src/domain/entities/ClubEntity';
-import { PositionEnum } from 'src/domain/enums/PositionEnum';
 import { expect } from 'chai';
+import { dbClient } from 'test/integration/setup';
 
 describe('Get Country with players e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
-	let country: CountryEntity;
+	let country: Country;
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 	});
 
 	beforeEach(async () => {
 		server = app.getHttpServer();
-		country = new CountryEntity();
-		country.id = 1;
-		country.uuid = '7c146bc5-378a-41b5-ade5-e9609a2b7c3e';
-		country.code = 'ARG';
-		country.name = 'Argentina';
-
-		await insert<CountryEntity>(datasource, [country]);
-
-		const club = new ClubEntity();
-		club.id = 1;
-		club.uuid = '7c146bc5-378a-41b5-ade5-e9609a2b7c3f';
-		club.name = 'Club Atlético Vélez Sarsfield';
-		club.foundationDate = new Date('1910-01-01');
-		club.country = country;
-
-		await insert<ClubEntity>(datasource, [club]);
-
-		const player = new PlayerEntity();
-		player.uuid = '7c146bc5-378a-41b5-ade5-e9609a2b7c3g';
-		player.name = 'Walter';
-		player.lastname = 'Bou';
-		player.birthDate = new Date('1993-08-25');
-		player.position = PositionEnum.CF;
-		player.createdAt = new Date();
-		player.updatedAt = new Date();
-		player.country = country;
-		player.club = club;
-
-		await insert<PlayerEntity>(datasource, [player]);
+		country = await dbClient.createCountry();
+		const club = await dbClient.createClub(country.id);
+		await dbClient.createPlayer(club.id, country.id);
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, PlayerEntity);
-		await deleteAll(datasource, ClubEntity);
-		await deleteAll(datasource, CountryEntity);
+		await dbClient.deleteDB();
 		await server.close();
 	});
 

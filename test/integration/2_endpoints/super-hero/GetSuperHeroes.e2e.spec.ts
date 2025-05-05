@@ -31,25 +31,8 @@ describe('Get Super Hero e2e Test.', () => {
 	});
 
 	it('Get super heroes', async () => {
-		const sh1 = new SuperHero();
-		sh1.id = 1;
-		sh1.name = 'test';
-		sh1.combat = '50';
-		sh1.durability = '50';
-		sh1.intelligence = '50';
-		sh1.power = '50';
-		sh1.speed = '50';
-		sh1.strength = '50';
-
-		const sh2 = new SuperHero();
-		sh2.id = 2;
-		sh2.name = 'test';
-		sh2.combat = '50';
-		sh2.durability = '50';
-		sh2.intelligence = '50';
-		sh2.power = '50';
-		sh2.speed = '50';
-		sh2.strength = '50';
+		const sh1 = new SuperHero(1, 'test', '50', '50', '50', '50', '50', '50');
+		const sh2 = new SuperHero(2, 'test', '50', '50', '50', '50', '50', '50');
 
 		const superHeroes = [sh1, sh2];
 

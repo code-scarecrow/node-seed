@@ -3,34 +3,26 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
-import { DataSource } from 'typeorm';
-import { deleteAll, findOneBy, insert } from 'test/integration/infrastructure/database/TestDatasetSeed';
+import { Country } from 'src/domain/entities/Country';
 import { expect } from 'chai';
+import { dbClient } from 'test/integration/setup';
 
 describe('Delete Country e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
-	let country: CountryEntity;
+	let country: Country;
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 	});
 
 	beforeEach(async () => {
 		server = app.getHttpServer();
-		country = new CountryEntity();
-		country.uuid = '0b5ccea9-85e5-438c-b60d-3fd36eeb1ba9';
-		country.code = 'BRA';
-		country.name = 'Brazil';
-
-		await insert<CountryEntity>(datasource, [country]);
+		country = await dbClient.createCountry();
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, CountryEntity);
+		await dbClient.deleteDB();
 		await server.close();
 	});
 
@@ -45,9 +37,7 @@ describe('Delete Country e2e Test.', () => {
 			.set('Country-Code', CountryCodeEnum.AR)
 			.expect(watch(HttpStatus.NO_CONTENT));
 
-		const countryExistent = await findOneBy<CountryEntity>(datasource, CountryEntity, {
-			uuid: country.uuid,
-		});
+		const countryExistent = await dbClient.getCountryByUuid(country.uuid);
 		expect(countryExistent).equal(null);
 	});
 

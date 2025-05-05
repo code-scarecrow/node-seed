@@ -3,26 +3,22 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
-import { DataSource } from 'typeorm';
-import { deleteAll, findOneWithRelations, insert } from 'test/integration/infrastructure/database/TestDatasetSeed';
 import { ClubRequest } from 'src/infrastructure/primary-adapters/http/controllers/club/request/ClubRequest';
-import { ClubEntity } from 'src/domain/entities/ClubEntity';
+import { Club } from 'src/domain/entities/Club';
 import { expect } from 'chai';
 import { Redis } from 'ioredis';
 import { safeGetConfig } from '@code-scarecrow/base';
+import { dbClient } from 'test/integration/setup';
 
 describe('Update Club e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
 	let clubRequest: ClubRequest;
-	let club: ClubEntity;
+	let club: Club;
 	let redisClient: Redis;
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 		redisClient = new Redis({
 			host: safeGetConfig('REDIS_HOST'),
 			port: Number(safeGetConfig('REDIS_PORT')),
@@ -32,21 +28,8 @@ describe('Update Club e2e Test.', () => {
 	beforeEach(async () => {
 		server = app.getHttpServer();
 
-		const country = new CountryEntity();
-		country.id = 1;
-		country.uuid = '4a93ee3e-5963-466b-bd22-6bebcea6c933';
-		country.code = 'ARG';
-		country.name = 'Argentina';
-
-		await insert<CountryEntity>(datasource, [country]);
-
-		club = new ClubEntity();
-		club.uuid = '4a93ee3e-5963-466b-bd22-6bebcea6c934';
-		club.name = 'Club Atlético Vélez Sarsfield';
-		club.foundationDate = new Date('1910-01-01');
-		club.country = country;
-
-		await insert<ClubEntity>(datasource, [club]);
+		const country = await dbClient.createCountry();
+		club = await dbClient.createClub(country.id);
 
 		clubRequest = new ClubRequest();
 		clubRequest.name = 'Club Atlético Vélez Sarsfield';
@@ -56,8 +39,7 @@ describe('Update Club e2e Test.', () => {
 
 	afterEach(async () => {
 		await redisClient.flushdb();
-		await deleteAll(datasource, ClubEntity);
-		await deleteAll(datasource, CountryEntity);
+		await dbClient.deleteDB();
 		await server.close();
 	});
 
@@ -80,11 +62,8 @@ describe('Update Club e2e Test.', () => {
 				expect(structure.includes('country')).to.be.true;
 			});
 
-		const clubExistent = await findOneWithRelations<ClubEntity>(datasource, ClubEntity, {
-			where: { uuid: club.uuid },
-			relations: { country: true },
-		});
-		expect(clubExistent).equal;
+		const clubExistent = await dbClient.getClubByUuid(club.uuid);
+		expect(clubExistent).not.be.null;
 		expect(clubExistent?.name).equal(clubRequest.name);
 		expect(clubExistent?.foundationDate).deep.equal(new Date(clubRequest.foundationDate));
 		expect(clubExistent?.country.uuid).equal(clubRequest.countryId);

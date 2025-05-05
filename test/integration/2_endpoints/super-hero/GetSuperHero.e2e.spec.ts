@@ -31,15 +31,7 @@ describe('Get Super Hero e2e Test.', () => {
 	});
 
 	it('Get a super hero', async () => {
-		const sh = new SuperHero();
-		sh.id = 1;
-		sh.name = 'test';
-		sh.combat = '50';
-		sh.durability = '50';
-		sh.intelligence = '50';
-		sh.power = '50';
-		sh.speed = '50';
-		sh.strength = '50';
+		const sh = new SuperHero(1, 'test', '50', '50', '50', '50', '50', '50');
 
 		axiosAdapter.onGet('http://json-server/super-heroes/1').reply(200, sh);
 		return request(server).get('/api/v1.0/super-heroes/1').send().set('Country-Code', CountryCodeEnum.AR).expect(200);

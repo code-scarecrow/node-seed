@@ -3,33 +3,28 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { DataSource } from 'typeorm';
-import { deleteAll, findOneBy, insert } from 'test/integration/infrastructure/database/TestDatasetSeed';
-import { ClubEntity } from 'src/domain/entities/ClubEntity';
 import { expect } from 'chai';
+import { dbClient } from 'test/integration/setup';
 
 describe('Delete Club e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
-	let club: ClubEntity;
+	let clubUuid: string;
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 	});
 
 	beforeEach(async () => {
 		server = app.getHttpServer();
-		club = new ClubEntity();
-		club.uuid = '10045785-706e-4652-a929-9d9e019e0591';
-		club.name = 'Club Atlético Vélez Sarsfield';
-		club.foundationDate = new Date('1910-01-01');
-		await insert<ClubEntity>(datasource, [club]);
+
+		const country = await dbClient.createCountry();
+		const club = await dbClient.createClub(country.id);
+		clubUuid = club.uuid;
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, ClubEntity);
+		await dbClient.deleteDB();
 		await server.close();
 	});
 
@@ -39,14 +34,12 @@ describe('Delete Club e2e Test.', () => {
 
 	it('Delete an existent club.', async () => {
 		await request(server)
-			.delete(`/api/v1.0/clubs/${club.uuid}`)
+			.delete(`/api/v1.0/clubs/${clubUuid}`)
 			.send()
 			.set('Country-Code', CountryCodeEnum.AR)
 			.expect(watch(HttpStatus.NO_CONTENT));
 
-		const clubExistent = await findOneBy<ClubEntity>(datasource, ClubEntity, {
-			uuid: club.uuid,
-		});
+		const clubExistent = await dbClient.getClubByUuid(clubUuid);
 		expect(clubExistent).equal(null);
 	});
 

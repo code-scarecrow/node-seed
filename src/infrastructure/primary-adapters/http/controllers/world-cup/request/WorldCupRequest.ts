@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBefore } from '@code-scarecrow/base';
 import { IsNotEmpty, IsString, IsUUID, Matches, IsDateString, Length } from 'class-validator';
-import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
+import { WorldCupCreation } from 'src/application/interfaces/IWorldCupRepository';
 
 export class WorldCupRequest {
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty({ type: 'string', example: 'argento' })
-	public petName: string;
+	public petName!: string;
 
 	@IsNotEmpty()
 	@IsString()
@@ -16,7 +16,7 @@ export class WorldCupRequest {
 		message: '$property must be formatted as yyyy',
 	})
 	@ApiProperty({ type: 'string', example: '2022' })
-	public year: string;
+	public year!: string;
 
 	@IsNotEmpty()
 	@IsDateString()
@@ -25,7 +25,7 @@ export class WorldCupRequest {
 	})
 	@ApiProperty({ type: 'string', format: 'date' })
 	@IsBefore('finishDate')
-	public startDate: string;
+	public startDate!: string;
 
 	@IsNotEmpty()
 	@IsDateString()
@@ -33,20 +33,19 @@ export class WorldCupRequest {
 		message: '$property must be formatted as yyyy-mm-dd',
 	})
 	@ApiProperty({ type: 'string', format: 'date' })
-	public finishDate: string;
+	public finishDate!: string;
 
 	@IsNotEmpty()
 	@IsUUID()
 	@ApiProperty({ type: 'string', format: 'uuid' })
-	public countryId: string;
+	public countryId!: string;
 
-	public toEntity(): WorldCupEntity {
-		const worldCup = new WorldCupEntity();
-		worldCup.petName = this.petName;
-		worldCup.year = this.year;
-		worldCup.startDate = new Date(this.startDate);
-		worldCup.finishDate = new Date(this.finishDate);
-
-		return worldCup;
+	public toEntity(): Omit<WorldCupCreation, 'locationId'> {
+		return {
+			petName: this.petName,
+			year: this.year,
+			startDate: new Date(this.startDate),
+			finishDate: new Date(this.finishDate),
+		};
 	}
 }

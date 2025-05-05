@@ -3,34 +3,23 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
-import { deleteAll, insert } from 'test/integration/infrastructure/database/TestDatasetSeed';
-import { DataSource } from 'typeorm';
 import { WorldCupRequest } from 'src/infrastructure/primary-adapters/http/controllers/world-cup/request/WorldCupRequest';
-import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
 import { expect } from 'chai';
+import { dbClient } from 'test/integration/setup';
 
 describe('Create World Cup e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
 	let worldCupRequest: WorldCupRequest;
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 	});
 
 	beforeEach(async () => {
 		server = app.getHttpServer();
 
-		const country = new CountryEntity();
-		country.id = 1;
-		country.uuid = '49f8135e-3331-4854-9afc-587dd4f9b6cb';
-		country.code = 'ARG';
-		country.name = 'Argentina';
-
-		await insert<CountryEntity>(datasource, [country]);
+		const country = await dbClient.createCountry();
 
 		worldCupRequest = new WorldCupRequest();
 		worldCupRequest.petName = 'Gauchito';
@@ -41,8 +30,7 @@ describe('Create World Cup e2e Test.', () => {
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, WorldCupEntity);
-		await deleteAll(datasource, CountryEntity);
+		await dbClient.deleteDB();
 		await server.close();
 	});
 

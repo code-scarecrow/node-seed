@@ -3,64 +3,33 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
-import { DataSource } from 'typeorm';
-import { deleteAll, insert } from 'test/integration/infrastructure/database/TestDatasetSeed';
-import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
+import { WorldCup } from 'src/domain/entities/WorldCup';
 import { WorldCupResponse } from 'src/infrastructure/primary-adapters/http/controllers/world-cup/response/WorldCupResponse';
 import { expect } from 'chai';
+import { dbClient } from 'test/integration/setup';
 
 describe('Get World Cup e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
-	let worldCup1: WorldCupEntity;
-	let worldCup2: WorldCupEntity;
+	let worldCup1: WorldCup;
+	let worldCup2: WorldCup;
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 	});
 
 	beforeEach(async () => {
 		server = app.getHttpServer();
 
-		const host1 = new CountryEntity();
-		host1.id = 1;
-		host1.uuid = '40d3a971-eb9d-4ac3-a0c2-4c8f31640339';
-		host1.code = 'ARG';
-		host1.name = 'Argentina';
+		const country1 = await dbClient.createCountry();
+		worldCup1 = await dbClient.createWorldCup(country1.id, []);
 
-		const host2 = new CountryEntity();
-		host2.id = 2;
-		host2.uuid = '40d3a971-eb9d-4ac3-a0c2-4c8f31640340';
-		host2.code = 'QAT';
-		host2.name = 'Qatar';
-
-		await insert<CountryEntity>(datasource, [host1, host2]);
-
-		worldCup1 = new WorldCupEntity();
-		worldCup1.uuid = '40d3a971-eb9d-4ac3-a0c2-4c8f31640341';
-		worldCup1.petName = 'Gauchito';
-		worldCup1.year = '1978';
-		worldCup1.startDate = new Date('1978-06-01');
-		worldCup1.finishDate = new Date('1978-06-25');
-		worldCup1.location = host1;
-
-		worldCup2 = new WorldCupEntity();
-		worldCup2.uuid = '40d3a971-eb9d-4ac3-a0c2-4c8f31640342';
-		worldCup2.petName = "La'eeb";
-		worldCup2.year = '2022';
-		worldCup2.startDate = new Date('2022-11-20');
-		worldCup2.finishDate = new Date('2022-12-18');
-		worldCup2.location = host2;
-
-		await insert<WorldCupEntity>(datasource, [worldCup1, worldCup2]);
+		const country2 = await dbClient.createCountry();
+		worldCup2 = await dbClient.createWorldCup(country2.id, []);
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, WorldCupEntity);
-		await deleteAll(datasource, CountryEntity);
+		await dbClient.deleteDB();
 		await server.close();
 	});
 

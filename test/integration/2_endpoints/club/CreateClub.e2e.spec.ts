@@ -4,33 +4,22 @@ import { initiateApp } from '../../infrastructure/app/AppInitiator';
 import { watch } from '../../infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { ClubRequest } from 'src/infrastructure/primary-adapters/http/controllers/club/request/ClubRequest';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
-import { deleteAll, insert } from '../../infrastructure/database/TestDatasetSeed';
-import { DataSource } from 'typeorm';
-import { ClubEntity } from 'src/domain/entities/ClubEntity';
 import { expect } from 'chai';
+import { dbClient } from 'test/integration/setup';
 
 describe('Create Club e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
 	let clubRequest: ClubRequest;
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 	});
 
 	beforeEach(async () => {
 		server = app.getHttpServer();
 
-		const country = new CountryEntity();
-		country.id = 1;
-		country.uuid = '10045785-706e-4652-a929-9d9e019e0590';
-		country.code = 'ARG';
-		country.name = 'Argentina';
-
-		await insert<CountryEntity>(datasource, [country]);
+		const country = await dbClient.createCountry();
 
 		clubRequest = new ClubRequest();
 		clubRequest.name = 'Club Atlético Vélez Sarsfield';
@@ -39,8 +28,7 @@ describe('Create Club e2e Test.', () => {
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, ClubEntity);
-		await deleteAll(datasource, CountryEntity);
+		await dbClient.deleteDB();
 		await server.close();
 	});
 

@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsNotEmpty, IsString, IsUUID, Matches } from 'class-validator';
-import { ClubEntity } from 'src/domain/entities/ClubEntity';
+import { ClubCreation } from 'src/application/interfaces/IClubRepository';
 
 export class ClubRequest {
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty({ type: 'string', example: 'Argentina' })
-	public name: string;
+	public name!: string;
 
 	@IsNotEmpty()
 	@IsDateString()
@@ -14,18 +14,17 @@ export class ClubRequest {
 		message: '$property must be formatted as yyyy-mm-dd',
 	})
 	@ApiProperty({ type: 'string', format: 'date', example: '1904-11-30' })
-	public foundationDate: string;
+	public foundationDate!: string;
 
 	@IsNotEmpty()
 	@IsUUID()
 	@ApiProperty({ type: 'string', format: 'uuid' })
-	public countryId: string;
+	public countryId!: string;
 
-	public toEntity(): ClubEntity {
-		const club = new ClubEntity();
-		club.name = this.name;
-		club.foundationDate = new Date(this.foundationDate);
-
-		return club;
+	public toEntity(): Omit<ClubCreation, 'countryId'> {
+		return {
+			name: this.name,
+			foundationDate: new Date(this.foundationDate),
+		};
 	}
 }

@@ -1,7 +1,7 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { QueueInterceptor } from '@code-scarecrow/base/logger';
 import { It, Mock } from 'moq.ts';
-import { UserEntity } from 'src/domain/entities/UserEntity';
+import { User } from 'src/domain/entities/User';
 import { UserCreateProducer } from 'src/infrastructure/secondary-adapters/message-queue/producers/user/UserCreateProducer';
 import { expect } from 'chai';
 import { IMessageProducerConfig } from '@code-scarecrow/base';
@@ -12,13 +12,16 @@ describe('User create producer test.', () => {
 	let amqpConnection: Mock<AmqpConnection>;
 	let interceptor: Mock<QueueInterceptor>;
 
-	const user: UserEntity = new UserEntity();
-	user.name = 'Walter';
-	user.lastname = 'Bou';
-	user.dni = '32415234';
-	user.birthDate = new Date('1993-08-25');
-	user.email = 'walter@bou.com';
-	user.password = 'qwerqwrsdf';
+	const user: User = new User({
+		id: 1,
+		uuid: 'XXXXXXXXXXXXXXXXXXXXXXXXX',
+		name: 'Walter',
+		lastname: 'Bou',
+		dni: '32415234',
+		birthDate: new Date('1993-08-25'),
+		email: 'XXXXXXXXXXXXXX',
+		password: 'XXXXXXXXXX',
+	});
 
 	beforeEach(() => {
 		process.env['APP_NAME'] = 'test';

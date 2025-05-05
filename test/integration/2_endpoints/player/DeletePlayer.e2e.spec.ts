@@ -3,40 +3,29 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { DataSource } from 'typeorm';
-import { deleteAll, findOneBy, insert } from 'test/integration/infrastructure/database/TestDatasetSeed';
-import { PlayerEntity } from 'src/domain/entities/PlayerEntity';
-import { PositionEnum } from 'src/domain/enums/PositionEnum';
+import { Player } from 'src/domain/entities/Player';
 import { expect } from 'chai';
+import { dbClient } from 'test/integration/setup';
 
 describe('Delete Player e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
-	let player: PlayerEntity;
+	let player: Player;
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 	});
 
 	beforeEach(async () => {
 		server = app.getHttpServer();
 
-		player = new PlayerEntity();
-		player.uuid = '67d7c4fc-02f4-49ce-befd-3fbd08e6ac28';
-		player.name = 'Walter';
-		player.lastname = 'Bou';
-		player.birthDate = new Date('1993-08-25');
-		player.position = PositionEnum.CF;
-		player.createdAt = new Date();
-		player.updatedAt = new Date();
-
-		await insert<PlayerEntity>(datasource, [player]);
+		const country = await dbClient.createCountry();
+		const club = await dbClient.createClub(country.id);
+		player = await dbClient.createPlayer(club.id, country.id);
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, PlayerEntity);
+		await dbClient.deleteDB();
 		await server.close();
 	});
 
@@ -51,9 +40,7 @@ describe('Delete Player e2e Test.', () => {
 			.set('Country-Code', CountryCodeEnum.AR)
 			.expect(watch(HttpStatus.NO_CONTENT));
 
-		const playerExistent = await findOneBy<PlayerEntity>(datasource, PlayerEntity, {
-			uuid: player.uuid,
-		});
+		const playerExistent = await dbClient.getPlayer(player.uuid);
 		expect(playerExistent).equal(null);
 	});
 

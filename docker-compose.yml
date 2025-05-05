@@ -10,10 +10,7 @@ services:
     volumes:
       - ./:/usr/application
     environment:
-      - DATABASE_HOST=database
-      - DATABASE_NAME=pickit
-      - DATABASE_PASS=pickit
-      - DATABASE_USER=pickit
+      - DATABASE_URL=mysql://root:root@database:3306/pickit
     depends_on:
       database:
         condition: service_started
@@ -32,10 +29,7 @@ services:
       - '9662:9662' #docker debbug port
     environment:
       - APP_NAME="ms-seed"
-      - DATABASE_HOST=database
-      - DATABASE_NAME=pickit
-      - DATABASE_PASS=pickit
-      - DATABASE_USER=pickit
+      - DATABASE_URL=mysql://root:root@database:3306/pickit
       - AWS_ACCESS_KEY_ID=DUMMYIDEXAMPLE
       - AWS_SECRET_ACCESS_KEY=DUMMYEXAMPLEKEY
       - AWS_ENDPOINT=http://dynamodb:4566
@@ -45,13 +39,6 @@ services:
       - AWS_BUCKET_NAME=test-bucket
       - DYNAMODB_TABLE_NAME_RABBITS=rabbits
       - SUPER_HERO_URL=http://json-server
-      - CORE_API_KEY=DUMMYCOREKEY
-      - CORE_URL_AR=https://api.test.pickit.net
-      - CORE_URL_CO=https://api.test.pickit.com.co
-      - CORE_URL_UY=https://api.test.pickit.com.uy
-      - CORE_URL_MX=https://api.test.pickit.com.mx
-      - CORE_URL_CL=https://api.test.pickit.cl
-      - CORE_URL_PE=https://api.test.pickit.com.pe
       - RABBIT_URI=amqp://guest:guest@rabbitmq:5672/
       - RABBIT_QUEUE=ms-seed-consumer
       - RABBIT_EVENT_BUS_EXCHANGE=event_bus_example

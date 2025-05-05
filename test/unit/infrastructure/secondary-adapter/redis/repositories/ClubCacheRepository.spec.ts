@@ -3,8 +3,10 @@ import { Logger } from '@code-scarecrow/base/logger';
 import { expect } from 'chai';
 import { Redis } from 'ioredis';
 import { It, Mock, Times } from 'moq.ts';
-import { ClubEntity } from 'src/domain/entities/ClubEntity';
+import { Club } from 'src/domain/entities/Club';
 import { ClubCacheRepository } from 'src/infrastructure/secondary-adapters/redis/repositories/ClubCacheRepository';
+import { Country } from 'src/domain/entities/Country';
+import { domainMocks } from 'test/unit/domain/mocks/DomainMocks';
 
 describe('ClubCacheRepository test', () => {
 	let clubCacheRepository: ClubCacheRepository;
@@ -27,21 +29,15 @@ describe('ClubCacheRepository test', () => {
 	it('should be defined', () => {
 		expect(clubCacheRepository).exist;
 	});
-
+	//TODO - add AAA comments
 	describe('getCache', () => {
 		it('should get from cache', async () => {
-			const uuid = '2bedb101-012d-490a-bf6f-a801d95afc05';
-			const club = new ClubEntity();
-			club.uuid = uuid;
-			club.name = 'Club Atlético Vélez Sarsfield';
-			club.foundationDate = new Date('1910-01-01');
-
+			const club = domainMocks.getClub();
 			redisManager.setup((rm) => rm.get(It.IsAny<string>())).returnsAsync(JSON.stringify(club));
 
-			const clubFromCache = await clubCacheRepository.getCache(uuid);
+			const clubFromCache = await clubCacheRepository.getCache(club.uuid);
 
 			redisManager.verify((rm) => rm.get(It.IsAny<string>()), Times.Once());
-
 			expect(clubFromCache).deep.equal(club);
 		});
 
@@ -78,7 +74,24 @@ describe('ClubCacheRepository test', () => {
 				.setup((rm) => rm.set(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<number>()))
 				.returnsAsync(null);
 
-			await clubCacheRepository.saveCache(new ClubEntity());
+			await clubCacheRepository.saveCache(
+				new Club(
+					{
+						uuid: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+						name: 'Club Atlético Vélez Sarsfield',
+						foundationDate: new Date('1910-01-01'),
+						createdAt: new Date('2023-01-01'),
+						updatedAt: new Date('2023-01-01'),
+						id: 1,
+					},
+					new Country({
+						id: 1,
+						uuid: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+						name: 'Argentina',
+						code: 'AR',
+					}),
+				),
+			);
 
 			redisManager.verify(
 				(rm) => rm.set(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<number>()),
@@ -94,7 +107,24 @@ describe('ClubCacheRepository test', () => {
 				.setup((rm) => rm.set(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<number>()))
 				.throwsAsync(mockedError);
 
-			const saveCachePromise = clubCacheRepository.saveCache(new ClubEntity());
+			const saveCachePromise = clubCacheRepository.saveCache(
+				new Club(
+					{
+						uuid: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+						name: 'Club Atlético Vélez Sarsfield',
+						foundationDate: new Date('1910-01-01'),
+						createdAt: new Date('2023-01-01'),
+						updatedAt: new Date('2023-01-01'),
+						id: 1,
+					},
+					new Country({
+						id: 1,
+						uuid: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+						name: 'Argentina',
+						code: 'AR',
+					}),
+				),
+			);
 
 			await expect(saveCachePromise).to.be.rejectedWith(mockedError);
 

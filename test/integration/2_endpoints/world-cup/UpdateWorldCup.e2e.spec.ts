@@ -3,45 +3,26 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
-import { DataSource } from 'typeorm';
-import { deleteAll, findOneWithRelations, insert } from 'test/integration/infrastructure/database/TestDatasetSeed';
 import { WorldCupRequest } from 'src/infrastructure/primary-adapters/http/controllers/world-cup/request/WorldCupRequest';
-import { WorldCupEntity } from 'src/domain/entities/WorldCupEntity';
+import { WorldCup } from 'src/domain/entities/WorldCup';
 import { expect } from 'chai';
+import { dbClient } from 'test/integration/setup';
 
 describe('Update World Cup e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
 	let worldCupRequest: WorldCupRequest;
-	let worldCup: WorldCupEntity;
+	let worldCup: WorldCup;
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 	});
 
 	beforeEach(async () => {
 		server = app.getHttpServer();
 
-		const country = new CountryEntity();
-		country.id = 1;
-		country.uuid = 'e225043d-b32d-4dfb-af40-036eefa3e388';
-		country.code = 'ARG';
-		country.name = 'Argentina';
-
-		await insert<CountryEntity>(datasource, [country]);
-
-		worldCup = new WorldCupEntity();
-		worldCup.uuid = 'e225043d-b32d-4dfb-af40-036eefa3e389';
-		worldCup.petName = "La'eeb";
-		worldCup.year = '2022';
-		worldCup.startDate = new Date('2022-11-20');
-		worldCup.finishDate = new Date('2022-12-18');
-		worldCup.location = country;
-
-		await insert<WorldCupEntity>(datasource, [worldCup]);
+		const country = await dbClient.createCountry();
+		worldCup = await dbClient.createWorldCup(country.id, []);
 
 		worldCupRequest = new WorldCupRequest();
 		worldCupRequest.petName = 'Gauchito';
@@ -52,8 +33,7 @@ describe('Update World Cup e2e Test.', () => {
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, WorldCupEntity);
-		await deleteAll(datasource, CountryEntity);
+		await dbClient.deleteDB();
 		await server.close();
 	});
 
@@ -77,20 +57,13 @@ describe('Update World Cup e2e Test.', () => {
 				expect(structure.includes('location')).to.be.true;
 			});
 
-		const worldCupExistent: WorldCupEntity | null = await findOneWithRelations<WorldCupEntity>(
-			datasource,
-			WorldCupEntity,
-			{
-				where: { uuid: worldCup.uuid },
-				relations: { location: true },
-			},
-		);
+		const worldCupExistent: WorldCup | null = await dbClient.getWorldCup(worldCup.uuid);
 		expect(worldCupExistent).exist;
 		expect(worldCupExistent?.petName).equal(worldCupRequest.petName);
 		expect(worldCupExistent?.year).equal(worldCupRequest.year);
 		expect(worldCupExistent?.startDate).deep.equal(new Date(worldCupRequest.startDate));
 		expect(worldCupExistent?.finishDate).deep.equal(new Date(worldCupRequest.finishDate));
-		expect(worldCupExistent?.location?.uuid).equal(worldCupRequest.countryId);
+		expect(worldCupExistent?.location.uuid).equal(worldCupRequest.countryId);
 	});
 
 	it('Update an existent world cup with bad dates.', async () => {

@@ -4,15 +4,12 @@ import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { CountryRequest } from 'src/infrastructure/primary-adapters/http/controllers/country/request/CountryRequest';
-import { deleteAll } from 'test/integration/infrastructure/database/TestDatasetSeed';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
-import { DataSource } from 'typeorm';
 import { expect } from 'chai';
+import { dbClient } from 'test/integration/setup';
 
 describe('Create Country e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
 
 	const countryRequest = new CountryRequest();
 	countryRequest.code = 'ARG';
@@ -20,7 +17,6 @@ describe('Create Country e2e Test.', () => {
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 	});
 
 	beforeEach(() => {
@@ -28,7 +24,7 @@ describe('Create Country e2e Test.', () => {
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, CountryEntity);
+		await dbClient.deleteDB();
 		await server.close();
 	});
 

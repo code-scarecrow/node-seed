@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { formatDate } from 'src/application/utils/DateFormat';
-import { PlayerEntity } from 'src/domain/entities/PlayerEntity';
+import { Player } from 'src/domain/entities/Player';
 import { PositionEnum } from 'src/domain/enums/PositionEnum';
 
 export class PlayerResponse {
@@ -31,12 +31,12 @@ export class PlayerResponse {
 	@ApiProperty({ type: 'string', format: 'date-time', example: '2023-01-10 18:33:57' })
 	public updatedAt: string;
 
-	constructor(player: PlayerEntity) {
+	constructor(player: Player) {
 		this.id = player.uuid;
 		this.name = player.name;
 		this.lastname = player.lastname;
-		if (player.country) this.country = player.country.name;
-		if (player.club) this.club = player.club.name;
+		this.country = player.country.name;
+		this.club = player.club.name;
 		this.birthDate = formatDate(player.birthDate);
 		this.position = player.position;
 		this.createdAt = player.createdAt.toDateString();

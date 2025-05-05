@@ -3,25 +3,21 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { DataSource } from 'typeorm';
-import { deleteAll, insert } from 'test/integration/infrastructure/database/TestDatasetSeed';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
-import { ClubEntity } from 'src/domain/entities/ClubEntity';
-import { CountryEntity } from 'src/domain/entities/CountryEntity';
+import { Club } from 'src/domain/entities/Club';
 import { expect } from 'chai';
 import { Redis } from 'ioredis';
 import { safeGetConfig } from '@code-scarecrow/base';
+import { dbClient } from 'test/integration/setup';
 
 describe('Get Club e2e Test.', () => {
 	let app: INestApplication;
 	let server: HttpServer;
-	let datasource: DataSource;
-	let club: ClubEntity;
+	let club: Club;
 	let redisClient: Redis;
 
 	before(async () => {
 		app = await initiateApp();
-		datasource = app.get(DataSource);
 		redisClient = new Redis({
 			host: safeGetConfig('REDIS_HOST'),
 			port: Number(safeGetConfig('REDIS_PORT')),
@@ -30,29 +26,14 @@ describe('Get Club e2e Test.', () => {
 
 	beforeEach(async () => {
 		await redisClient.flushdb();
-
 		server = app.getHttpServer();
 
-		const country = new CountryEntity();
-		country.id = 1;
-		country.uuid = '10045785-706e-4652-a929-9d9e019e0592';
-		country.code = 'ARG';
-		country.name = 'Argentina';
-
-		await insert<CountryEntity>(datasource, [country]);
-
-		club = new ClubEntity();
-		club.uuid = '10045785-706e-4652-a929-9d9e019e0593';
-		club.name = 'Club Atlético Vélez Sarsfield';
-		club.foundationDate = new Date('1910-01-01');
-		club.country = country;
-
-		await insert<ClubEntity>(datasource, [club]);
+		const country = await dbClient.createCountry();
+		club = await dbClient.createClub(country.id);
 	});
 
 	afterEach(async () => {
-		await deleteAll(datasource, ClubEntity);
-		await deleteAll(datasource, CountryEntity);
+		await dbClient.deleteDB();
 		await server.close();
 	});
 

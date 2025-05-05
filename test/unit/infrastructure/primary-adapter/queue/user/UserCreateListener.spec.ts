@@ -1,7 +1,7 @@
 import { Logger, QueueInterceptor } from '@code-scarecrow/base/logger';
 import { It, Mock, Times } from 'moq.ts';
 import { UserService } from 'src/application/services/UserService';
-import { UserEntity } from 'src/domain/entities/UserEntity';
+import { User } from 'src/domain/entities/User';
 import { UserCreateListener } from 'src/infrastructure/primary-adapters/message-queue/listeners/user/UserCreateListener';
 import { expect } from 'chai';
 import { IUserIncommingMessage } from 'src/infrastructure/primary-adapters/message-queue/listeners/user/IUserIncommingMessage';
@@ -29,13 +29,7 @@ describe('User create listener test.', () => {
 		'ms-seed',
 	);
 
-	const user: UserEntity = new UserEntity();
-	user.name = messageBody.name;
-	user.lastname = messageBody.lastname;
-	user.dni = messageBody.dni;
-	user.birthDate = messageBody.birthDate;
-	user.email = messageBody.email;
-	user.password = messageBody.password;
+	const user: User = new Mock<User>().object();
 
 	beforeEach(() => {
 		userService = new Mock<UserService>();
