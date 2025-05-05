@@ -9,16 +9,16 @@ import { takeDownS3 } from '@code-scarecrow/base-tests/s3/teardown';
 import { setUpMysql } from '@code-scarecrow/base-tests/mysql/setup';
 import { takeDownMysql } from '@code-scarecrow/base-tests/mysql/teardown';
 import { exec } from 'child_process';
+import { DBClient } from './infrastructure/database/DBClient';
+
+export let dbClient: DBClient;
 
 before(async function () {
 	this.timeout(100000);
 
 	//Set env variables:
 	process.env['APP_NAME'] = 'ms-seed';
-	process.env['DATABASE_HOST'] = 'localhost';
-	process.env['DATABASE_NAME'] = 'pickit';
-	process.env['DATABASE_PASS'] = 'pickit';
-	process.env['DATABASE_USER'] = 'pickit';
+	process.env['DATABASE_URL'] = 'mysql://root:root@localhost:3306/pickit';
 	process.env['AWS_ACCESS_KEY_ID'] = 'TEST';
 	process.env['AWS_SECRET_ACCESS_KEY'] = 'TESTKEY';
 	process.env['AWS_ENDPOINT'] = 'http://localhost:8000';
@@ -28,13 +28,6 @@ before(async function () {
 	process.env['AWS_REGION'] = 'us-west-2';
 	process.env['DYNAMODB_TABLE_NAME_RABBITS'] = 'rabbits';
 	process.env['SUPER_HERO_URL'] = 'http://json-server';
-	process.env['CORE_API_KEY'] = 'mocked-api-key';
-	process.env['CORE_URL_AR'] = 'http://mocked-ar-url';
-	process.env['CORE_URL_CO'] = 'http://mocked-co-url';
-	process.env['CORE_URL_UY'] = 'http://mocked-uy-url';
-	process.env['CORE_URL_MX'] = 'http://mocked-mx-url';
-	process.env['CORE_URL_CL'] = 'http://mocked-cl-url';
-	process.env['CORE_URL_PE'] = 'http://mocked-pe-url';
 	process.env['RABBIT_URI'] = 'amqp://guest:guest@0.0.0.0:5672/';
 	process.env['RABBIT_QUEUE'] = 'ms-seed-consumer';
 	process.env['RABBIT_EVENT_BUS_EXCHANGE'] = 'event_bus_example';
@@ -53,6 +46,8 @@ before(async function () {
 	]);
 
 	await runNpmCommandWithEnv();
+
+	dbClient = new DBClient();
 });
 
 after(async function () {

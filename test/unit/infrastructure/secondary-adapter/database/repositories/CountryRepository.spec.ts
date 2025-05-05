@@ -1,59 +1,58 @@
 import { It, Mock } from 'moq.ts';
-import { Country } from 'src/domain/entities/Country';
 import { CountryRepository } from 'src/infrastructure/secondary-adapters/database/repositories/CountryRepository';
-import { Repository } from 'typeorm';
 import { expect } from 'chai';
+import { PrismaService } from 'src/infrastructure/secondary-adapters/database/client/PrismaService';
+import { domainMocks } from 'test/unit/domain/mocks/DomainMocks';
+import { prismaMocks } from '../mocks/PrismaMocks';
+import { DefaultArgs } from '@prisma/client/runtime/library';
+import { Prisma } from '@prisma/client';
 
 describe('Country Repository Test.', () => {
 	let countryRepository: CountryRepository;
-	let repo: Mock<Repository<Country>>;
+	let repo: Mock<Prisma.countriesDelegate<DefaultArgs>>;
 
 	beforeEach(() => {
-		repo = new Mock<Repository<Country>>();
-		countryRepository = new CountryRepository(repo.object());
+		const prisma: Mock<PrismaService> = new Mock();
+
+		repo = new Mock<Prisma.countriesDelegate<DefaultArgs>>();
+		prisma.setup((m) => m.countries).returns(repo.object());
+
+		countryRepository = new CountryRepository(prisma.object());
 	});
 
 	it('Find one by uuid.', async () => {
 		//Arrange
-		const uuid = 'c46f7322-9045-11ed-923d-0242ac180003';
-
-		repo.setup((m) => m.findOneBy(It.IsAny())).returnsAsync(new Country());
+		const country = domainMocks.getCountry();
+		repo.setup((m) => m.findUnique(It.IsAny())).returnsAsync(prismaMocks.getCountry(country));
 
 		//Act
-		const result = await countryRepository.findByUuid(uuid);
+		const result = await countryRepository.findByUuid(country.uuid);
 
 		//Assert
-		expect(result).instanceOf(Country);
+		expect(result).deep.equal(country);
 	});
 
 	it('Find all by uuids.', async () => {
 		//Arrange
-		const uuid = 'c46f7322-9045-11ed-923d-0242ac180003';
-		const clubEntity = new Country();
-
-		repo.setup((m) => m.find(It.IsAny())).returnsAsync([clubEntity]);
+		const country = domainMocks.getCountry();
+		repo.setup((m) => m.findMany(It.IsAny())).returnsAsync([country]);
 
 		//Act
-		const result = await countryRepository.findAllByUuid([uuid]);
+		const result = await countryRepository.findAllByUuid([country.uuid]);
 
 		//Assert
-		expect(result).deep.equal([clubEntity]);
-
-		result.forEach((club) => {
-			expect(club).instanceOf(Country);
-		});
+		expect(result).deep.equal([country]);
 	});
 
 	it('Get country with players.', async () => {
 		//Arrange
-		const uuid = 'c46f7322-9045-11ed-923d-0242ac180003';
-
-		repo.setup((m) => m.findOne(It.IsAny())).returnsAsync(new Country());
+		const country = domainMocks.getCountry(true);
+		repo.setup((m) => m.findUnique(It.IsAny())).returnsAsync(prismaMocks.getCountry(country, true));
 
 		//Act
-		const result = await countryRepository.getCountryWithPlayers(uuid);
+		const result = await countryRepository.getCountryWithPlayers(country.uuid);
 
 		//Assert
-		expect(result).instanceOf(Country);
+		expect(result).deep.equal(country);
 	});
 });

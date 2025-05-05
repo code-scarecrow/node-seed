@@ -5,7 +5,7 @@ import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { WorldCupRequest } from 'src/infrastructure/primary-adapters/http/controllers/world-cup/request/WorldCupRequest';
 import { expect } from 'chai';
-import { dbClient } from 'test/integration/infrastructure/database/DBClient';
+import { dbClient } from 'test/integration/setup';
 
 describe('Create World Cup e2e Test.', () => {
 	let app: INestApplication;

@@ -32,7 +32,7 @@ export class ClubCacheRepository extends RedisBaseRepository implements IClubCac
 	}
 
 	private mapFoundationDate(key: string, value: string): Date | string {
-		if (key === 'foundationDate') {
+		if (key === 'foundationDate' || key === 'createdAt' || key === 'updatedAt') {
 			return new Date(value);
 		}
 		return value;

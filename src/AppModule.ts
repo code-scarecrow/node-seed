@@ -4,10 +4,8 @@ import { HttpModule } from '@nestjs/axios';
 import { HttpConfigService } from './infrastructure/secondary-adapters/http/config/HttpConfigService';
 import { dynamodbConfig } from './infrastructure/secondary-adapters/dynamodb/config/DynamodbConfig';
 import { DynamodbClient } from './infrastructure/secondary-adapters/dynamodb/clients/DynamodbClient';
-import { databaseConfig } from './infrastructure/secondary-adapters/database/config/DatabaseConfig';
 import { cacheConfig } from './infrastructure/secondary-adapters/redis/config/CacheConfig';
 import { ValidateCountryCodeMiddleware } from './infrastructure/primary-adapters/http/middleware/ValidateCountryCodeMiddleware';
-import { httpCoreConfig } from './infrastructure/secondary-adapters/http/core/config/HttpCoreConfig';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { UserCreateListener } from './infrastructure/primary-adapters/message-queue/listeners/user/UserCreateListener';
 import { RabbitRepository } from './infrastructure/secondary-adapters/dynamodb/repositories/RabbitRepository';
@@ -46,7 +44,6 @@ import { AxiosInstanceFactory } from '@code-scarecrow/base';
 import { SuperHeroRepository } from './infrastructure/secondary-adapters/http/super-hero/repositories/SuperHeroRepository';
 import { SuperHeroClient } from './infrastructure/secondary-adapters/http/super-hero/client/SuperHeroClient';
 import { httpSuperHeroConfig } from './infrastructure/secondary-adapters/http/super-hero/config/HttpSuperHeroConfig';
-import { prismaConfig } from './infrastructure/secondary-adapters/database/config/PrismaConfig';
 import { PrismaService } from './infrastructure/secondary-adapters/database/client/PrismaService';
 
 @Module({
@@ -54,16 +51,13 @@ import { PrismaService } from './infrastructure/secondary-adapters/database/clie
 		ConfigModule.forRoot({
 			load: [
 				dynamodbConfig,
-				databaseConfig,
 				cacheConfig,
-				httpCoreConfig,
 				rabbitMQConfig,
 				httpSuperHeroConfig,
 				loggerConfig,
 				userCreateQueueConfig,
 				userFinishCreationConfig,
 				awsClientS3Config,
-				prismaConfig,
 			],
 			isGlobal: true,
 			cache: true,

@@ -3,6 +3,7 @@ import { ICountryRepository } from 'src/application/interfaces/ICountryRepositor
 import { CountryService } from 'src/application/services/CountryService';
 import { Country } from 'src/domain/entities/Country';
 import { expect } from 'chai';
+import { domainMocks } from 'test/unit/domain/mocks/DomainMocks';
 
 describe('Country service test.', () => {
 	let countryService: CountryService;
@@ -20,7 +21,7 @@ describe('Country service test.', () => {
 
 	it('should create a country.', async () => {
 		//Arrange
-		const country = new Country();
+		const country = new Mock<Country>().object();
 
 		countryRepository.setup((m) => m.create(It.IsAny<Country>())).returnsAsync(country);
 
@@ -33,7 +34,7 @@ describe('Country service test.', () => {
 
 	it('should update a country.', async () => {
 		//Arrange
-		const country = new Country();
+		const country = new Mock<Country>().object();
 
 		countryRepository.setup((m) => m.findByUuid(It.IsAny<string>())).returnsAsync(country);
 		countryRepository.setup((m) => m.update(It.IsAny<{ id: number }>(), It.IsAny<Country>())).returnsAsync(country);
@@ -54,7 +55,7 @@ describe('Country service test.', () => {
 
 	it('should delete a country.', async () => {
 		//Arrange
-		const country = new Country();
+		const country = new Mock<Country>().object();
 
 		countryRepository.setup((m) => m.findByUuid(It.IsAny<string>())).returnsAsync(country);
 		countryRepository.setup((m) => m.delete(It.IsAny<{ id: number }>())).returnsAsync(undefined);
@@ -68,8 +69,7 @@ describe('Country service test.', () => {
 
 	it('should find a country by uuid return an entity.', async () => {
 		//Arrange
-		const country = new Country();
-
+		const country = domainMocks.getCountry();
 		countryRepository.setup((m) => m.findByUuid(It.IsAny<string>())).returnsAsync(country);
 
 		//Act
@@ -83,7 +83,7 @@ describe('Country service test.', () => {
 
 	it('should find a country by uuid throw error.', async () => {
 		//Arrange
-		const country = new Country();
+		const country = domainMocks.getCountry();
 
 		countryRepository.setup((m) => m.findByUuid(It.IsAny<string>())).returnsAsync(null);
 
@@ -98,7 +98,7 @@ describe('Country service test.', () => {
 
 	it('should return all countries.', async () => {
 		//Arrange
-		const country = new Country();
+		const country = domainMocks.getCountry();
 
 		countryRepository.setup((m) => m.findAll()).returnsAsync([country]);
 
@@ -113,7 +113,7 @@ describe('Country service test.', () => {
 
 	it('should find all countries in array of uuids.', async () => {
 		//Arrange
-		const country = new Country();
+		const country = domainMocks.getCountry();
 		countryRepository.setup((m) => m.findAllByUuid(It.IsAny<string[]>())).returnsAsync([country]);
 
 		//Act
@@ -127,7 +127,7 @@ describe('Country service test.', () => {
 
 	it('should find a country by uuid with players return a entity.', async () => {
 		//Arrange
-		const country = new Country();
+		const country = domainMocks.getCountry();
 
 		countryRepository.setup((m) => m.getCountryWithPlayers(It.IsAny<string>())).returnsAsync(country);
 
@@ -142,7 +142,7 @@ describe('Country service test.', () => {
 
 	it('should find a country by with players uuid throw error.', async () => {
 		//Arrange
-		const country = new Country();
+		const country = domainMocks.getCountry();
 
 		countryRepository.setup((m) => m.getCountryWithPlayers(It.IsAny<string>())).returnsAsync(null);
 

@@ -1,11 +1,10 @@
 import { HttpServer, INestApplication } from '@nestjs/common';
 import { initiateApp } from '../../infrastructure/app/AppInitiator';
-import { User } from 'src/domain/entities/User';
 import { expect } from 'chai';
 import { IUserIncommingMessage } from 'src/infrastructure/primary-adapters/message-queue/listeners/user/IUserIncommingMessage';
 import { RabbitMessage, safeGetConfig } from '@code-scarecrow/base';
 import { Channel, Connection, connect } from 'amqplib';
-import { dbClient } from 'test/integration/infrastructure/database/DBClient';
+import { dbClient } from 'test/integration/setup';
 
 describe('Process user create message.', () => {
 	let app: INestApplication;
@@ -53,11 +52,14 @@ describe('Process user create message.', () => {
 		channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)));
 
 		//Act
-		await new Promise((r) => setTimeout(r, 10));
+		let counter = 0;
+		let userCreated = null;
+		while (userCreated === null || counter < 10) {
+			userCreated = await dbClient.getUserByEmail(messageBody.email);
+			counter++;
+		}
 
 		//Assert
-		const userCreated = await dbClient.getUserByEmail(messageBody.email);
-		expect(userCreated).instanceOf(User);
 		expect(userCreated?.name).equal(messageBody.name);
 		expect(userCreated?.lastname).equal(messageBody.lastname);
 		expect(userCreated?.dni).equal(messageBody.dni);

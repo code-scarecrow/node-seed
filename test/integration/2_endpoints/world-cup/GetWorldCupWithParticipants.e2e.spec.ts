@@ -3,10 +3,10 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
 import { WorldCup } from 'src/domain/entities/WorldCup';
 import { expect } from 'chai';
+import { dbClient } from 'test/integration/setup';
 
 describe('Get World cup with participants e2e Test.', () => {
 	let app: INestApplication;

@@ -4,9 +4,9 @@ import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { Country } from 'src/domain/entities/Country';
-import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 import { CountryResponse } from 'src/infrastructure/primary-adapters/http/controllers/country/response/CountryResponse';
 import { expect } from 'chai';
+import { dbClient } from 'test/integration/setup';
 
 describe('Get Countries e2e Test.', () => {
 	let app: INestApplication;

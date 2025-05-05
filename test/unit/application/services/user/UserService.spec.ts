@@ -5,6 +5,7 @@ import { UserService } from 'src/application/services/UserService';
 import { User } from 'src/domain/entities/User';
 import { expect } from 'chai';
 import { IUserFinishCreationProducer } from 'src/application/interfaces/IUserFinishCreationProducer';
+import { domainMocks } from 'test/unit/domain/mocks/DomainMocks';
 
 describe('User service test.', () => {
 	let userService: UserService;
@@ -29,7 +30,7 @@ describe('User service test.', () => {
 
 	it('should create a user.', async () => {
 		//Arrange
-		const user = new User();
+		const user = new Mock<User>().object();
 
 		userRepository.setup((ur) => ur.create(It.IsAny<User>())).returnsAsync(user);
 		userFinishCreationProducer.setup((ur) => ur.send(It.IsAny<User>())).returns(undefined);
@@ -43,22 +44,19 @@ describe('User service test.', () => {
 
 	it('should return all users.', async () => {
 		//Arrange
-		const user = new User();
-
+		const user = domainMocks.getUser();
 		userRepository.setup((ur) => ur.findAll()).returnsAsync([user]);
 
 		//Act
 		const response = await userService.findAll();
 
 		//Assert
-		userRepository.verify((ur) => ur.findAll(), Times.Once());
-
-		response.forEach((u) => expect(u).instanceOf(User));
+		expect(response).to.be.deep.equal([user]);
 	});
 
 	it('should send a user create message.', () => {
 		//Arrange
-		const user = new User();
+		const user = new Mock<User>().object();
 
 		userCreateProducer.setup((ur) => ur.send(It.IsAny<User>())).returns(undefined);
 

@@ -3,10 +3,10 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 import { Club } from 'src/domain/entities/Club';
 import { ClubResponse } from 'src/infrastructure/primary-adapters/http/controllers/club/response/ClubResponse';
 import { expect } from 'chai';
+import { dbClient } from 'test/integration/setup';
 
 describe('Get Clubs e2e Test.', () => {
 	let app: INestApplication;

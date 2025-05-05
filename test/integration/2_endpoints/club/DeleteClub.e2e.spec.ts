@@ -3,8 +3,8 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 import { expect } from 'chai';
+import { dbClient } from 'test/integration/setup';
 
 describe('Delete Club e2e Test.', () => {
 	let app: INestApplication;

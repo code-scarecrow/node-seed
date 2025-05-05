@@ -7,8 +7,7 @@ import { expect } from 'chai';
 import { UserRequest } from 'src/infrastructure/primary-adapters/http/controllers/user/request/UserRequest';
 import { Channel, Connection, connect } from 'amqplib';
 import { safeGetConfig } from '@code-scarecrow/base';
-import { PrismaClient } from '@prisma/client';
-import { dbClient } from 'test/integration/infrastructure/database/DBClient';
+import { dbClient } from 'test/integration/setup';
 
 describe('Send Create User Message e2e Test.', () => {
 	let app: INestApplication;
@@ -64,12 +63,8 @@ describe('Send Create User Message e2e Test.', () => {
 		//TODO - look for betteroptions
 		let counter = 0;
 		let userCreated = null;
-		while (counter < 10) {
-			userCreated = await new PrismaClient().users.findUnique({
-				where: {
-					email: userRequest.email,
-				},
-			});
+		while (userCreated === null || counter < 10) {
+			userCreated = await dbClient.getUserByEmail(userRequest.email);
 			counter++;
 		}
 

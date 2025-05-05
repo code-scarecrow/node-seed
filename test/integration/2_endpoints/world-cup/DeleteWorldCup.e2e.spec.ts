@@ -5,7 +5,7 @@ import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { WorldCup } from 'src/domain/entities/WorldCup';
 import { expect } from 'chai';
-import { dbClient } from 'test/integration/infrastructure/database/DBClient';
+import { dbClient } from 'test/integration/setup';
 
 describe('Delete World Cup e2e Test.', () => {
 	let app: INestApplication;

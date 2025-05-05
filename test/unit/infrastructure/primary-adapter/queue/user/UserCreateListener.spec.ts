@@ -29,13 +29,7 @@ describe('User create listener test.', () => {
 		'ms-seed',
 	);
 
-	const user: User = new User();
-	user.name = messageBody.name;
-	user.lastname = messageBody.lastname;
-	user.dni = messageBody.dni;
-	user.birthDate = messageBody.birthDate;
-	user.email = messageBody.email;
-	user.password = messageBody.password;
+	const user: User = new Mock<User>().object();
 
 	beforeEach(() => {
 		userService = new Mock<UserService>();

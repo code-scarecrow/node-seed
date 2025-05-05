@@ -3,10 +3,10 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 import { expect } from 'chai';
 import { User } from 'src/domain/entities/User';
 import { UserResponse } from 'src/infrastructure/primary-adapters/http/controllers/user/response/UserResponse';
+import { dbClient } from 'test/integration/setup';
 
 describe('Get Users e2e Test.', () => {
 	let app: INestApplication;

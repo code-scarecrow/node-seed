@@ -12,6 +12,6 @@ export class Country {
 		this.uuid = props.uuid;
 		this.name = props.name;
 		this.code = props.code;
-		this.players = players;
+		if (players) this.players = players;
 	}
 }

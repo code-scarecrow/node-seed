@@ -2,20 +2,17 @@ import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 import { Club } from 'src/domain/entities/Club';
 import { Country } from 'src/domain/entities/Country';
-import {
-	mapPositionEnum,
-	mapPositionPrismaEnum,
-} from 'src/infrastructure/secondary-adapters/database/mappers/PositionEnumMapper';
 import { PositionEnum } from 'src/domain/enums/PositionEnum';
 import { Player } from 'src/domain/entities/Player';
 import { User } from 'src/domain/entities/User';
 import { WorldCup } from 'src/domain/entities/WorldCup';
+import { positionEnumMap } from 'src/infrastructure/secondary-adapters/database/mappers/PositionEnumMapper';
 
-class DBClient {
+export class DBClient {
 	private readonly prisma: PrismaClient;
 
-	public constructor(client: PrismaClient) {
-		this.prisma = client;
+	public constructor() {
+		this.prisma = new PrismaClient();
 	}
 
 	public async deleteDB(): Promise<void> {
@@ -95,7 +92,7 @@ class DBClient {
 				birthDate: faker.date.past(),
 				countryId: countryId,
 				lastname: faker.string.alpha(10),
-				position: mapPositionPrismaEnum(PositionEnum.CM),
+				position: positionEnumMap.getRev(PositionEnum.CM),
 			},
 			include: {
 				countries: true,
@@ -109,7 +106,7 @@ class DBClient {
 
 		return new Player(
 			player,
-			mapPositionEnum(player.position),
+			positionEnumMap.get(player.position),
 			new Club(player.clubs, new Country(player.clubs.countries)),
 			new Country(player.countries),
 		);
@@ -134,7 +131,7 @@ class DBClient {
 
 		return new Player(
 			player,
-			mapPositionEnum(player.position),
+			positionEnumMap.get(player.position),
 			new Club(player.clubs, new Country(player.clubs.countries)),
 			new Country(player.countries),
 		);
@@ -211,5 +208,3 @@ class DBClient {
 		return new WorldCup(wc, new Country(wc.countries));
 	}
 }
-
-export const dbClient = new DBClient(new PrismaClient());

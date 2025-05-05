@@ -16,7 +16,7 @@
 		"resolveJsonModule": true,
 		"esModuleInterop": true,
 		//type checking
-		"strict": false,
+		"strict": true,
 		"allowUnreachableCode": false,
 		"alwaysStrict": true,
 		"exactOptionalPropertyTypes": true,
@@ -32,7 +32,7 @@
 		"strictBindCallApply": true,
 		"strictFunctionTypes": true,
 		"strictNullChecks": true,
-		"strictPropertyInitialization": false,
+		"strictPropertyInitialization": true,
 		"useUnknownInCatchVariables": true
 	}
 }

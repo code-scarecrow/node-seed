@@ -4,12 +4,12 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:root@localhost:3306/pickit"
+  url      = env("DATABASE_URL")
 }
 
 model clubs {
   id             Int       @id @default(autoincrement())
-  uuid           String    @unique() @db.VarChar(36)
+  uuid           String    @unique() @default(uuid()) @db.VarChar(36)
   name           String    @db.VarChar(30)
   foundationDate DateTime  @map("foundation_date") @db.DateTime(0)
   createdAt      DateTime  @default(now()) @map("created_at") @db.DateTime(6)
@@ -23,7 +23,7 @@ model clubs {
 
 model countries {
   id           Int            @id @default(autoincrement())
-  uuid         String         @unique() @db.VarChar(36)
+  uuid         String         @unique() @default(uuid()) @db.VarChar(36)
   name         String         @db.VarChar(50)
   code         String         @db.VarChar(3)
   clubs        clubs[]
@@ -51,7 +51,7 @@ model participants {
 
 model players {
   id                            Int                             @id @default(autoincrement())
-  uuid                          String                          @unique() @db.VarChar(36)
+  uuid                          String                          @unique() @default(uuid()) @db.VarChar(36)
   name                          String                          @db.VarChar(30)
   lastname                      String                          @db.VarChar(100)
   birthDate                     DateTime                        @map("birth_date") @db.DateTime(0)
@@ -81,18 +81,18 @@ model players_world_cups_world_cups {
 
 model users {
   id        Int      @id @default(autoincrement())
-  uuid      String   @db.VarChar(36)
+  uuid      String   @default(uuid()) @db.VarChar(36)
   name      String   @db.VarChar(30)
   lastname  String   @db.VarChar(100)
   dni       String   @unique(map: "IDX_5fe9cfa518b76c96518a206b35") @db.VarChar(9)
   email     String   @unique(map: "IDX_97672ac88f789774dd47f7c8be") @db.VarChar(100)
-  password  String   @db.VarChar(255) //TODO - fix nams (extra s)
+  password  String   @db.VarChar(255)
   birthDate DateTime @map("birth_date") @db.DateTime(0)
 }
 
 model world_cups {
   id                            Int                             @id @default(autoincrement())
-  uuid                          String                          @unique() @db.VarChar(36)
+  uuid                          String                          @unique() @default(uuid()) @db.VarChar(36)
   petName                       String                          @map("pet_name") @db.VarChar(30)
   startDate                     DateTime                        @map("start_date") @db.DateTime(0)
   finishDate                    DateTime                        @map("finish_date") @db.DateTime(0)

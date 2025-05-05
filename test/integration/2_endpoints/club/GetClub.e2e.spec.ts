@@ -3,12 +3,12 @@ import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
-import { dbClient } from 'test/integration/infrastructure/database/DBClient';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
 import { Club } from 'src/domain/entities/Club';
 import { expect } from 'chai';
 import { Redis } from 'ioredis';
 import { safeGetConfig } from '@code-scarecrow/base';
+import { dbClient } from 'test/integration/setup';
 
 describe('Get Club e2e Test.', () => {
 	let app: INestApplication;
