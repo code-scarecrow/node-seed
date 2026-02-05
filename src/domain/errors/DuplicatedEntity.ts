@@ -1,4 +1,4 @@
-import { BaseError } from '@code-scarecrow/base';
+import { BaseError } from 'src/base/nest/errors';
 import { ErrorCodesEnum } from './ErrorCodesEnum';
 
 export class DuplicatedEntity extends BaseError<ErrorCodesEnum> {

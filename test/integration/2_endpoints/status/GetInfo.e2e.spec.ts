@@ -1,5 +1,5 @@
 import { HttpServer, INestApplication } from '@nestjs/common';
-import { safeGetConfig } from '@code-scarecrow/base';
+import { getRequiredConfig } from 'src/base/nest/config';
 import { expect } from 'chai';
 import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
@@ -30,7 +30,7 @@ describe('Get Info e2e Test.', () => {
 			.get('/api/v1.0/info')
 			.send()
 			.expect((r) => {
-				expect(r.body.name).to.be.equal(safeGetConfig('APP_NAME'));
+				expect(r.body.name).to.be.equal(getRequiredConfig('APP_NAME'));
 				expect(r.body.version).to.be.equal(version);
 				expect(r.body.seedVersion).to.be.equal(seedVersion);
 			});

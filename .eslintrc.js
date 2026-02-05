@@ -49,7 +49,7 @@ module.exports = {
 		'@typescript-eslint/no-empty-interface': 'error',
 		'@typescript-eslint/no-explicit-any': 'error',
 		'@typescript-eslint/no-extra-non-null-assertion': 'error',
-		'@typescript-eslint/no-extraneous-class': 'error',
+		'@typescript-eslint/no-extraneous-class': ['error', { allowStaticOnly: true }],
 		'@typescript-eslint/no-floating-promises': 'error',
 		'@typescript-eslint/no-for-in-array': 'off',
 		'@typescript-eslint/no-inferrable-types': 'error',
@@ -72,12 +72,12 @@ module.exports = {
 		'function-name/starts-with-verb': [
 			'error',
 			{
-				whitelist: ['configure'],
+				whitelist: ['configure', 'intercept', 'verbose'],
 			},
 		],
 		'no-nested-ternary': 'error',
 		'folders/match-regex': ['error', '^[a-z-]+$', 'src'],
 		'folders/match-regex': ['error', '^([1-9]_)?[a-z-1-9]+$', 'test'],
-		'@typescript-eslint/prefer-readonly': 'error'
+		'@typescript-eslint/prefer-readonly': 'error',
 	},
 };

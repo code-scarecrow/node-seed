@@ -1,10 +1,10 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { QueueInterceptor } from '@code-scarecrow/base/logger';
 import { It, Mock } from 'moq.ts';
 import { User } from 'src/domain/entities/User';
 import { UserCreateProducer } from 'src/infrastructure/secondary-adapters/message-queue/producers/user/UserCreateProducer';
 import { expect } from 'chai';
-import { IMessageProducerConfig } from '@code-scarecrow/base';
+import { QueueInterceptor } from 'src/base/logger';
+import { IMessageProducerConfig } from 'src/base/rabbit';
 
 describe('User create producer test.', () => {
 	let userCreateProducer: UserCreateProducer;

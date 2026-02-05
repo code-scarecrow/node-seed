@@ -12,7 +12,6 @@ import { RabbitRepository } from './infrastructure/secondary-adapters/dynamodb/r
 import { RABBIT_REPO } from './application/interfaces/IRabbitRepository';
 import { SUPER_HERO_REPO } from './application/interfaces/ISuperHeroRepository';
 import { loggerConfig } from './infrastructure/base/logger/LoggerConfig';
-import { LogModule, LoggerConfig, QueueInterceptor } from '@code-scarecrow/base/logger';
 import { COUNTRY_REPO } from './application/interfaces/ICountryRepository';
 import { CountryRepository } from './infrastructure/secondary-adapters/database/repositories/CountryRepository';
 import { CLUB_REPO } from './application/interfaces/IClubRepository';
@@ -40,11 +39,12 @@ import { FilesRepository } from './infrastructure/secondary-adapters/s3/reposito
 import { FILE_REPO } from './application/interfaces/IFileRepository';
 import { ClubCacheRepository } from './infrastructure/secondary-adapters/redis/repositories/ClubCacheRepository';
 import { CLUB_CACHE_REPO } from './application/interfaces/IClubCacheRepository';
-import { AxiosInstanceFactory } from '@code-scarecrow/base';
 import { SuperHeroRepository } from './infrastructure/secondary-adapters/http/super-hero/repositories/SuperHeroRepository';
 import { SuperHeroClient } from './infrastructure/secondary-adapters/http/super-hero/client/SuperHeroClient';
 import { httpSuperHeroConfig } from './infrastructure/secondary-adapters/http/super-hero/config/HttpSuperHeroConfig';
 import { PrismaService } from './infrastructure/secondary-adapters/database/client/PrismaService';
+import { LoggerConfig, LogModule, QueueInterceptor } from './base/logger';
+import { AxiosInstanceFactory } from './base/http';
 
 @Module({
 	imports: [

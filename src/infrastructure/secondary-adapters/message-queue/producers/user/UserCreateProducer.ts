@@ -1,12 +1,13 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
-import { QueueInterceptor } from '@code-scarecrow/base/logger';
 import { IUserCreateMessageProducer } from 'src/application/interfaces/IUserCreateMessageProducer';
 import { User } from 'src/domain/entities/User';
 import { userCreateQueueConfig } from '../config/UserCreateQueueConfig';
 import { UserCreateMessage } from './UserCreateMessage';
-import { MessageClient, safeGetConfig } from '@code-scarecrow/base';
+import { MessageClient } from 'src/base/rabbit';
+import { QueueInterceptor } from 'src/base/logger';
+import { getRequiredConfig } from 'src/base/nest/config';
 
 @Injectable()
 export class UserCreateProducer extends MessageClient<UserCreateMessage> implements IUserCreateMessageProducer {
@@ -15,7 +16,7 @@ export class UserCreateProducer extends MessageClient<UserCreateMessage> impleme
 		amqpConnection: AmqpConnection,
 		interceptor: QueueInterceptor,
 	) {
-		super(config.queue, amqpConnection, interceptor, safeGetConfig('APP_NAME'));
+		super(config.queue, amqpConnection, interceptor, getRequiredConfig('APP_NAME'));
 	}
 
 	public send(user: Omit<User, 'id'>): void {

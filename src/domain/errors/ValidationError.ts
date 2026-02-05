@@ -1,4 +1,4 @@
-import { BaseComplexError } from '@code-scarecrow/base';
+import { BaseComplexError } from 'src/base/nest/errors';
 import { ErrorCodesEnum } from './ErrorCodesEnum';
 
 export class ValidationError extends BaseComplexError<ErrorCodesEnum> {

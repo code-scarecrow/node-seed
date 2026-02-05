@@ -11,7 +11,7 @@ import {
 import { ClubService } from 'src/application/services/ClubService';
 import { ClubResponse } from './response/ClubResponse';
 import { ClubRequest } from './request/ClubRequest';
-import { ErrorResponse } from '@code-scarecrow/base';
+import { ErrorResponse } from 'src/base/nest/errors';
 
 @Controller('clubs')
 @ApiTags('Clubs')

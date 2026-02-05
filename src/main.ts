@@ -1,9 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './AppModule';
 import { setUpPipeline, setUpPrefix, setUpSwagger } from './AppConfigurator';
-import { Logger, NestLoggerAdapter } from '@code-scarecrow/base/logger';
 import { Transport } from '@nestjs/microservices';
-import { safeGetConfig } from '@code-scarecrow/base';
+import { getRequiredConfig } from 'src/base/nest/config';
+import { Logger } from '@nestjs/common';
+import { NestLoggerAdapter } from './base/logger';
 
 async function initApp(): Promise<void> {
 	const app = await NestFactory.create(AppModule, { bufferLogs: true });
@@ -15,7 +16,7 @@ async function initApp(): Promise<void> {
 	app.connectMicroservice({
 		transport: Transport.RMQ,
 		options: {
-			urls: [safeGetConfig('RABBIT_URI')],
+			urls: [getRequiredConfig('RABBIT_URI')],
 			queueOptions: { durable: false },
 		},
 	});

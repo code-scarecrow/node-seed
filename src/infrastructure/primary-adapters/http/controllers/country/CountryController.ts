@@ -11,7 +11,7 @@ import {
 import { CountryService } from 'src/application/services/CountryService';
 import { CountryResponse } from './response/CountryResponse';
 import { CountryRequest } from './request/CountryRequest';
-import { ErrorResponse } from '@code-scarecrow/base';
+import { ErrorResponse } from 'src/base/nest/errors';
 
 @Controller('countries')
 @ApiTags('Countries')

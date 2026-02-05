@@ -1,5 +1,5 @@
-import { Logger } from '@code-scarecrow/base/logger';
 import Redis from 'ioredis';
+import { Logger } from 'src/base/logger';
 
 //TODO - move to node-base
 export abstract class RedisBaseRepository {

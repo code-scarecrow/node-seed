@@ -3,7 +3,7 @@ import { ApiTags, ApiOperation, ApiBadRequestResponse, ApiHeader, ApiResponse, g
 import { SuperHeroResponse } from './response/SuperHeroResponse';
 import { SuperHeroRequest } from './request/SuperHeroRequest';
 import { SuperHeroService } from 'src/application/services/SuperHeroService';
-import { ErrorResponse } from '@code-scarecrow/base';
+import { ErrorResponse } from 'src/base/nest/errors';
 
 @Controller('super-heroes')
 @ApiTags('Super Heroes')

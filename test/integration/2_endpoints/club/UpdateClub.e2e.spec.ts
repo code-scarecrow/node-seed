@@ -6,7 +6,7 @@ import { ClubRequest } from 'src/infrastructure/primary-adapters/http/controller
 import { Club } from 'src/domain/entities/Club';
 import { expect } from 'chai';
 import { Redis } from 'ioredis';
-import { safeGetConfig } from '@code-scarecrow/base';
+import { getRequiredConfig } from 'src/base/nest/config';
 import { dbClient } from 'test/integration/setup';
 
 describe('Update Club e2e Test.', () => {
@@ -19,8 +19,8 @@ describe('Update Club e2e Test.', () => {
 	before(async () => {
 		app = await initiateApp();
 		redisClient = new Redis({
-			host: safeGetConfig('REDIS_HOST'),
-			port: Number(safeGetConfig('REDIS_PORT')),
+			host: getRequiredConfig('REDIS_HOST'),
+			port: Number(getRequiredConfig('REDIS_PORT')),
 		});
 	});
 

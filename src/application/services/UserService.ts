@@ -29,7 +29,7 @@ export class UserService {
 		return result;
 	}
 
-	public async findAll(): Promise<User[]> {
+	public findAll(): Promise<User[]> {
 		return this.userRepository.findAll();
 	}
 }

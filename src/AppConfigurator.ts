@@ -1,8 +1,8 @@
 import { SwaggerModule, DocumentBuilder, SwaggerCustomOptions } from '@nestjs/swagger';
 import { ErrorCodesMapper } from './infrastructure/primary-adapters/filters/ErrorCodesMapper';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { Logger, ContextInterceptor, NestLoggingInterceptor } from '@code-scarecrow/base/logger';
 import { CustomExceptionsFilter } from './infrastructure/primary-adapters/filters/CustomExceptionsFilter';
+import { ContextInterceptor, Logger, NestLoggingInterceptor } from './base/logger';
 
 export function setUpSwagger(app: INestApplication): void {
 	const config = new DocumentBuilder()

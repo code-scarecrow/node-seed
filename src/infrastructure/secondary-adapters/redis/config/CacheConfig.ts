@@ -1,13 +1,13 @@
 import { registerAs } from '@nestjs/config';
 import { ICacheConfig } from './ICacheConfig';
-import { safeGetConfig } from '@code-scarecrow/base';
+import { getRequiredConfig } from 'src/base/nest/config';
 
 export const cacheConfig = registerAs('cache', (): ICacheConfig => {
 	return {
 		config: {
-			host: safeGetConfig('REDIS_HOST'),
-			port: parseInt(safeGetConfig('REDIS_PORT')),
-			password: safeGetConfig('REDIS_PASSWORD'),
+			host: getRequiredConfig('REDIS_HOST'),
+			port: parseInt(getRequiredConfig('REDIS_PORT')),
+			password: getRequiredConfig('REDIS_PASSWORD'),
 		},
 	};
 });

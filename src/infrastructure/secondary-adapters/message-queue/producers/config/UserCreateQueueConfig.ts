@@ -1,8 +1,9 @@
 import { registerAs } from '@nestjs/config';
-import { IMessageProducerConfig, safeGetConfig } from '@code-scarecrow/base';
+import { getRequiredConfig } from 'src/base/nest/config';
+import { IMessageProducerConfig } from 'src/base/rabbit';
 
 export const userCreateQueueConfig = registerAs('usercreatequeue', (): IMessageProducerConfig => {
 	return {
-		queue: safeGetConfig('RABBIT_QUEUE'),
+		queue: getRequiredConfig('RABBIT_QUEUE'),
 	};
 });

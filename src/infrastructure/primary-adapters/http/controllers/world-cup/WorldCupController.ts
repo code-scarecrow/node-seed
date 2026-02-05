@@ -13,7 +13,7 @@ import { WorldCupRequest } from './request/WorldCupRequest';
 import { WorldCupService } from 'src/application/services/WorldCupService';
 import { AddParticipantsRequest } from './request/AddParticipantsRequest';
 import { AddParticipantsResponse } from './response/AddParticipantsResponse';
-import { ErrorResponse } from '@code-scarecrow/base';
+import { ErrorResponse } from 'src/base/nest/errors';
 
 @Controller('world-cups')
 @ApiTags('World Cups')

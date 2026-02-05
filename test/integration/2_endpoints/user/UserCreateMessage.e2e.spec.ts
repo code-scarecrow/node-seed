@@ -5,7 +5,7 @@ import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { expect } from 'chai';
 import { UserRequest } from 'src/infrastructure/primary-adapters/http/controllers/user/request/UserRequest';
 import { Channel, Connection, connect } from 'amqplib';
-import { safeGetConfig } from '@code-scarecrow/base';
+import { getRequiredConfig } from 'src/base/nest/config';
 import { dbClient } from 'test/integration/setup';
 
 describe('Send Create User Message e2e Test.', () => {
@@ -18,8 +18,8 @@ describe('Send Create User Message e2e Test.', () => {
 
 	before(async () => {
 		app = await initiateApp();
-		connection = await connect(safeGetConfig('RABBIT_URI'));
-		queue = safeGetConfig('RABBIT_QUEUE');
+		connection = await connect(getRequiredConfig('RABBIT_URI'));
+		queue = getRequiredConfig('RABBIT_QUEUE');
 	});
 
 	beforeEach(async () => {

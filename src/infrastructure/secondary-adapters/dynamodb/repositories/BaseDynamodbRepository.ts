@@ -1,10 +1,7 @@
-import { ISingleEntityRepository } from '@code-scarecrow/base/database';
 import { DynamodbClient } from '../clients/DynamodbClient';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
-export abstract class BaseDynamodbRepository<TKey extends { [key: string]: unknown }, TEntity extends TKey>
-	implements ISingleEntityRepository<TKey, TEntity>
-{
+export abstract class BaseDynamodbRepository<TKey extends { [key: string]: unknown }, TEntity extends TKey> {
 	constructor(private readonly client: DynamodbClient, protected tableName: string) {}
 
 	public async update(_key: TKey, entity: TEntity): Promise<TEntity> {

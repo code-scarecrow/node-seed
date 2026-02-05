@@ -18,7 +18,7 @@ before(async function () {
 
 	//Set env variables:
 	process.env['APP_NAME'] = 'ms-seed';
-	process.env['DATABASE_URL'] = 'mysql://root:root@localhost:3306/pickit';
+	process.env['DATABASE_URL'] = 'mysql://root:root@localhost:3306/db';
 	process.env['AWS_ACCESS_KEY_ID'] = 'TEST';
 	process.env['AWS_SECRET_ACCESS_KEY'] = 'TESTKEY';
 	process.env['AWS_ENDPOINT'] = 'http://localhost:8000';

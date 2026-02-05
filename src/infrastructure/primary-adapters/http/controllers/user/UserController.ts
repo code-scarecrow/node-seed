@@ -3,7 +3,7 @@ import { ApiBadRequestResponse, ApiHeader, ApiOperation, ApiResponse, ApiTags } 
 import { UserService } from 'src/application/services/UserService';
 import { UserRequest } from './request/UserRequest';
 import { UserResponse } from './response/UserResponse';
-import { ErrorResponse } from '@code-scarecrow/base';
+import { ErrorResponse } from 'src/base/nest/errors';
 
 @Controller('users')
 @ApiTags('Users')

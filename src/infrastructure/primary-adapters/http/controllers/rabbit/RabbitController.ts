@@ -4,7 +4,7 @@ import { RabbitService } from 'src/application/services/RabbitService';
 import { RabbitResponse } from './response/RabbitResponse';
 import { RabbitRequest } from './request/RabbitRequest';
 import { Rabbit } from 'src/domain/entities/Rabbit';
-import { ErrorResponse } from '@code-scarecrow/base';
+import { ErrorResponse } from 'src/base/nest/errors';
 
 @Controller('rabbits')
 @ApiTags('Rabbits')

@@ -1,8 +1,14 @@
 import { Rabbit } from 'src/domain/entities/Rabbit';
-import { ISingleEntityRepository } from '@code-scarecrow/base/database';
 
 export const RABBIT_REPO = 'IRabbitRepository';
 
 export type RabbitCreation = Omit<Rabbit, 'id'>;
 
-export type IRabbitRepository = ISingleEntityRepository<{ id: string }, Rabbit, RabbitCreation>;
+type Key = Pick<Rabbit, 'id'>;
+
+export interface IRabbitRepository {
+	findByKey(key: Key): Promise<Rabbit | null>;
+	create(entity: RabbitCreation): Promise<Rabbit>;
+	update(key: Key, entity: RabbitCreation): Promise<Rabbit>;
+	delete(key: Key): Promise<void>;
+}

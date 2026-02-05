@@ -2,7 +2,7 @@
 	"name": "ms-seed-nest",
 	"version": "2.0.0",
 	"seedVersion": "2.0.0",
-	"description": "Base project for pickit micro services.",
+	"description": "Base project for micro services.",
 	"author": "Agufa",
 	"private": true,
 	"license": "UNLICENSED",
@@ -28,7 +28,6 @@
 	"dependencies": {
 		"@aws-sdk/client-s3": "^3.735.0",
 		"@aws-sdk/s3-request-presigner": "^3.735.0",
-		"@code-scarecrow/base": "^1.1.1",
 		"@golevelup/nestjs-rabbitmq": "^4.1.0",
 		"@golevelup/profiguration": "^0.2.1",
 		"@liaoliaots/nestjs-redis": "^10.0.0",
