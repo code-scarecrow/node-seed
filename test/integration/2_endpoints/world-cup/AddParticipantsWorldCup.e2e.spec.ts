@@ -1,7 +1,6 @@
 import { HttpServer, HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
-import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { WorldCup } from 'src/domain/entities/WorldCup';
 import { AddParticipantsRequest } from 'src/infrastructure/primary-adapters/http/controllers/world-cup/request/AddParticipantsRequest';
@@ -49,7 +48,7 @@ describe('Add Participants to a World Cup e2e Test.', () => {
 			.post(`/api/v1.0/world-cups/${worldCup.uuid}/participants`)
 			.send(participantsRequest)
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(watch(HttpStatus.ACCEPTED))
+			.expect(HttpStatus.ACCEPTED)
 			.expect((res) => {
 				expect(res.body).deep.equal(new AddParticipantsResponse());
 			});

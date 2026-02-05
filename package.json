@@ -3,7 +3,7 @@
 	"version": "2.0.0",
 	"seedVersion": "2.0.0",
 	"description": "Base project for pickit micro services.",
-	"author": "Pickit",
+	"author": "Agufa",
 	"private": true,
 	"license": "UNLICENSED",
 	"scripts": {

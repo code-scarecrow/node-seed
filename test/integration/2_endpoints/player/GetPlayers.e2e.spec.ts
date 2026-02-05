@@ -1,7 +1,6 @@
 import { HttpServer, HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
-import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { Player } from 'src/domain/entities/Player';
 import { PlayerResponse } from 'src/infrastructure/primary-adapters/http/controllers/player/response/PlayerResponse';
@@ -41,7 +40,7 @@ describe('Get Players e2e Test.', () => {
 			.get('/api/v1.0/players')
 			.send()
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(watch(HttpStatus.OK))
+			.expect(HttpStatus.OK)
 			.expect((res) => {
 				const structure = Object.values(res.body);
 				expect(structure).to.deep.equals([new PlayerResponse(player1), new PlayerResponse(player2)]);

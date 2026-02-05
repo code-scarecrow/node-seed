@@ -1,7 +1,6 @@
 import { HttpServer, HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
-import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { expect } from 'chai';
@@ -51,7 +50,7 @@ describe('Get File Url e2e Test.', () => {
 			.get('/api/v1.0/files/test/signed-url')
 			.send()
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(watch(HttpStatus.OK))
+			.expect(HttpStatus.OK)
 			.expect((res) => {
 				const structure = Object.keys(res.body);
 				expect(structure.includes('url')).to.be.true;

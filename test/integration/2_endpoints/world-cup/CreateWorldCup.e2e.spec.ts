@@ -1,7 +1,6 @@
 import { HttpServer, HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
-import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { WorldCupRequest } from 'src/infrastructure/primary-adapters/http/controllers/world-cup/request/WorldCupRequest';
 import { expect } from 'chai';
@@ -43,7 +42,7 @@ describe('Create World Cup e2e Test.', () => {
 			.post('/api/v1.0/world-cups')
 			.send(worldCupRequest)
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(watch(HttpStatus.CREATED))
+			.expect(HttpStatus.CREATED)
 			.expect((res) => {
 				const structure = Object.keys(res.body);
 				expect(structure.includes('id')).to.be.true;

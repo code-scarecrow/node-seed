@@ -1,7 +1,6 @@
 import { HttpServer, HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
-import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { expect } from 'chai';
 import { UserRequest } from 'src/infrastructure/primary-adapters/http/controllers/user/request/UserRequest';
@@ -53,7 +52,7 @@ describe('Send Create User Message e2e Test.', () => {
 			.post('/api/v1.0/users')
 			.send(userRequest)
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(watch(HttpStatus.CREATED));
+			.expect(HttpStatus.CREATED);
 
 		//TODO - look for better options
 		while ((await channel.assertQueue(queue)).messageCount !== 0) {

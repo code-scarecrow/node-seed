@@ -1,7 +1,6 @@
 import { HttpServer, HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
-import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { ClubRequest } from 'src/infrastructure/primary-adapters/http/controllers/club/request/ClubRequest';
 import { Club } from 'src/domain/entities/Club';
@@ -53,7 +52,7 @@ describe('Update Club e2e Test.', () => {
 			.put(`/api/v1.0/clubs/${club.uuid}`)
 			.send(clubRequest)
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(watch(HttpStatus.OK))
+			.expect(HttpStatus.OK)
 			.expect((res) => {
 				const structure = Object.keys(res.body);
 				expect(structure.includes('id')).to.be.true;
@@ -76,7 +75,7 @@ describe('Update Club e2e Test.', () => {
 			.put(`/api/v1.0/clubs/${club.uuid}`)
 			.send(clubRequest)
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(watch(HttpStatus.OK))
+			.expect(HttpStatus.OK)
 			.expect((res) => {
 				const structure = Object.keys(res.body);
 				expect(structure.includes('id')).to.be.true;
