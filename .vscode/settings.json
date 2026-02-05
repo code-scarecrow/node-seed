@@ -2,10 +2,7 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "sonarlint.connectedMode.project": {
-    "connectionId": "pickit",
-    "projectKey": "pickit_it_ms-seed-nest"
-  },
-  "[terraform]": {
-    "editor.defaultFormatter": "hashicorp.terraform"
+    "connectionId": "xxx",
+    "projectKey": "xxxx-xxxx"
   }
 }
