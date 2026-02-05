@@ -3,8 +3,7 @@ import { AppModule } from './AppModule';
 import { setUpPipeline, setUpPrefix, setUpSwagger } from './AppConfigurator';
 import { Transport } from '@nestjs/microservices';
 import { getRequiredConfig } from 'src/base/nest/config';
-import { Logger } from '@nestjs/common';
-import { NestLoggerAdapter } from './base/logger';
+import { Logger, NestLoggerAdapter } from './base/logger';
 
 async function initApp(): Promise<void> {
 	const app = await NestFactory.create(AppModule, { bufferLogs: true });
@@ -22,6 +21,6 @@ async function initApp(): Promise<void> {
 	});
 
 	await app.startAllMicroservices();
-	await app.listen(33000);
+	await app.listen(3000);
 }
 void initApp();

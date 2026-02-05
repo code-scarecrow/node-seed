@@ -4,6 +4,8 @@
 
 - Create base module
 - Merged base in seed
+- Removed docker compose version
+- Change listen port to 3000 from 33000
 
 ## [2.0.0] - 2025-01-27
 
