@@ -1,10 +1,18 @@
 import { expect } from 'chai';
 import { LogLevels, LogMessage } from 'src/base/logger';
 import { ConsoleWritter } from 'src/base/logger/core/console-log/ConsoleWritter';
+import * as sinon from 'sinon';
 
 describe('ConsoleWritter Test', () => {
-	it('should write correct message', async () => {
+	let consoleStub: sinon.SinonStub;
+
+	afterEach(() => {
+		consoleStub.restore();
+	});
+
+	it('should write correct message', () => {
 		//Arrange
+		consoleStub = sinon.stub(console, 'log');
 		const uut = new ConsoleWritter();
 		const logMessage: LogMessage = {
 			timeStamp: new Date(Date.UTC(2022, 8, 30, 18, 16, 16, 34)),
@@ -16,18 +24,18 @@ describe('ConsoleWritter Test', () => {
 		};
 		const expectedRes =
 			'{"timeStamp":"2022-09-30T18:16:16.034Z","traceId":"test","appName":"test","level":"Info","message":"test - message"}';
-		let res = '';
-		console.log = (a: string) => (res = a);
 
 		//Act
 		uut.writeMessage(logMessage);
 
 		//Assert
-		expect(res).to.be.equal(expectedRes);
+		expect(consoleStub.calledOnce).to.be.true;
+		expect(consoleStub.firstCall.args[0]).to.be.equal(expectedRes);
 	});
 
-	it('should write correct message', async () => {
+	it('should write correct message', () => {
 		//Arrange
+		consoleStub = sinon.stub(console, 'error');
 		const uut = new ConsoleWritter();
 		const logMessage: LogMessage = {
 			timeStamp: new Date(Date.UTC(2022, 8, 30, 18, 16, 16, 34)),
@@ -39,18 +47,18 @@ describe('ConsoleWritter Test', () => {
 		};
 		const expectedRes =
 			'{"timeStamp":"2022-09-30T18:16:16.034Z","traceId":"test","appName":"test","level":"Error","message":"test - message"}';
-		let res = '';
-		console.error = (a: string) => (res = a);
 
 		//Act
 		uut.writeMessage(logMessage);
 
 		//Assert
-		expect(res).to.be.equal(expectedRes);
+		expect(consoleStub.calledOnce).to.be.true;
+		expect(consoleStub.firstCall.args[0]).to.be.equal(expectedRes);
 	});
 
-	it('should write correct message', async () => {
+	it('should write correct message', () => {
 		//Arrange
+		consoleStub = sinon.stub(console, 'error');
 		const uut = new ConsoleWritter();
 		const logMessage: LogMessage = {
 			timeStamp: new Date(Date.UTC(2022, 8, 30, 18, 16, 16, 34)),
@@ -62,13 +70,12 @@ describe('ConsoleWritter Test', () => {
 		};
 		const expectedRes =
 			'{"timeStamp":"2022-09-30T18:16:16.034Z","traceId":"test","appName":"test","level":"Warning","message":"test - message"}';
-		let res = '';
-		console.error = (a: string) => (res = a);
 
 		//Act
 		uut.writeMessage(logMessage);
 
 		//Assert
-		expect(res).to.be.equal(expectedRes);
+		expect(consoleStub.calledOnce).to.be.true;
+		expect(consoleStub.firstCall.args[0]).to.be.equal(expectedRes);
 	});
 });

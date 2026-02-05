@@ -1,5 +1,5 @@
-import { expect } from "chai";
-import { LoggerConfig, LogProvider } from "src/base/logger";
+import { expect } from 'chai';
+import { LoggerConfig, LogProvider } from 'src/base/logger';
 
 describe('LogProvieder Test', () => {
 	it('should create a logger instance', async () => {
