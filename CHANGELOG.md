@@ -4,8 +4,11 @@
 
 - Create base module
 - Merged base in seed
+- Merged base-test in seed
 - Removed docker compose version
 - Change listen port to 3000 from 33000
+- implemented NODE_OPTIONS='--no-experimental-strip-types'  to allow migration to node 22.18
+- migrated to node 22.22
 
 ## [2.0.0] - 2025-01-27
 

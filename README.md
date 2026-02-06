@@ -101,3 +101,5 @@ npm run test:e2e
 # 🧡
 
 Reminder that _you are great, you are enough, and your presence is valued._ If you are struggling with your mental health, please reach out to someone you love and consult a professional.
+
+TODO - migrate to tsx or other option than ts-node // NODE_OPTIONS='--no-experimental-strip-types' 
