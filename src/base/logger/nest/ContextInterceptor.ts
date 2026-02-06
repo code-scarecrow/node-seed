@@ -1,7 +1,7 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Response } from 'express';
-import { IncomingMessage, OutgoingMessage } from 'http';
+import { IncomingMessage, OutgoingMessage } from 'node:http';
 import { v4 } from 'uuid';
 import { storage } from './Storage';
 
