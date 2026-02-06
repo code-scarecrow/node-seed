@@ -151,13 +151,7 @@ export class WorldCupRepository implements IWorldCupRepository {
 			data: {
 				participants: {
 					createMany: {
-						data: [
-							...countries.map((e) => {
-								return {
-									countryId: e.id,
-								};
-							}),
-						],
+						data: countries.map((e) => ({ countryId: e.id })),
 					},
 				},
 			},

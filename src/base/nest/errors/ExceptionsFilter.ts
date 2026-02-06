@@ -18,8 +18,10 @@ export class ExceptionsFilter<T> implements ExceptionFilter {
 		this.errorCodesMapper = errorMapper;
 		this.errorMapper = [];
 
-		this.errorMapper.push((exception: unknown, response: Response) => this.errorHandlerBase(exception, response));
-		this.errorMapper.push((exception: unknown, response: Response) => this.notFoundErrorHandler(exception, response));
+		this.errorMapper.push(
+			(exception: unknown, response: Response) => this.errorHandlerBase(exception, response),
+			(exception: unknown, response: Response) => this.notFoundErrorHandler(exception, response),
+		);
 	}
 
 	public catch(exception: unknown, host: ArgumentsHost): void {
