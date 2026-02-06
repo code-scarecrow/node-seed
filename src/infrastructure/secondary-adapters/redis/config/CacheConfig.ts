@@ -6,7 +6,7 @@ export const cacheConfig = registerAs('cache', (): ICacheConfig => {
 	return {
 		config: {
 			host: getRequiredConfig('REDIS_HOST'),
-			port: parseInt(getRequiredConfig('REDIS_PORT')),
+			port: Number.parseInt(getRequiredConfig('REDIS_PORT')),
 			password: getRequiredConfig('REDIS_PASSWORD'),
 		},
 	};

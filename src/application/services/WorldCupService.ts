@@ -3,13 +3,12 @@ import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
 import { CountryService } from './CountryService';
 import { IWorldCupRepository, WORLD_CUP_REPO, WorldCupCreation } from '../interfaces/IWorldCupRepository';
 import { WorldCup } from 'src/domain/entities/WorldCup';
-//import { IUOWFactory, UOW_FACTORY } from '@code-scarecrow/base/database';
 
 @Injectable()
 export class WorldCupService {
 	constructor(
 		@Inject(WORLD_CUP_REPO) private readonly worldCupRepository: IWorldCupRepository,
-		private readonly countryService: CountryService, //@Inject(UOW_FACTORY) private readonly uow: IUOWFactory,
+		private readonly countryService: CountryService,
 	) {}
 
 	public async create(countryId: string, worldCup: Omit<WorldCupCreation, 'locationId'>): Promise<WorldCup> {

@@ -70,7 +70,7 @@ export class AxiosLoggerInterceptor {
 			};
 			this.logger.error('External response', metadata);
 		}
-		return Promise.reject(error);
+		return Promise.reject(new Error(JSON.stringify(error)));
 	}
 
 	public configureClient(httpClient: AxiosInstance): void {

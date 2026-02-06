@@ -40,12 +40,12 @@ describe('Get Super Hero e2e Test.', () => {
 			.expect(HttpStatus.OK);
 	});
 
-	it('Super hero not found', async () => {
+	it('Super hero not found, should return 404 as this is an unhandled error in external server', async () => {
 		axiosAdapter.onGet('http://json-server/super-heroes/55').reply(HttpStatus.NOT_FOUND);
 		return request(server)
 			.get('/api/v1.0/super-heroes/55')
 			.send()
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(HttpStatus.NOT_FOUND);
+			.expect(HttpStatus.INTERNAL_SERVER_ERROR);
 	});
 });

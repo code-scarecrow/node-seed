@@ -7,7 +7,7 @@ describe('Redis Client Test', () => {
 		const client = new RedisConfig({
 			config: {
 				host: 'REDIS_HOST',
-				port: parseInt('REDIS_PORT'),
+				port: Number.parseInt('REDIS_PORT'),
 				password: 'REDIS_PASSWORD',
 			},
 		});
