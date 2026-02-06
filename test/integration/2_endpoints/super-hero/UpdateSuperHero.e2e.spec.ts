@@ -1,8 +1,7 @@
-import { HttpServer, INestApplication } from '@nestjs/common';
+import { HttpServer, HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
 import MockAdapter from 'axios-mock-adapter';
-import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { SuperHeroClient } from 'src/infrastructure/secondary-adapters/http/super-hero/client/SuperHeroClient';
 
@@ -30,7 +29,7 @@ describe('Update Super Hero e2e Test.', () => {
 	});
 
 	it('Update a super hero', async () => {
-		axiosAdapter.onPut('http://json-server/super-heroes/55').reply(200);
+		axiosAdapter.onPut('http://json-server/super-heroes/55').reply(HttpStatus.OK);
 
 		return request(server)
 			.put('/api/v1.0/super-heroes/55')
@@ -44,11 +43,11 @@ describe('Update Super Hero e2e Test.', () => {
 				strength: '50',
 			})
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(watch(204));
+			.expect(HttpStatus.NO_CONTENT);
 	});
 
 	it('Update a super hero without name', async () => {
-		axiosAdapter.onPut('http://json-server/super-heroes').reply(200);
+		axiosAdapter.onPut('http://json-server/super-heroes').reply(HttpStatus.OK);
 
 		return request(server)
 			.put('/api/v1.0/super-heroes/55')
@@ -61,6 +60,6 @@ describe('Update Super Hero e2e Test.', () => {
 				strength: '50',
 			})
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(400);
+			.expect(HttpStatus.BAD_REQUEST);
 	});
 });

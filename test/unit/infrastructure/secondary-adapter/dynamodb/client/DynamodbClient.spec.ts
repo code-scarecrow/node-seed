@@ -7,8 +7,8 @@ describe('Dynamo Client Test.', () => {
 		//Arrange
 		const config: IDynamodbConfig = {
 			region: 'us-test',
-			accessKeyId: 'pickit-access-key-test',
-			secretAccessKey: 'pickit-secret-access-key-test',
+			accessKeyId: 'access-key-test',
+			secretAccessKey: 'secret-access-key-test',
 			rabbitTableName: '',
 		};
 
@@ -23,8 +23,8 @@ describe('Dynamo Client Test.', () => {
 		//Arrange
 		const config: IDynamodbConfig = {
 			region: 'us-test',
-			accessKeyId: 'pickit-access-key-test',
-			secretAccessKey: 'pickit-secret-access-key-test',
+			accessKeyId: 'access-key-test',
+			secretAccessKey: 'secret-access-key-test',
 			rabbitTableName: '',
 			endpoint: 'test.com',
 		};

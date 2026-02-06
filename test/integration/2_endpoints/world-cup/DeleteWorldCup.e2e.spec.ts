@@ -1,7 +1,6 @@
 import { HttpServer, HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
-import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { WorldCup } from 'src/domain/entities/WorldCup';
 import { expect } from 'chai';
@@ -36,7 +35,7 @@ describe('Delete World Cup e2e Test.', () => {
 			.delete(`/api/v1.0/world-cups/${worldCup.uuid}`)
 			.send()
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(watch(HttpStatus.NO_CONTENT));
+			.expect(HttpStatus.NO_CONTENT);
 
 		const worldCupExistent: WorldCup | null = await dbClient.getWorldCup(worldCup.uuid);
 		expect(worldCupExistent).equal(null);

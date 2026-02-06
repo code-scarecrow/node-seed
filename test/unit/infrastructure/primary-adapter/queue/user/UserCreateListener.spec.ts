@@ -1,11 +1,11 @@
-import { Logger, QueueInterceptor } from '@code-scarecrow/base/logger';
 import { It, Mock, Times } from 'moq.ts';
 import { UserService } from 'src/application/services/UserService';
 import { User } from 'src/domain/entities/User';
 import { UserCreateListener } from 'src/infrastructure/primary-adapters/message-queue/listeners/user/UserCreateListener';
 import { expect } from 'chai';
 import { IUserIncommingMessage } from 'src/infrastructure/primary-adapters/message-queue/listeners/user/IUserIncommingMessage';
-import { RabbitMessage } from '@code-scarecrow/base';
+import { Logger, QueueInterceptor } from 'src/base/logger';
+import { RabbitMessage } from 'src/base/rabbit';
 
 describe('User create listener test.', () => {
 	let userCreateListener: UserCreateListener;

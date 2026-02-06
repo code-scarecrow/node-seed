@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Logger } from '@code-scarecrow/base/logger';
+import { Logger } from 'src/base/logger';
 import { RedisService } from '@liaoliaots/nestjs-redis';
 import { RedisBaseRepository } from './RedisBaseRepository';
 import { Club } from 'src/domain/entities/Club';

@@ -1,15 +1,16 @@
-import { setUpRedis } from '@code-scarecrow/base-tests/redis/setup';
-import { takeDownRedis } from '@code-scarecrow/base-tests/redis/teardown';
-import { setUpRabbit } from '@code-scarecrow/base-tests/rabbit/setup';
-import { takeDownRabbit } from '@code-scarecrow/base-tests/rabbit/teardown';
-import { setUpDynamo } from '@code-scarecrow/base-tests/dynamodb/setup';
-import { takeDownDynamo } from '@code-scarecrow/base-tests/dynamodb/teardown';
-import { setUpS3 } from '@code-scarecrow/base-tests/s3/setup';
-import { takeDownS3 } from '@code-scarecrow/base-tests/s3/teardown';
-import { setUpMysql } from '@code-scarecrow/base-tests/mysql/setup';
-import { takeDownMysql } from '@code-scarecrow/base-tests/mysql/teardown';
+import 'reflect-metadata';
 import { exec } from 'child_process';
 import { DBClient } from './infrastructure/database/DBClient';
+import { setUpDynamo } from './infrastructure/test-containers/dynamodb/setup';
+import { takeDownDynamo } from './infrastructure/test-containers/dynamodb/teardown';
+import { setUpMysql } from './infrastructure/test-containers/mysql/setup';
+import { takeDownMysql } from './infrastructure/test-containers/mysql/teardown';
+import { setUpRabbit } from './infrastructure/test-containers/rabbit/setup';
+import { takeDownRabbit } from './infrastructure/test-containers/rabbit/teardown';
+import { setUpRedis } from './infrastructure/test-containers/redis/setup';
+import { takeDownRedis } from './infrastructure/test-containers/redis/teardown';
+import { setUpS3 } from './infrastructure/test-containers/s3/setup';
+import { takeDownS3 } from './infrastructure/test-containers/s3/teardown';
 
 export let dbClient: DBClient;
 
@@ -18,7 +19,7 @@ before(async function () {
 
 	//Set env variables:
 	process.env['APP_NAME'] = 'ms-seed';
-	process.env['DATABASE_URL'] = 'mysql://root:root@localhost:3306/pickit';
+	process.env['DATABASE_URL'] = 'mysql://root:root@localhost:3306/db';
 	process.env['AWS_ACCESS_KEY_ID'] = 'TEST';
 	process.env['AWS_SECRET_ACCESS_KEY'] = 'TESTKEY';
 	process.env['AWS_ENDPOINT'] = 'http://localhost:8000';

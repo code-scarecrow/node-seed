@@ -1,13 +1,12 @@
 import { HttpServer, HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
-import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { ClubRequest } from 'src/infrastructure/primary-adapters/http/controllers/club/request/ClubRequest';
 import { Club } from 'src/domain/entities/Club';
 import { expect } from 'chai';
 import { Redis } from 'ioredis';
-import { safeGetConfig } from '@code-scarecrow/base';
+import { getRequiredConfig } from 'src/base/nest/config';
 import { dbClient } from 'test/integration/setup';
 
 describe('Update Club e2e Test.', () => {
@@ -20,8 +19,8 @@ describe('Update Club e2e Test.', () => {
 	before(async () => {
 		app = await initiateApp();
 		redisClient = new Redis({
-			host: safeGetConfig('REDIS_HOST'),
-			port: Number(safeGetConfig('REDIS_PORT')),
+			host: getRequiredConfig('REDIS_HOST'),
+			port: Number(getRequiredConfig('REDIS_PORT')),
 		});
 	});
 
@@ -53,7 +52,7 @@ describe('Update Club e2e Test.', () => {
 			.put(`/api/v1.0/clubs/${club.uuid}`)
 			.send(clubRequest)
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(watch(HttpStatus.OK))
+			.expect(HttpStatus.OK)
 			.expect((res) => {
 				const structure = Object.keys(res.body);
 				expect(structure.includes('id')).to.be.true;
@@ -76,7 +75,7 @@ describe('Update Club e2e Test.', () => {
 			.put(`/api/v1.0/clubs/${club.uuid}`)
 			.send(clubRequest)
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(watch(HttpStatus.OK))
+			.expect(HttpStatus.OK)
 			.expect((res) => {
 				const structure = Object.keys(res.body);
 				expect(structure.includes('id')).to.be.true;

@@ -1,9 +1,9 @@
-import { AxiosLoggerInterceptor } from '@code-scarecrow/base/logger';
 import { It, Mock } from 'moq.ts';
 import { expect } from 'chai';
-import { AxiosInstanceFactory } from '@code-scarecrow/base';
 import { SuperHeroClient } from 'src/infrastructure/secondary-adapters/http/super-hero/client/SuperHeroClient';
 import { IHttpSuperHeroConfig } from 'src/infrastructure/secondary-adapters/http/super-hero/config/IHttpSuperHeroConfig';
+import { AxiosInstanceFactory } from 'src/base/http';
+import { AxiosLoggerInterceptor } from 'src/base/logger';
 
 describe('Super Hero Client test.', () => {
 	let superHeroClient: SuperHeroClient;

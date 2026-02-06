@@ -1,9 +1,9 @@
 import { registerAs } from '@nestjs/config';
 import { IHttpSuperHeroConfig } from './IHttpSuperHeroConfig';
-import { safeGetConfig } from '@code-scarecrow/base';
+import { getRequiredConfig } from 'src/base/nest/config';
 
 export const httpSuperHeroConfig = registerAs('superHeroHttp', (): IHttpSuperHeroConfig => {
 	return {
-		url: safeGetConfig('SUPER_HERO_URL'),
+		url: getRequiredConfig('SUPER_HERO_URL'),
 	};
 });

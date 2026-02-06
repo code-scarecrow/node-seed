@@ -1,9 +1,9 @@
 import { MessageHandlerErrorBehavior, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { Injectable } from '@nestjs/common';
-import { Logger, QueueInterceptor } from '@code-scarecrow/base/logger';
 import { UserService } from 'src/application/services/UserService';
-import { BaseMessageHandler, IRabbitMessage } from '@code-scarecrow/base';
 import { IUserIncommingMessage } from './IUserIncommingMessage';
+import { BaseMessageHandler, IRabbitMessage } from 'src/base/rabbit';
+import { Logger, QueueInterceptor } from 'src/base/logger';
 
 @Injectable()
 export class UserCreateListener extends BaseMessageHandler {

@@ -20,7 +20,7 @@ import {
 	ApiBody,
 	ApiConsumes,
 } from '@nestjs/swagger';
-import { ErrorResponse } from '@code-scarecrow/base';
+import { ErrorResponse } from 'src/base/nest/errors';
 import { FileService } from 'src/application/services/FileService';
 import { FileDataResponse } from './response/FileDataResponse';
 import { UrlResponse } from './response/UrlResponse';

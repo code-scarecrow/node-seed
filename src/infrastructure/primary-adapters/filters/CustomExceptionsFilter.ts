@@ -2,9 +2,9 @@ import { BadRequestException, Catch, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
 import { ValidationError } from 'src/domain/errors/ValidationError';
 import { ErrorCodesMapper } from './ErrorCodesMapper';
-import { Logger } from '@code-scarecrow/base/logger';
+import { Logger } from 'src/base/logger';
 import { ErrorCodesEnum } from 'src/domain/errors/ErrorCodesEnum';
-import { ErrorResponse, ExceptionsFilter } from '@code-scarecrow/base';
+import { ErrorResponse, ExceptionsFilter } from 'src/base/nest/errors';
 
 @Catch()
 export class CustomExceptionsFilter extends ExceptionsFilter<ErrorCodesEnum> {

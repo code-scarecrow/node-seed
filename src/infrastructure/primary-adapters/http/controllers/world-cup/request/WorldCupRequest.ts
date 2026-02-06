@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBefore } from '@code-scarecrow/base';
 import { IsNotEmpty, IsString, IsUUID, Matches, IsDateString, Length } from 'class-validator';
 import { WorldCupCreation } from 'src/application/interfaces/IWorldCupRepository';
+import { IsBefore } from 'src/base/nest/decorators';
 
 export class WorldCupRequest {
 	@IsNotEmpty()

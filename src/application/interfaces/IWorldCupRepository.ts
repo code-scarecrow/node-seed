@@ -1,5 +1,4 @@
 import { WorldCup } from 'src/domain/entities/WorldCup';
-import { IBaseRepository } from '@code-scarecrow/base/database';
 import { Country } from 'src/domain/entities/Country';
 
 export const WORLD_CUP_REPO = 'WorldRepositoryInterface';
@@ -8,9 +7,15 @@ export type WorldCupCreation = Omit<WorldCup, 'id' | 'uuid' | 'participants' | '
 	locationId: number;
 };
 
-export interface IWorldCupRepository extends IBaseRepository<{ id: number }, WorldCup, WorldCupCreation> {
+type Key = Pick<WorldCup, 'id'>;
+
+export interface IWorldCupRepository {
 	findByUuid(uuid: string): Promise<WorldCup | null>;
 	deleteByUuid(uuid: string): Promise<void>;
 	addParticipants(id: string, countries: Country[]): Promise<void>;
 	findOneWithParticipants(uuid: string): Promise<WorldCup | null>;
+	create(entity: WorldCupCreation): Promise<WorldCup>;
+	update(key: Key, entity: WorldCupCreation): Promise<WorldCup>;
+	delete(key: Key): Promise<void>;
+	findAll(): Promise<WorldCup[]>;
 }

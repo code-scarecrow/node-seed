@@ -1,8 +1,9 @@
 import { registerAs } from '@nestjs/config';
-import { IEventProducerConfig, safeGetConfig } from '@code-scarecrow/base';
+import { getRequiredConfig } from 'src/base/nest/config';
+import { IEventProducerConfig } from 'src/base/rabbit';
 
 export const userFinishCreationConfig = registerAs('userfinishcreation', (): IEventProducerConfig => {
 	return {
-		exchange: safeGetConfig('RABBIT_EVENT_BUS_EXCHANGE'),
+		exchange: getRequiredConfig('RABBIT_EVENT_BUS_EXCHANGE'),
 	};
 });

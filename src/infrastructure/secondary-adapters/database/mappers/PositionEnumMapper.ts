@@ -1,7 +1,28 @@
 import { PositionEnum } from 'src/domain/enums/PositionEnum';
 import { $Enums } from '@prisma/client';
-import { SafeTwoWaysMap } from '@code-scarecrow/base/core/SafeTwoWaysMap';
-import { SafeMap } from '@code-scarecrow/base/core/SafeMap';
+import { SafeMap } from 'src/base/dataStructures/SafeMap';
+
+class SafeTwoWaysMap<K, V> {
+	private readonly map: SafeMap<K, V>;
+	private readonly reverseMap: SafeMap<V, K>;
+
+	constructor(map: SafeMap<K, V>) {
+		this.map = map;
+		this.reverseMap = new SafeMap<V, K>();
+
+		map.forEach((value, key) => {
+			this.reverseMap.set(value, key);
+		});
+	}
+
+	public get(key: K): V {
+		return this.map.get(key);
+	}
+
+	public getRev(key: V): K {
+		return this.reverseMap.get(key);
+	}
+}
 
 export const positionEnumMap: SafeTwoWaysMap<$Enums.players_position, PositionEnum> = new SafeTwoWaysMap(
 	new SafeMap([

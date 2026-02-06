@@ -1,12 +1,11 @@
 import { HttpServer, HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
-import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { expect } from 'chai';
 import { UserRequest } from 'src/infrastructure/primary-adapters/http/controllers/user/request/UserRequest';
 import { Channel, Connection, connect } from 'amqplib';
-import { safeGetConfig } from '@code-scarecrow/base';
+import { getRequiredConfig } from 'src/base/nest/config';
 import { dbClient } from 'test/integration/setup';
 
 describe('Send Create User Message e2e Test.', () => {
@@ -19,8 +18,8 @@ describe('Send Create User Message e2e Test.', () => {
 
 	before(async () => {
 		app = await initiateApp();
-		connection = await connect(safeGetConfig('RABBIT_URI'));
-		queue = safeGetConfig('RABBIT_QUEUE');
+		connection = await connect(getRequiredConfig('RABBIT_URI'));
+		queue = getRequiredConfig('RABBIT_QUEUE');
 	});
 
 	beforeEach(async () => {
@@ -53,7 +52,7 @@ describe('Send Create User Message e2e Test.', () => {
 			.post('/api/v1.0/users')
 			.send(userRequest)
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(watch(HttpStatus.CREATED));
+			.expect(HttpStatus.CREATED);
 
 		//TODO - look for better options
 		while ((await channel.assertQueue(queue)).messageCount !== 0) {

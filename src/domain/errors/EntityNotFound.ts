@@ -1,4 +1,4 @@
-import { BaseError } from '@code-scarecrow/base';
+import { BaseError } from 'src/base/nest/errors';
 import { CountryCodeEnum } from '../enums/CountryCodeEnum';
 import { ErrorCodesEnum } from './ErrorCodesEnum';
 

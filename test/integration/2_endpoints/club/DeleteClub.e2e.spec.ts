@@ -1,7 +1,6 @@
 import { HttpServer, HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
-import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { expect } from 'chai';
 import { dbClient } from 'test/integration/setup';
@@ -37,7 +36,7 @@ describe('Delete Club e2e Test.', () => {
 			.delete(`/api/v1.0/clubs/${clubUuid}`)
 			.send()
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(watch(HttpStatus.NO_CONTENT));
+			.expect(HttpStatus.NO_CONTENT);
 
 		const clubExistent = await dbClient.getClubByUuid(clubUuid);
 		expect(clubExistent).equal(null);

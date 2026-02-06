@@ -1,5 +1,5 @@
 import { RedisService } from '@liaoliaots/nestjs-redis';
-import { Logger } from '@code-scarecrow/base/logger';
+import { Logger } from 'src/base/logger';
 import { expect } from 'chai';
 import { Redis } from 'ioredis';
 import { It, Mock, Times } from 'moq.ts';

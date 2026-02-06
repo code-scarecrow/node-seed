@@ -2,9 +2,10 @@ import { HttpServer, INestApplication } from '@nestjs/common';
 import { initiateApp } from '../../infrastructure/app/AppInitiator';
 import { expect } from 'chai';
 import { IUserIncommingMessage } from 'src/infrastructure/primary-adapters/message-queue/listeners/user/IUserIncommingMessage';
-import { RabbitMessage, safeGetConfig } from '@code-scarecrow/base';
 import { Channel, Connection, connect } from 'amqplib';
 import { dbClient } from 'test/integration/setup';
+import { RabbitMessage } from 'src/base/rabbit';
+import { getRequiredConfig } from 'src/base/nest/config';
 
 describe('Process user create message.', () => {
 	let app: INestApplication;
@@ -27,8 +28,8 @@ describe('Process user create message.', () => {
 
 	before(async () => {
 		app = await initiateApp();
-		connection = await connect(safeGetConfig('RABBIT_URI'));
-		queue = safeGetConfig('RABBIT_QUEUE');
+		connection = await connect(getRequiredConfig('RABBIT_URI'));
+		queue = getRequiredConfig('RABBIT_QUEUE');
 	});
 
 	beforeEach(async () => {

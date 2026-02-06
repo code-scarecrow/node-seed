@@ -1,7 +1,6 @@
 import { HttpServer, HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
-import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { S3Client, GetObjectAttributesCommand } from '@aws-sdk/client-s3';
 import { expect } from 'chai';
@@ -42,7 +41,7 @@ describe('Create File e2e Test.', () => {
 			.post('/api/v1.0/files/test')
 			.attach('file', 'test/integration/2_endpoints/file/image.png')
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(watch(HttpStatus.CREATED));
+			.expect(HttpStatus.CREATED);
 
 		const objectData = await s3client.send(
 			new GetObjectAttributesCommand({

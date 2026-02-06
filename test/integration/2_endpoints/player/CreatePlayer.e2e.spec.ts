@@ -1,7 +1,6 @@
 import { HttpServer, HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
-import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { PlayerRequest } from 'src/infrastructure/primary-adapters/http/controllers/player/request/PlayerRequest';
 import { PositionEnum } from 'src/domain/enums/PositionEnum';
@@ -45,7 +44,7 @@ describe('Create Player e2e Test.', () => {
 			.post('/api/v1.0/players')
 			.send(playerRequest)
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(watch(HttpStatus.CREATED))
+			.expect(HttpStatus.CREATED)
 			.expect((res) => {
 				const structure = Object.keys(res.body);
 				expect(structure.includes('id'), 'id').to.be.true;

@@ -1,7 +1,6 @@
 import { HttpServer, HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
-import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
 import { WorldCup } from 'src/domain/entities/WorldCup';
@@ -43,7 +42,7 @@ describe('Get World cup with participants e2e Test.', () => {
 			.get(`/api/v1.0/world-cups/${worldCup.uuid}/participants`)
 			.send()
 			.set('Country-Code', CountryCodeEnum.AR)
-			.expect(watch(HttpStatus.OK))
+			.expect(HttpStatus.OK)
 			.expect((res) => {
 				const structure = Object.keys(res.body);
 				expect(structure.includes('id')).to.be.true;

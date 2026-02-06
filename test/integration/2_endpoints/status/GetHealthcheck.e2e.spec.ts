@@ -1,7 +1,6 @@
 import { HttpServer, HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { initiateApp } from 'test/integration/infrastructure/app/AppInitiator';
-import { watch } from 'test/integration/infrastructure/app/ResponseWatcher';
 
 describe('Get Healthcheck e2e Test.', () => {
 	let app: INestApplication;
@@ -24,6 +23,6 @@ describe('Get Healthcheck e2e Test.', () => {
 	});
 
 	it('Get health status.', async () => {
-		await request(server).get('/api/v1.0/health-check').send().expect(watch(HttpStatus.OK));
+		await request(server).get('/api/v1.0/health-check').send().expect(HttpStatus.OK);
 	});
 });

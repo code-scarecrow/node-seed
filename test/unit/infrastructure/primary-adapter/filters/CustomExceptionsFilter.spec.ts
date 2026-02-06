@@ -4,7 +4,7 @@ import { ArgumentsHost, BadRequestException, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
 import { HttpArgumentsHost, RpcArgumentsHost } from '@nestjs/common/interfaces';
 import { ErrorCodesEnum } from 'src/domain/errors/ErrorCodesEnum';
-import { Logger } from '@code-scarecrow/base/logger';
+import { Logger } from 'src/base/logger';
 import { EntityNotFound } from 'src/domain/errors/EntityNotFound';
 import { CountryCodeEnum } from 'src/domain/enums/CountryCodeEnum';
 import { expect } from 'chai';

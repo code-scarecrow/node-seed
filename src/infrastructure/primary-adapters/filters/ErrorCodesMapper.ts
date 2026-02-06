@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { ErrorCodesMapperBase } from '@code-scarecrow/base';
+import { ErrorCodesMapperBase } from 'src/base/nest/errors';
 import { ErrorCodesEnum } from 'src/domain/errors/ErrorCodesEnum';
 
 @Injectable()

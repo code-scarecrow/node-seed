@@ -11,7 +11,7 @@ import {
 import { PlayerService } from 'src/application/services/PlayerService';
 import { PlayerResponse } from './response/PlayerResponse';
 import { PlayerRequest } from './request/PlayerRequest';
-import { ErrorResponse } from '@code-scarecrow/base';
+import { ErrorResponse } from 'src/base/nest/errors';
 
 @Controller('players')
 @ApiTags('Players')
